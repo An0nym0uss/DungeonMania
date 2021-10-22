@@ -1,4 +1,7 @@
-enum Level {
-    Invincible
-    Invisible
+package dungeonmania.entities.player;
+
+public enum StatusEffect {
+    Invincible,
+    Invisible;
+    
 }
