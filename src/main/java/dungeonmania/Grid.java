@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import java.util.Arrays;
 import java.util.List;
 
 import dungeonmania.entities.Entity;
@@ -14,21 +15,24 @@ import dungeonmania.entities.player.Player;
  */
 public class Grid {
 
-    public int getHeight() {
-        return this.height;
-    }
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    
-    ppublic Player getPlayer() {
-        return this.player
-    }rivate final int HEIGHT;
+    private final int HEIGHT;
     private final int WIDTH;
     private Entity[][][] map;
     private Player player;
+
+
+    public int getHeight() {
+        return this.HEIGHT;
+    }
+
+    public int getWidth() {
+        return this.WIDTH;
+    }
+
+    
+    public Player getPlayer() {
+        return this.player;
+    }
 
     public Grid(int height, int width, Entity[][][] map, Player player) {
         this.HEIGHT = height;
@@ -41,8 +45,10 @@ public class Grid {
 
     /**
      * returns entities on the cell at given position
+     * @pre 0 <= x < WIDTH
+     * @pre 0 <= y < HEIGHT
      */
     public List<Entity> getEntities(int x, int y) {
-        return null;
+        return Arrays.asList(map[x][y]);
     }
 }
