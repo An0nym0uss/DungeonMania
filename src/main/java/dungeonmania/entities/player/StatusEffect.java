@@ -1,0 +1,4 @@
+enum Level {
+    Invincible
+    Invisible
+}
