@@ -1,6 +1,6 @@
 package dungeonmania.entities.collectable;
 
-public abstract class CollectableEntities {
+public abstract class CollectableEntity {
     private String id;
     private String type;
 }

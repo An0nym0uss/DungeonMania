@@ -17,6 +17,7 @@ public class Grid {
 
     private final int HEIGHT;
     private final int WIDTH;
+    private final int LAYER_SIZE = 4;
     private Entity[][][] map;
     private Player player;
 
@@ -41,6 +42,15 @@ public class Grid {
         this.player = player;
     }
 
+    public void update() {
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                for (int z = 0; z < LAYER_SIZE; z++) {
+                    if (map[x][y][z] != null) map[x][y][z].update();
+                }
+            }
+        }
+    }
 
 
     /**
