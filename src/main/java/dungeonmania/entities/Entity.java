@@ -1,5 +1,6 @@
 package dungeonmania.entities;
 
+import dungeonmania.Grid;
 import dungeonmania.util.Position;
 
 public abstract class Entity implements ObserverEntity {
@@ -32,7 +33,8 @@ public abstract class Entity implements ObserverEntity {
     /**
      * What happens every tick.
      */
-    public void update() {
+    @Override
+    public void update(Grid grid) {
 
     };
 
