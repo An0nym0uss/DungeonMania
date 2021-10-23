@@ -2,7 +2,7 @@ package dungeonmania.entities;
 
 import dungeonmania.util.Position;
 
-public abstract class Entity {
+public abstract class Entity implements ObserverEntity {
     private String id;
     private String type;
     private Position position;
@@ -43,5 +43,16 @@ public abstract class Entity {
      */
     public void collidesWith(Entity other) {
 
+    }
+    
+    /**
+     * This checks this entity can move into other entity.
+     * 
+     * @param other
+     * @return true if can.
+     */
+    public boolean canMoveInto(Entity other) {
+        // For subclasses to override otherwise by default returns true.
+        return true;
     }
 }
