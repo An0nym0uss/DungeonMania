@@ -22,6 +22,9 @@ import dungeonmania.entities.enemy.Zombie;
 import dungeonmania.entities.player.Player;
 import dungeonmania.util.Position;
 
+/**
+ * A boulder that can be pushed around by the player, activates any floor switches it is placed on.
+ */
 public class Boulder extends StaticEntity {
 
     @Override
