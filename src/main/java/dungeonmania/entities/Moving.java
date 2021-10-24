@@ -8,5 +8,5 @@ public interface Moving {
 
     void move(Grid grid, Direction d);
 
-    boolean movinConstraints(Entity e);
+    boolean movingConstraints(Entity e);
 }
