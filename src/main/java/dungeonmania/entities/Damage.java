@@ -1,5 +1,7 @@
 package dungeonmania.entities;
 
-public class Damage {
-    
+public interface Damage {
+    int damage = 10;
+
+    int damageDealt(Entity e);
 }
