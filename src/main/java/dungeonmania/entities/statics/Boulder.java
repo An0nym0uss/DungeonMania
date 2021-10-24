@@ -69,8 +69,11 @@ public class Boulder extends StaticEntity {
     
     @Override
     public boolean canMoveInto(Entity other) {
+        //player
+            if (other instanceof Player)                { return false; }   //required
+
         //static entities
-             if (other instanceof Wall)                 { return false; }   //required
+        else if (other instanceof Wall)                 { return false; }   //required
         else if (other instanceof Exit)                 { return true; }    //assumption
         else if (other instanceof Boulder)              { return false; }   //required
         else if (other instanceof FloorSwitch)          { return true; }    //required
