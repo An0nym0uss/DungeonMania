@@ -43,7 +43,7 @@ public abstract class Entity implements ObserverEntity {
      * 
      * @param other
      */
-    public void collidesWith(Entity other) {
+    public void collidesWith(Entity other, Grid grid) {
 
     }
     
