@@ -31,6 +31,14 @@ public abstract class Entity implements ObserverEntity {
     }
 
     /**
+     * Setter for position.
+     * @param position The new position to set.
+     */
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    /**
      * What happens every tick.
      */
     @Override

@@ -4,6 +4,21 @@ import java.util.List;
 
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
+/*
+import dungeonmania.entities.collectable.Armour;
+import dungeonmania.entities.collectable.Arrow;
+import dungeonmania.entities.collectable.Bomb;
+import dungeonmania.entities.collectable.HealthPotion;
+import dungeonmania.entities.collectable.InvincibilityPotion;
+import dungeonmania.entities.collectable.InvisibilityPotion;
+import dungeonmania.entities.collectable.Key;
+import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.collectable.Treasure;
+import dungeonmania.entities.collectable.Wood;
+import dungeonmania.entities.enemy.Mercenary;
+import dungeonmania.entities.enemy.Spider;
+import dungeonmania.entities.enemy.Zombie;
+*/
 import dungeonmania.entities.player.Player;
 import dungeonmania.util.Position;
 
@@ -18,16 +33,21 @@ public class Boulder extends StaticEntity {
 
             List<Entity> entitiesAtNewPosition = grid.getEntities(newPosition.getX(), newPosition.getY());
 
-            boolean canMove = false;
+            boolean canMove = true;
 
+            //check if theres anything in new position that won't allow our boulder
             for (Entity entity : entitiesAtNewPosition) {
-                //check there's nothing already in new position then update canMove
+                if (!this.canMoveInto(entity)) {
+                    canMove = false;
+                }
             }
 
             if (canMove) {
-                this.setPosition(newPosition.getX(), newPosition.getY());
+                this.setPosition(newPosition); //boulder moves to new position
+                other.setPosition(boulderPosition); //player moves to boulders old position
             }
         }
+        //assume nothing else can move a boulder (since spiders are mean't to turn around, and the other moving entities are based off of it)
     }
 
     /**
@@ -46,15 +66,39 @@ public class Boulder extends StaticEntity {
     
     @Override
     public boolean canMoveInto(Entity other) {
-        if (other instanceof Wall)                  { return false; }   //required
-        if (other instanceof Exit)                  { return true; }    //assumption
-        if (other instanceof Boulder)               { return false; }   //required
-        if (other instanceof FloorSwitch)           { return true; }    //required
-        if (other instanceof Door)                  { 
-            if (((Door)other).getIsOpen())          { return true; }    //assumption
-            else                                    { return false; } } //required
-        if (other instanceof Portal)                { return true; }    //assumption
-        if (other instanceof ZombieToastSpawner)    { return false; }   //assumption
+        //static entities
+             if (other instanceof Wall)                 { return false; }   //required
+        else if (other instanceof Exit)                 { return true; }    //assumption
+        else if (other instanceof Boulder)              { return false; }   //required
+        else if (other instanceof FloorSwitch)          { return true; }    //required
+        else if (other instanceof Door)                 { 
+            if (((Door)other).getIsOpen())              { return true; }    //assumption
+            else                                        { return false; } } //required
+        else if (other instanceof Portal)               { return true; }    //assumption
+        else if (other instanceof ZombieToastSpawner)   { return false; }   //assumption
+        
+        /* can uncomment when these extend Entity
+        //moving entities
+        else if (other instanceof Spider)               { return false; }   //required
+        else if (other instanceof Zombie)               { return false; }   //required
+        else if (other instanceof Mercenary)            { return false; }   //required
+
+        //collectable entities
+        else if (other instanceof Treasure)             { return true; }   //assumption
+        else if (other instanceof Key)                  { return true; }   //assumption
+        else if (other instanceof HealthPotion)         { return true; }   //assumption
+        else if (other instanceof InvincibilityPotion)  { return true; }   //assumption
+        else if (other instanceof InvisibilityPotion)   { return true; }   //assumption
+        else if (other instanceof Wood)                 { return true; }   //assumption
+        else if (other instanceof Arrow)                { return true; }   //assumption
+        else if (other instanceof Bomb)                 { 
+            if (((Bomb)other).getIsPlaced())            { return false; }  //assumption
+            else                                        { return true; } } //assumption
+        }   //required
+        else if (other instanceof Sword)                { return true; }   //assumption
+        else if (other instanceof Armour)               { return true; }   //assumption
+        */
+
         return true;
     }
 }
