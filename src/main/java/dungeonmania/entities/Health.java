@@ -1,5 +1,8 @@
 package dungeonmania.entities;
 
-public class Health {
-    
+public interface Health {
+    int maxHealth = 10;
+    int currenthealth = 10;
+
+    boolean isDead();
 }
