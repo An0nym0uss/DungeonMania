@@ -9,15 +9,21 @@ import org.json.JSONObject;
 
 public class Dungeon {
     
-    private String dungeonName;
+    private String dungeonId; // Dungeon game file.
+    private String dungeonName; // Type of dungeon
     private Mode gameMode;
     private ComponentGoal goal;
     private Grid grid;
 
-    public Dungeon(String name, String mode) {
+    public Dungeon(String id, String name, String mode) {
+        this.dungeonId = id;
         this.dungeonName = name;
         //this.gameMode = new Mode(mode);
 
+    }
+
+    public String getDungeonId() {
+        return this.dungeonId;
     }
 
     public String getDungeonName() {
