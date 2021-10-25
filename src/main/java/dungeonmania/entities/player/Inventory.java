@@ -23,6 +23,16 @@ public class Inventory {
             }
         }
     }
+
+
+    public void removeNonSpecificItem(String item) {
+        for (CollectableEntity ownedItem : items) {
+            if (item == ownedItem.getType()) {
+                items.remove(ownedItem);
+                break;
+            }
+        }
+    }
     
 
     public int checkItem(String item) {
