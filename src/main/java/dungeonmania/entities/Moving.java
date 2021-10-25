@@ -4,9 +4,7 @@ import dungeonmania.Grid;
 import dungeonmania.util.Direction;
 
 public interface Moving {
-    int speed = 1;
-
     void move(Grid grid, Direction d);
 
-    boolean movinConstraints(Entity e);
+    boolean movingConstraints(Entity e);
 }
