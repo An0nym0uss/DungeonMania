@@ -1,19 +1,26 @@
 package dungeonmania.entities.collectable.buildable;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import dungeonmania.entities.collectable.Durable;
-import dungeonmania.entities.player.Recipe;
+import dungeonmania.entities.player.ReadRecipe;
 
 public class Bow extends BuildableEntity implements Durable{
     private int durability;
 
-    public Bow(String id, String type, int durability) {
+    private String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/bowRecipe.json";
+
+    public Bow(String id) {
         this.id = id;
-        this.type = type;
+        this.type = "bow";
+        this.durability = 10;
+
+        ReadRecipe read = new ReadRecipe();
+        this.recipes = read.readRecipes(recipeFile);
+    }
+
+    public Bow(String id, String type, int durability) {
+        this(id);
         this.durability = durability;
-        List<String> ingredients = new ArrayList<String>();
     }
 
     @Override

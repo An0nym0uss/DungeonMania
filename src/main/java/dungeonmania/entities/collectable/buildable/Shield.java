@@ -1,21 +1,29 @@
 package dungeonmania.entities.collectable.buildable;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import dungeonmania.entities.collectable.Durable;
-import dungeonmania.entities.player.Recipe;
+import dungeonmania.entities.player.ReadRecipe;
 
 public class Shield extends BuildableEntity implements Durable{
     private int durability;
     private int defense;
 
-    public Shield(String id, String type, int durability, int defense) {
+    private final String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/shieldRecipe.json";
+
+    public Shield(String id) {
         this.id = id;
-        this.type = type;
+        this.type = "armour";
+        this.durability = 10;
+        this.defense = 10;
+
+        ReadRecipe read = new ReadRecipe();
+        this.recipes = read.readRecipes(recipeFile);
+    }
+
+    public Shield(String id, int durability, int defense) {
+        this(id);
         this.durability = durability;
         this.defense = defense;
-        List<String> ingredients = new ArrayList<String>();
     }
 
     public int getDefense() {
