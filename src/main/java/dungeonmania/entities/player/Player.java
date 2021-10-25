@@ -45,7 +45,9 @@ public class Player extends Entity {
     @Override
     public void collidesWith(Entity other, Grid grid) {
         if (canMoveInto(other)) {
-            if (other instanceof CollectableEntity) {
+            if (other instanceof Key) {
+                // can only pick up one key
+            } else if (other instanceof CollectableEntity) {
                 inventory.addItem((CollectableEntity)other);
                 this.setPosition(other.getPosition());
             } else if (other instanceof Enemy) {
@@ -79,13 +81,13 @@ public class Player extends Entity {
         // else if (other instanceof Spider)               {return true;} 
         // else if (other instanceof Zombie)               {return true;} 
         // else if (other instanceof Mercenary)            {return true;} 
-        // else if (other instanceof Treasure)             {return true;}  
-        // else if (other instanceof Key)                  {return true;}  
-        // else if (other instanceof HealthPotion)         {return true;}  
-        // else if (other instanceof InvincibilityPotion)  {return true;}  
-        // else if (other instanceof InvisibilityPotion)   {return true;}  
-        // else if (other instanceof Wood)                 {return true;}  
-        // else if (other instanceof Arrow)                {return true;}  
+        else if (other instanceof Treasure)             {return true;}  
+        else if (other instanceof Key)                  {return true;}  
+        else if (other instanceof HealthPotion)         {return true;}  
+        else if (other instanceof InvincibilityPotion)  {return true;}  
+        else if (other instanceof InvisibilityPotion)   {return true;}  
+        else if (other instanceof Wood)                 {return true;}  
+        else if (other instanceof Arrow)                {return true;}  
         // else if (other instanceof Bomb)                 { 
         //     if (((Bomb)other).getIsPlaced())            {return false;} 
         //     else                                        {return true;}
