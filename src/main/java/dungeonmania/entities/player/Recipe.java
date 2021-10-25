@@ -1,28 +1,29 @@
-
 package dungeonmania.entities.player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Recipe {
 
-    private List<String> ingredients = new ArrayList<String>();
+    private Map<String, Integer> ingredients = new HashMap<String, Integer>();
 
-    public Recipe(List<String> ingredients) {
+    public Recipe(Map<String, Integer> ingredients) {
         this.ingredients = ingredients;
     }
 
 
-    public List<String> getIngredients() {
+    public Map<String, Integer> getIngredients() {
         return this.ingredients;
     }
 
 
     public boolean isCraftable(Inventory inventory) {
-        // TO-DO:
-        return false;
+        boolean craftable = true;
+        for (HashMap.Entry<String, Integer> ingredient : ingredients.entrySet()) {
+            if (inventory.checkItem(ingredient.getKey()) < ingredient.getValue()) {
+                craftable = false;
+            }
+        }
+        return craftable;
     }
-
-    
-
 }
