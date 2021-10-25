@@ -10,6 +10,25 @@ public abstract class Entity implements ObserverEntity {
     private boolean isInteractable;
 
     /**
+     * Getter for entity id.
+     * 
+     * @return
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Getter for entity type.
+     * 
+     * @return
+     */
+    public String getType() {
+        return type;
+    }
+
+
+    /**
      * Getter for position.
      * 
      * @return
@@ -28,6 +47,14 @@ public abstract class Entity implements ObserverEntity {
      */
     public void setPosition(int x, int y) {
         position = position.translateBy(x, y);
+    }
+
+    /**
+     * Is Interactable.
+     * 
+     */
+    public boolean isInteractable() {
+        return isInteractable;
     }
 
     /**
