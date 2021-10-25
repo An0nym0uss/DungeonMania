@@ -11,6 +11,6 @@ public class HealthPotion extends CollectableEntity{
 
     @Override
     public void useItem(Player player) {
-        player.setHealth(player.getMaxHealth());
+        player.setCurrentHealth(player.getMaxHealth());
     }
 }
