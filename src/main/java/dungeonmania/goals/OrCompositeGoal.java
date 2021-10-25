@@ -2,6 +2,7 @@ package dungeonmania.goals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,7 +19,7 @@ public class OrCompositeGoal implements ComponentGoal {
 
     /**
      * 
-     * @param componentGoal is subgoal to be added
+     * @param componentGoal is subgoal to be added.
      * @pre componentGoal is not null
      */
     public void addSubgoal(ComponentGoal componentGoal) {
@@ -56,10 +57,20 @@ public class OrCompositeGoal implements ComponentGoal {
  
         this.subgoals.stream().forEach(g -> subgoals.put(g.getJSON()));
 
-        goal.put("goal", "AND");
+        goal.put("goal", "OR");
         goal.put("subgoals", subgoals);
 
         return goal;
+    }
+
+    /**
+     * 
+     * @post convert goal to string for frontend format.
+     */
+    @Override
+    public String toString() {
+        
+        return String.join(" OR ", getSubgoals().stream().map(subgoal -> subgoal.toString()).collect(Collectors.toList()));
     }
 
 }

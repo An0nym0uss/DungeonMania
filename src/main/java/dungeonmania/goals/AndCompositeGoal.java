@@ -2,6 +2,7 @@ package dungeonmania.goals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,6 +60,16 @@ public class AndCompositeGoal implements ComponentGoal {
         goal.put("subgoals", subgoals);
 
         return goal;
+    }
+
+    /**
+     * 
+     * @post convert goal to string for frontend format.
+     */
+    @Override
+    public String toString() {
+        
+        return String.join(" AND ", getSubgoals().stream().map(subgoal -> subgoal.toString()).collect(Collectors.toList()));
     }
 
 }
