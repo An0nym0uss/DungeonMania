@@ -1,6 +1,7 @@
 package dungeonmania.entities.collectable;
 
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.entities.player.Player;
 
 public abstract class CollectableEntity {
     protected String id;
@@ -12,6 +13,10 @@ public abstract class CollectableEntity {
 
     public String getType() {
         return type;
+    }
+
+    public void useItem(Player player) {
+
     }
 
     public ItemResponse createItemResponse() {
