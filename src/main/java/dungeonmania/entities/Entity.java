@@ -4,10 +4,10 @@ import dungeonmania.Grid;
 import dungeonmania.util.Position;
 
 public abstract class Entity implements ObserverEntity {
-    private String id;
-    private String type;
-    private Position position;
-    private boolean isInteractable;
+    protected String id;
+    protected String type;
+    protected Position position;
+    protected boolean isInteractable;
 
     /**
      * Getter for entity id.
