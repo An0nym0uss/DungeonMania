@@ -1,5 +1,5 @@
 package dungeonmania.entities.collectable;
 
-public class Treasure {
+public class Treasure extends CollectableEntity {
     
 }

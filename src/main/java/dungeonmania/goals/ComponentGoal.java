@@ -20,4 +20,10 @@ public interface ComponentGoal {
      * @post return object as a JSONObject representation
      */
     public JSONObject getJSON();
+
+    /**
+     * 
+     * @post convert goal to string for frontend format.
+     */
+    public String toString();
 }
