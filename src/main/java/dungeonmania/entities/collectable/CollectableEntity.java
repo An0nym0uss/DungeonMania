@@ -1,10 +1,11 @@
 package dungeonmania.entities.collectable;
 
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.entities.Entity;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.player.StatusEffect;
 
-public abstract class CollectableEntity {
+public abstract class CollectableEntity extends Entity {
     protected String id;
     protected String type;
 

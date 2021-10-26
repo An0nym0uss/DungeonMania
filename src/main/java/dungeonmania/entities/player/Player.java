@@ -7,7 +7,7 @@ import dungeonmania.entities.statics.*;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 
-public class Player extends Entity {
+public class Player extends Entity implements GameToJSON {
     private int damage;
     private int maxHealth;
     private int currentHealth;

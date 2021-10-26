@@ -1,9 +1,10 @@
 package dungeonmania.entities;
 
+import dungeonmania.GameToJSON;
 import dungeonmania.Grid;
 import dungeonmania.util.Position;
 
-public abstract class Entity implements ObserverEntity {
+public abstract class Entity implements ObserverEntity, GameToJSON {
     private String id;
     private String type;
     private Position position;

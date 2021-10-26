@@ -2,12 +2,14 @@ package dungeonmania.goals;
 
 import org.json.JSONObject;
 
+import dungeonmania.GameToJSON;
+
 /**
  * Interface for composite pattern with goals.
  * 
  * @author Enoch Kavur (z5258204)
  */
-public interface ComponentGoal {
+public interface ComponentGoal extends GameToJSON {
     
     /**
      * 
