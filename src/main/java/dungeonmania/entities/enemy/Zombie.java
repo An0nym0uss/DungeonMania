@@ -14,6 +14,7 @@ import dungeonmania.entities.statics.Wall;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -34,9 +35,14 @@ public class Zombie extends Enemy {
         //
         this.getPosition();
         // Gets the adjacent squares of the zombie
+        // NW N NE E SE S SW W
         List<Position> adjacentSquares = this.getPosition().getAdjacentPositions();
         // free = not collectable?
 
+        // Randomly shuffles not sure if pseudo random or purely random.
+        Collections.shuffle(adjacentSquares);
+
+        // for(int i = 0; i < speed; i++) // requirement cannot backtrack
         for (Position position : adjacentSquares) {
             // Check if position is free
             //
