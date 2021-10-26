@@ -1,30 +1,30 @@
 
 {
     "entities": [
-      {
-        "x": 0,
-        "y": 0,
-        "type": "player"
-      },
-      {
-        "x": 1,
-        "y": 0,
-        "type": "door",
-        "key": 1
-      },
-      {
-        "x": 0,
-        "y": 1,
-        "type": "key",
-        "key": 1
-      },
-      {
-        "x": 2,
-        "y": 0,
-        "type": "exit"
-      }
+        {
+            "x": 0,
+            "y": 0,
+            "type": "player"
+        },
+        {
+            "x": 1,
+            "y": 0,
+            "type": "door",
+            "key": 1
+        },
+        {
+            "x": 0,
+            "y": 1,
+            "type": "key",
+            "key": 1
+        },
+        {
+            "x": 2,
+            "y": 0,
+            "type": "exit"
+        }
     ],
     "goal-condition": {
-      "goal": "exit"
+        "goal": "exit"
     }
-  }
+}
