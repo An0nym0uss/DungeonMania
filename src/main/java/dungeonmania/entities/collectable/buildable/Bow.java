@@ -18,7 +18,7 @@ public class Bow extends BuildableEntity implements Durable{
         this.recipes = read.readRecipes(recipeFile);
     }
 
-    public Bow(String id, String type, int durability) {
+    public Bow(String id, int durability) {
         this(id);
         this.durability = durability;
     }
