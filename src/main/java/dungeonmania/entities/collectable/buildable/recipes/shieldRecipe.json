@@ -1,0 +1,12 @@
+{
+    "ingredients": [
+        {
+            "wood": 2,
+            "treasure": 1
+        },
+        {
+            "wood": 2,
+            "key": 1
+        }
+    ]
+}
