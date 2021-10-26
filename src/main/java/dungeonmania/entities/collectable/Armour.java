@@ -3,9 +3,14 @@ package dungeonmania.entities.collectable;
 public class Armour extends CollectableEntity implements Durable{
     private int durability;
 
-    public Armour(String id, String type, int durability) {
+    public Armour(String id) {
         this.id = id;
-        this.type = type;
+        this.type = "armour";
+        this.durability = 10;
+    }
+
+    public Armour(String id, int durability) {
+        this(id);
         this.durability = durability;
     }
 

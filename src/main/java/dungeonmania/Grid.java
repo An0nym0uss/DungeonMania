@@ -2,6 +2,7 @@ package dungeonmania;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.ObserverEntity;
@@ -91,9 +92,11 @@ public class Grid implements GridSubject {
      * returns entities on the cell at given position
      * @pre 0 <= x < WIDTH
      * @pre 0 <= y < HEIGHT
+     * 
+     * @post List of entities at x, y;
      */
     public List<Entity> getEntities(int x, int y) {
-        return Arrays.asList(map[x][y]);
+        return Arrays.asList(map[x][y]).stream().filter(e -> e != null).collect(Collectors.toList());
     }
 
     /**
