@@ -2,6 +2,7 @@ package dungeonmania.goals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
@@ -10,7 +11,7 @@ import org.json.JSONObject;
 /**
  * @author Enoch Kavur (z5258204)
  * 
- * @invarient sub goals never change.
+ * @invariant sub goals never change.
  */
 public class AndCompositeGoal implements ComponentGoal {
 
@@ -68,8 +69,18 @@ public class AndCompositeGoal implements ComponentGoal {
      */
     @Override
     public String toString() {
+
+        // Would just be smarter to have an interface for leaf and composite, bad code right here.
+        Function<ComponentGoal, String> toString =
+            (subgoal) -> {
+                if (subgoal instanceof OrCompositeGoal || subgoal instanceof AndCompositeGoal){
+                    return "(" + subgoal.toString() + ")";
+                } else {
+                    return subgoal.toString();
+                }
+        };
         
-        return String.join(" AND ", getSubgoals().stream().map(subgoal -> subgoal.toString()).collect(Collectors.toList()));
+        return String.join(" AND ", getSubgoals().stream().map(toString).collect(Collectors.toList()));
     }
 
 }
