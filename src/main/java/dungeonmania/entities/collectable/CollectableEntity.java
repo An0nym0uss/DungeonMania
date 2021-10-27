@@ -1,10 +1,15 @@
 package dungeonmania.entities.collectable;
 
 import dungeonmania.response.models.ItemResponse;
+<<<<<<< HEAD
+=======
+import dungeonmania.Grid;
+>>>>>>> master
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.player.StatusEffect;
 
+<<<<<<< HEAD
 public abstract class CollectableEntity extends Entity {
     protected String id;
     protected String type;
@@ -12,16 +17,18 @@ public abstract class CollectableEntity extends Entity {
     public String getId() {
         return id;
     }
-
-    public String getType() {
-        return type;
-    }
-
+=======
+public abstract class CollectableEntity extends Entity{
     public void useItem(Player player) {
+>>>>>>> master
 
     }
 
     public void useItemWithEffect(StatusEffect statusEffect) {
+
+    }
+
+    public void placeBomb(Player player, Grid grid) {
 
     }
 

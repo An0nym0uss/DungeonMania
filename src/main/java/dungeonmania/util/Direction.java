@@ -21,4 +21,18 @@ public enum Direction {
     public Position getOffset() {
         return this.offset;
     }
+
+    static public Direction getOppositeDirection(Direction d) {
+        if (d.equals(Direction.UP)) {
+            return Direction.DOWN;
+        } else if (d.equals(Direction.DOWN)) {
+            return Direction.UP;
+        } else if (d.equals(Direction.RIGHT)) {
+            return Direction.LEFT;
+        } else if (d.equals(Direction.LEFT)) {
+            return Direction.RIGHT;
+        } else {
+            return Direction.NONE;
+        }
+    }
 }

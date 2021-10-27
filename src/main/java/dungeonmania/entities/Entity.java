@@ -11,6 +11,21 @@ public abstract class Entity implements ObserverEntity, GameToJSON {
     private boolean isInteractable;
 
     /**
+     * Constructor for Entity.
+     * 
+     * @param id
+     * @param type
+     * @param position
+     * @param isInteractable
+     */
+    public Entity(String id, String type, Position position, boolean isInteractable) {
+        this.id = id;
+        this.type = type;
+        this.position = position;
+        this.isInteractable = isInteractable;
+    }
+
+    /**
      * Getter for entity id.
      * 
      * @return
