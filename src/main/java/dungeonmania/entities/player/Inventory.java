@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.entities.collectable.CollectableEntity;
+import dungeonmania.response.models.ItemResponse;
 
 public class Inventory {
 
@@ -59,5 +60,13 @@ public class Inventory {
             }
         }
         return recipeExist;
+    }
+
+    public List<ItemResponse> inventoryItems () {
+        List<ItemResponse> itemsInfo = new ArrayList<ItemResponse>();
+        for (CollectableEntity item : items) {
+            itemsInfo.add(item.createItemResponse());
+        }
+        return itemsInfo;
     }
 }
