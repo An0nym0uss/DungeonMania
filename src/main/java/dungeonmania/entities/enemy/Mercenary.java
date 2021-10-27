@@ -15,7 +15,11 @@ public class Mercenary extends Enemy {
 
     @Override
     public void update(Grid grid) {
-        super.update(grid);
+        /* TODO:
+        * find out which direction it should move by doing something with player's and mercenary's x and y position
+        * try move in that direction
+        * if it cant, try move in the other direction closer to the player
+        */
     }
 
     @Override

@@ -99,15 +99,24 @@ public final class Position {
     // 6 5 4
     public List<Position> getAdjacentPositions() {
         List<Position> adjacentPositions = new ArrayList<>();
-        adjacentPositions.add(new Position(x-1, y-1));
-        adjacentPositions.add(new Position(x  , y-1));
-        adjacentPositions.add(new Position(x+1, y-1));
-        adjacentPositions.add(new Position(x+1, y));
-        adjacentPositions.add(new Position(x+1, y+1));
-        adjacentPositions.add(new Position(x  , y+1));
-        adjacentPositions.add(new Position(x-1, y+1));
-        adjacentPositions.add(new Position(x-1, y));
+        adjacentPositions.add(new Position(x-1, y-1));  // NW
+        adjacentPositions.add(new Position(x  , y-1));  // N
+        adjacentPositions.add(new Position(x+1, y-1));  // NE
+        adjacentPositions.add(new Position(x+1, y));    // E 
+        adjacentPositions.add(new Position(x+1, y+1));  // SE
+        adjacentPositions.add(new Position(x  , y+1));  // S
+        adjacentPositions.add(new Position(x-1, y+1));  // SW
+        adjacentPositions.add(new Position(x-1, y));    // W
         return adjacentPositions;
     }
 
+    
+    public List<Position> getAdjacentCardinalPositions() {
+        List<Position> adjacentPositions = new ArrayList<>();
+        adjacentPositions.add(new Position(x  , y-1));  // N
+        adjacentPositions.add(new Position(x+1, y));    // E 
+        adjacentPositions.add(new Position(x  , y+1));  // S
+        adjacentPositions.add(new Position(x-1, y));    // W
+        return adjacentPositions;
+    }
 }
