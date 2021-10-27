@@ -9,14 +9,12 @@
         {
             "x": 1,
             "y": 0,
-            "type": "wall",
-            "key": 1
+            "type": "wall"
         },
         {
             "x": 1,
             "y": 1,
-            "type": "spider",
-            "key": 1
+            "type": "spider"
         },
         {
             "x": 0,
