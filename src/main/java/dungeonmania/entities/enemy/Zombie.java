@@ -33,10 +33,9 @@ public class Zombie extends Enemy {
         // if space is not constriant, then move entity to that space
         // Check moving constraints (eg, can it go through walls/portals, etc)
         //
-        this.getPosition();
         // Gets the adjacent squares of the zombie
         // NW N NE E SE S SW W
-        List<Position> adjacentSquares = this.getPosition().getAdjacentPositions();
+        List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
         // free = not collectable?
 
         // Randomly shuffles not sure if pseudo random or purely random.
@@ -60,13 +59,14 @@ public class Zombie extends Enemy {
                 if (this.movingConstraints(positionEntity)) {
                     // Entity cannot move to this square -> check the next square
                     canMoveToPosition = false;
+                    break;
                 }
             }
 
             // if square is "free" perform the actual movement
             if (canMoveToPosition) {
                 this.setPosition(position.getX(), position.getY());
-
+                break;
             }
         }
     }

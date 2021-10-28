@@ -1,19 +1,19 @@
 package dungeonmania.entities.collectable;
 
+import dungeonmania.util.Position;
 
 public class Sword extends CollectableEntity implements Durable{
     private int durability;
     private int attack;
 
-    public Sword(String id) {
-        this.id = id;
-        this.type = "sword";
+    public Sword(String type, Position position, boolean isInteractable) {
+        super(type, position, isInteractable);
         this.durability = 10;
         this.attack = 10;
     }
 
-    public Sword(String id, int durability, int attack) {
-        this(id);
+    public Sword(String type, Position position, boolean isInteractable, int durability, int attack) {
+        this(type, position, isInteractable);
         this.durability = durability;
         this.attack = attack;
     }

@@ -3,23 +3,23 @@ package dungeonmania.entities.collectable.buildable;
 
 import dungeonmania.entities.collectable.Durable;
 import dungeonmania.entities.player.ReadRecipe;
+import dungeonmania.util.Position;
 
 public class Bow extends BuildableEntity implements Durable{
     private int durability;
 
     private String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/bowRecipe.json";
 
-    public Bow(String id) {
-        this.id = id;
-        this.type = "bow";
+    public Bow(String type, Position position, boolean isInteractable) {
+        super(type, position, isInteractable);
         this.durability = 10;
 
         ReadRecipe read = new ReadRecipe();
         this.recipes = read.readRecipes(recipeFile);
     }
 
-    public Bow(String id, int durability) {
-        this(id);
+    public Bow(String type, Position position, boolean isInteractable, int durability) {
+        this(type, position, isInteractable);
         this.durability = durability;
     }
 

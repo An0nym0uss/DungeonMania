@@ -30,6 +30,21 @@ public class Inventory {
         }
     }
 
+    public List<CollectableEntity> getItems() {
+        return this.items;
+    }
+
+    public CollectableEntity getItem(String type) {
+        for (CollectableEntity item : this.items) {
+            if (item.getType() == type) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+
     public void removeNonSpecificItem(String item) {
         for (CollectableEntity ownedItem : items) {
             if (item == ownedItem.getType()) {
