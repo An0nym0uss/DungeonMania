@@ -3,10 +3,21 @@ package dungeonmania.entities;
 import com.google.gson.JsonObject;
 
 import dungeonmania.entities.statics.*;
+import dungeonmania.modes.Mode;
 import dungeonmania.util.Position;
 import dungeonmania.entities.player.Player;
 
 public class StandardEntityFactory implements EntityFactory {
+
+    Mode mode = null;
+
+    public StandardEntityFactory() {
+        // Exits so you can have a null mode;
+    }
+
+    public StandardEntityFactory(Mode mode) {
+        this.mode = mode;
+    }
 
     @Override
     public Entity createEntity(JsonObject entityData) {
@@ -26,9 +37,22 @@ public class StandardEntityFactory implements EntityFactory {
             return new FloorSwitch(new Position(x, y, 0));
         } else if (entityType.equals("boulder")) {
             return new Boulder(new Position(x, y, 2));
+        } else if (entityType.equals("boulder")) {
+            return new Boulder(new Position(x, y, 2));
+        } else if (entityType.equals("boulder")) {
+            return new Boulder(new Position(x, y, 2));
+        } else if (entityType.equals("boulder")) {
+            return new Boulder(new Position(x, y, 2));
+        } else if (entityType.equals("boulder")) {
+            return new Boulder(new Position(x, y, 2));
         }
+
+
         else if (entityType.equals("player")) {
-            return new Player(new Position(x,y, 3), 10, 10);
+
+            if (mode == null) throw new InternalError("tried to create a player without selecting a mode.");
+
+            return new Player(new Position(x,y, 3), mode, 10);
         }
 
         return null;

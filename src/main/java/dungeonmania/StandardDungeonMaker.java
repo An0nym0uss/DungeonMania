@@ -39,7 +39,7 @@ public class StandardDungeonMaker implements DungeonMaker {
 
     public static final String RESOURCE_PATH = "src\\main\\resources\\dungeons\\";
 
-    private EntityFactory entityFactory = new StandardEntityFactory();
+    private EntityFactory entityFactory = null;
 
     /**
      * Creates dungeon.
@@ -68,6 +68,8 @@ public class StandardDungeonMaker implements DungeonMaker {
 
         // Create mode
         Mode mode = createGameMode(gameMode);
+
+        this.entityFactory = new StandardEntityFactory(mode);
         
         // Create dungeon.
         Dungeon dungeon = new Dungeon(dungeonName, mode);

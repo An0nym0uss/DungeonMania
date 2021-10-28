@@ -32,7 +32,7 @@ public class Player extends Entity implements Damage, Health, Moving{
     private Direction movement;
     private List<Recipe> recipes;
 
-    public Player(String type, Position position, boolean isInteractable, Mode mode) {
+    public Player(Position position, Mode mode) {
         super("player", position, false);
         this.damage = 10;
         this.maxHealth = mode.getMaxPlayerHealth();
@@ -43,8 +43,8 @@ public class Player extends Entity implements Damage, Health, Moving{
         this.recipes = allRecipes.getRecipes();
     }
 
-    public Player(String type, Position position, boolean isInteractable, Mode mode, int damage) {
-        this(type, position, isInteractable, mode);
+    public Player(Position position, Mode mode, int damage) {
+        this(position, mode);
         this.damage = damage;
     }
 
