@@ -27,6 +27,16 @@ import dungeonmania.util.Position;
  */
 public class Boulder extends StaticEntity {
 
+    /**
+     * Constructor for Boulder.
+     * 
+     * @param type
+     * @param position
+     */
+    public Boulder(Position position) {
+        super("boulder", position, false);
+    }
+
     @Override
     public void collidesWith(Entity other, Grid grid) {
         if (other instanceof Player) {

@@ -1,26 +1,25 @@
 package dungeonmania.entities.collectable;
 
-import dungeonmania.response.models.ItemResponse;
-<<<<<<< HEAD
-=======
+import dungeonmania.util.Position;
 import dungeonmania.Grid;
->>>>>>> master
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.player.StatusEffect;
 
-<<<<<<< HEAD
-public abstract class CollectableEntity extends Entity {
-    protected String id;
-    protected String type;
-
-    public String getId() {
-        return id;
-    }
-=======
 public abstract class CollectableEntity extends Entity{
+    
+    /**
+     * Constructor for CollectableEntity.
+     * @param id
+     * @param type
+     * @param position
+     * @param isInteractable
+     */
+    public CollectableEntity(String type, Position position, boolean isInteractable) {
+        super(type, position, isInteractable);
+    }
+
     public void useItem(Player player) {
->>>>>>> master
 
     }
 
@@ -30,9 +29,5 @@ public abstract class CollectableEntity extends Entity{
 
     public void placeBomb(Player player, Grid grid) {
 
-    }
-
-    public ItemResponse createItemResponse() {
-        return new ItemResponse(id, type);
     }
 }

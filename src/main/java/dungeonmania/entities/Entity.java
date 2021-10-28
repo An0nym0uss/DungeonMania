@@ -1,10 +1,16 @@
 package dungeonmania.entities;
 
+import java.util.UUID;
+
+import org.json.JSONObject;
+
 import dungeonmania.GameToJSON;
 import dungeonmania.Grid;
 import dungeonmania.util.Position;
 
 public abstract class Entity implements ObserverEntity, GameToJSON {
+
+    private static int n_entities = 0;
     private String id;
     private String type;
     private Position position;
@@ -18,8 +24,8 @@ public abstract class Entity implements ObserverEntity, GameToJSON {
      * @param position
      * @param isInteractable
      */
-    public Entity(String id, String type, Position position, boolean isInteractable) {
-        this.id = id;
+    public Entity(String type, Position position, boolean isInteractable) {
+        this.id = Integer.toString(Entity.n_entities++);
         this.type = type;
         this.position = position;
         this.isInteractable = isInteractable;
@@ -107,5 +113,17 @@ public abstract class Entity implements ObserverEntity, GameToJSON {
     public boolean canMoveInto(Entity other) {
         // For subclasses to override otherwise by default returns true.
         return true;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+
+        JSONObject entity = new JSONObject();
+
+        entity.put("x", getPosition().getX());
+        entity.put("y", getPosition().getY());
+        entity.put("type", getType());
+
+        return entity;
     }
 }

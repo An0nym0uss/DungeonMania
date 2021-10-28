@@ -21,8 +21,10 @@ public class Portal extends StaticEntity {
      * Creates a new Portal entity with a corresponding portal to transport entities to.
      * @param correspondingPortal The corresponding portal to set.
      */
-    public Portal(Portal correspondingPortal) {
+    public Portal(Position position, Portal correspondingPortal) {
+        super("portal", position, false);
         this.correspondingPortal = correspondingPortal;
+        
     }
 
     /**

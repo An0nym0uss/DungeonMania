@@ -26,7 +26,8 @@ public class Door extends StaticEntity {
      * @param key The specific key needed to open the door.
      * @param isOpen The status of the door. True for open, false for closed.
      */
-    public Door(Key key, boolean isOpen) {
+    public Door(Position position, Key key, boolean isOpen) {
+        super("door", position, false);
         this.key = key;
         this.isOpen = isOpen;
     }
