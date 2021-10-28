@@ -1,12 +1,18 @@
 package dungeonmania;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.sound.sampled.Port;
 
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.ObserverEntity;
 import dungeonmania.entities.player.Player;
+import dungeonmania.entities.statics.Portal;
+import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 /**
@@ -23,6 +29,7 @@ public class Grid implements GridSubject {
     private final int LAYER_SIZE = 4;
     private Entity[][][] map;
     private Player player;
+    private Map<String, Position> portalMapping = new HashMap<>();
 
     /**
      * Getter for height.
@@ -129,6 +136,25 @@ public class Grid implements GridSubject {
 
         if (e instanceof Player) {
             setPlayer((Player) e);
+        // For linking portals
+        } else if (e instanceof Portal) {
+            String colour = ((Portal) e).getColour();
+
+            // If already added a portal of same colour then create link between
+            if (portalMapping.containsKey(colour)) {
+                Position other_portal = portalMapping.get(colour);
+
+                int x_other = other_portal.getX();
+                int y_other = other_portal.getY();
+                int layer_other = other_portal.getLayer();
+
+                ((Portal) e).setCorrespondingPortal((Portal) map[x_other][y_other][layer_other]);
+                ((Portal) map[x_other][y_other][layer_other]).setCorrespondingPortal((Portal) e);
+            
+            // Else mark that we have seen that portal of colour
+            } else {
+                portalMapping.put(colour, e.getPosition());
+            }
         }
     }
 
@@ -157,6 +183,10 @@ public class Grid implements GridSubject {
             setPlayer(null);
         }
         */
+    }
+
+    public void movePlayer(Direction d) {
+        player.move(this, d);
     }
 
 }
