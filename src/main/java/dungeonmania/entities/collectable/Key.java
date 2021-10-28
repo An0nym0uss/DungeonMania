@@ -8,3 +8,4 @@ public class Key extends CollectableEntity{
         super("key", position, false);
     }
 }
+

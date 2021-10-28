@@ -8,3 +8,4 @@ public class Wood extends CollectableEntity {
         super("wood", position, false);
     }
 }
+

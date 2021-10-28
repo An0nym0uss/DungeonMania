@@ -12,5 +12,7 @@ public class InvisibilityPotion extends CollectableEntity {
     @Override
     public void useItemWithEffect(StatusEffect statusEffect) {
         statusEffect.setInvisible(true);
+        statusEffect.setInvisibleDuration(10);
     }
 }
+
