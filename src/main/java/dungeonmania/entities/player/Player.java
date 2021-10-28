@@ -183,7 +183,7 @@ public class Player extends Entity implements Damage, Health, Moving{
      * Player coolect item and put it to inventory
      */
     public void collectItem(Entity e, Grid grid) {
-        List<Entity> entities = grid.getEntities(this.position.getX(), this.position.getY());
+        List<Entity> entities = grid.getEntities(this.getPosition().getX(), this.getPosition().getY());
         for (Entity entity : entities) {
             if (entity instanceof CollectableEntity) {
                 // player can only have one sword, armour, key and buildables
@@ -219,8 +219,8 @@ public class Player extends Entity implements Damage, Health, Moving{
      * player pushes boulder
      */
     private void pushBoulder(Boulder boulder, Grid grid) {
-        int newX = position.getX() + movement.getOffset().getX();
-        int newY = position.getY() + movement.getOffset().getY();
+        int newX = getPosition().getX() + movement.getOffset().getX();
+        int newY = getPosition().getY() + movement.getOffset().getY();
 
         // detach boulder form old position
         grid.dettach(boulder);
@@ -316,7 +316,7 @@ public class Player extends Entity implements Damage, Health, Moving{
         List<String> buildables = new ArrayList<>();
         for (Recipe recipe : this.recipes) {
             if (recipe.isCraftable(this.inventory)) {
-                buildables.add(type);
+                buildables.add(recipe.getType());
             }
         }
         return buildables;
@@ -327,8 +327,8 @@ public class Player extends Entity implements Damage, Health, Moving{
     public void move(Grid grid, Direction d) {
         this.movement = d;
         // check movement within border
-        int newX = position.getX() + d.getOffset().getX();
-        int newY = position.getY() + d.getOffset().getY();
+        int newX = getPosition().getX() + d.getOffset().getX();
+        int newY = getPosition().getY() + d.getOffset().getY();
         if (newX >= 0 && newX <= grid.getWidth() &&
             newY >= 0 && newY <= grid.getHeight()
         ) {
@@ -344,7 +344,7 @@ public class Player extends Entity implements Damage, Health, Moving{
 
             // player moves
             grid.dettach(this);
-            this.position.translateBy(new Position(newX, newY, this.position.getLayer()));
+            this.setPosition(new Position(newX, newY, this.getPosition().getLayer()));
             grid.attach(this);
 
             // player interacts with entities in the cell

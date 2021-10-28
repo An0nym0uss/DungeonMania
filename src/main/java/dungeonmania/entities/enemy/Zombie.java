@@ -65,7 +65,7 @@ public class Zombie extends Enemy {
 
             // if square is "free" perform the actual movement
             if (canMoveToPosition) {
-                this.setPosition(position.getX(), position.getY());
+                this.setPosition(position);
                 break;
             }
         }

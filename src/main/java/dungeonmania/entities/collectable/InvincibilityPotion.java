@@ -1,12 +1,12 @@
 package dungeonmania.entities.collectable;
 
 import dungeonmania.entities.player.StatusEffect;
+import dungeonmania.util.Position;
 
 public class InvincibilityPotion extends CollectableEntity {
 
-    public InvincibilityPotion(String id, String type) {
-        this.id = id;
-        this.type = "invincibility_potion";
+    public InvincibilityPotion(Position position) {
+        super("invincibility_potion", position, false);
     }
     
     @Override

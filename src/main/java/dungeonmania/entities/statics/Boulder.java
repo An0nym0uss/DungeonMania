@@ -79,8 +79,9 @@ public class Boulder extends StaticEntity {
     
     @Override
     public boolean canMoveInto(Entity other) {
+        if (super.canMoveInto(other))                   { return true; }
         //player
-            if (other instanceof Player)                { return false; }   //required
+        else if (other instanceof Player)               { return false; }   //required
 
         //static entities
         else if (other instanceof Wall)                 { return false; }   //required
@@ -92,7 +93,6 @@ public class Boulder extends StaticEntity {
             else                                        { return false; } } //required
         else if (other instanceof Portal)               { return true; }    //assumption
         else if (other instanceof ZombieToastSpawner)   { return false; }   //assumption
-        
         /* can uncomment when these extend Entity
         //moving entities
         else if (other instanceof Spider)               { return false; }   //required

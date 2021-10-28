@@ -42,7 +42,7 @@ public class Spider extends Enemy {
         }
         // move to new position
         // probably should use move()
-        this.setPosition(newPosition.getX(), newPosition.getY());
+        this.setPosition(newPosition);
 
     }
 
