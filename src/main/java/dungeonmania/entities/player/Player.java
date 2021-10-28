@@ -249,11 +249,6 @@ public class Player extends Entity implements Damage, Health, Moving{
     public boolean canMoveInto(Entity other) {
         
         if (other instanceof Wall)                      {return false;} 
-        else if (other instanceof Boulder) {
-            // //////////////////////////////////////////////////////////////////////
-            // check if can push boulder
-            return false;
-        }
         else if (other instanceof ZombieToastSpawner)   {return false;}
         // else if (other instanceof Door) {
         //     /////////////////////////////////////////////////////////////////////
