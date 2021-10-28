@@ -3,6 +3,7 @@ package dungeonmania.entities.collectable.buildable;
 
 import dungeonmania.entities.collectable.Durable;
 import dungeonmania.entities.player.ReadRecipe;
+import dungeonmania.util.Position;
 
 public class Shield extends BuildableEntity implements Durable{
     private int durability;
@@ -10,9 +11,8 @@ public class Shield extends BuildableEntity implements Durable{
 
     private final String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/shieldRecipe.json";
 
-    public Shield(String id) {
-        this.id = id;
-        this.type = "armour";
+    public Shield(String type, Position position, boolean isInteractable) {
+        super(type, position, isInteractable);
         this.durability = 10;
         this.defense = 10;
 
@@ -20,8 +20,8 @@ public class Shield extends BuildableEntity implements Durable{
         this.recipes = read.readRecipes(recipeFile);
     }
 
-    public Shield(String id, int durability, int defense) {
-        this(id);
+    public Shield(String type, Position position, boolean isInteractable, int durability, int defense) {
+        this(type, position, isInteractable);
         this.durability = durability;
         this.defense = defense;
     }
