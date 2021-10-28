@@ -24,12 +24,8 @@ import dungeonmania.entities.StandardEntityFactory;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Wall;
-import dungeonmania.goals.ComponentGoal;
-import dungeonmania.goals.ReachedExitGoal;
-import dungeonmania.modes.Hard;
-import dungeonmania.modes.Mode;
-import dungeonmania.modes.Peaceful;
-import dungeonmania.modes.Standard;
+import dungeonmania.goals.*;
+import dungeonmania.modes.*;
 import dungeonmania.util.Position;
 
 /**
@@ -99,6 +95,7 @@ public class StandardDungeonMaker implements DungeonMaker {
         return dungeon;
     }
 
+    @Override
     public Mode createGameMode(String gameMode) throws IllegalArgumentException {
 
         if (gameMode.equalsIgnoreCase("peaceful")) {
@@ -112,6 +109,7 @@ public class StandardDungeonMaker implements DungeonMaker {
         throw new IllegalAccessError("IllegalAccessError: game mode given doesn't exist");
     }
 
+    @Override
     public Grid createGrid(JsonArray gridData, int height, int width) {
         Grid grid = new Grid(height, width, new Entity[width][height][4], null);
 
@@ -128,8 +126,44 @@ public class StandardDungeonMaker implements DungeonMaker {
         return entityFactory.createEntity(entityData);
     }
 
+    /**
+     * @apiNote returns null if doesn't goal type in json file doesn't match to pre-existing ones.
+     * This is purely for extension reasons.
+     */
     public ComponentGoal createGoal(JsonObject goalData) {
-        
-        return new ReachedExitGoal();
+
+        String goalType = goalData.get("goal").getAsString();
+
+        if (goalType.equalsIgnoreCase("AND")) {
+
+            Iterator<JsonElement> subgoals = goalData.getAsJsonArray("subgoals").iterator();
+            AndCompositeGoal goal = new AndCompositeGoal();
+            while(subgoals.hasNext()) {
+                goal.addSubgoal(createGoal(subgoals.next().getAsJsonObject()));
+            }
+
+            return goal;
+
+        } else if (goalType.equalsIgnoreCase("OR")) {
+
+            Iterator<JsonElement> subgoals = goalData.getAsJsonArray("subgoals").iterator();
+            OrCompositeGoal goal = new OrCompositeGoal();
+            while(subgoals.hasNext()) {
+                goal.addSubgoal(createGoal(subgoals.next().getAsJsonObject()));
+            }
+
+            return goal;
+
+        } else if (goalType.equalsIgnoreCase("enemies")) {
+            return new DestroyAllEnemiesGoal();
+        } else if (goalType.equalsIgnoreCase("treasure")) {
+            return new CollectAllTreasureGoal();
+        } else if (goalType.equalsIgnoreCase("boulders")) {
+            return new AllSwitchesTriggeredGoal();
+        } else if (goalType.equalsIgnoreCase("exit")) {
+            return new ReachedExitGoal();
+        }
+
+        return null;
     }
 }
