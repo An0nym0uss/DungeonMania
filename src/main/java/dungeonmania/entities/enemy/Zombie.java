@@ -20,8 +20,8 @@ import java.util.Random;
 
 public class Zombie extends Enemy {
 
-    public Zombie(int speed, Health health, Moving moving, Damage damage) {
-        super(speed, health, moving, damage);
+    public Zombie(Position position, int speed, Health health, Moving moving, Damage damage) {
+        super("zombie", position, false, speed, health, moving, damage);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Zombie extends Enemy {
 
             // if square is "free" perform the actual movement
             if (canMoveToPosition) {
-                this.setPosition(position.getX(), position.getY());
+                this.setPosition(position);
                 break;
             }
         }

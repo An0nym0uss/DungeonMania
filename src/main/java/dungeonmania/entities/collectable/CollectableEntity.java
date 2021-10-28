@@ -8,6 +8,14 @@ import dungeonmania.entities.player.Player;
 import dungeonmania.entities.player.StatusEffect;
 
 public abstract class CollectableEntity extends Entity{
+    
+    /**
+     * Constructor for CollectableEntity.
+     * @param id
+     * @param type
+     * @param position
+     * @param isInteractable
+     */
     public CollectableEntity(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);
     }
@@ -22,9 +30,5 @@ public abstract class CollectableEntity extends Entity{
 
     public void placeBomb(Player player, Grid grid) {
 
-    }
-
-    public ItemResponse createItemResponse() {
-        return new ItemResponse(id, type);
     }
 }

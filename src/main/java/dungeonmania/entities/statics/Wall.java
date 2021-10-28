@@ -13,6 +13,15 @@ import dungeonmania.util.Position;
  */
 public class Wall extends StaticEntity {
     
+    /**
+     * Constructor for wall.
+     * 
+     * @param position
+     */
+    public Wall(Position position) {
+        super("wall", position, false);
+    }
+
     @Override
     public void collidesWith(Entity other, Grid grid) {
         /* Can uncomment when Spider extends Entity
