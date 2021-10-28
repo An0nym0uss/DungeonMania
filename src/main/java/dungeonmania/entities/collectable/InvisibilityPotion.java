@@ -4,9 +4,8 @@ import dungeonmania.entities.player.StatusEffect;
 
 public class InvisibilityPotion extends CollectableEntity {
 
-    public InvisibilityPotion(String id) {
-        this.id = id;
-        this.type = "invisible_potion";
+    public InvisibilityPotion(Position position) {
+        super("invisible_potion", position, false);
     }
 
     @Override
