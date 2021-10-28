@@ -4,10 +4,10 @@ import dungeonmania.entities.player.StatusEffect;
 
 public class InvincibilityPotion extends CollectableEntity {
 
-    public InvincibilityPotion(String id) {
-        this.id = id;
-        this.type = "invincibility_potion";
+    public InvincibilityPotion(Position position) {
+        super("invincibility_potion", position, false);
     }
+
     
     @Override
     public void useItemWithEffect(StatusEffect statusEffect) {
