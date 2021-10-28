@@ -2,6 +2,8 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.ResponseFactory;
+import dungeonmania.response.models.StandardResponseFactory;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
@@ -11,6 +13,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DungeonManiaController {
+
+    Dungeon currentGame = null;
+    DungeonMaker dungeonMaker = new StandardDungeonMaker();
+    ResponseFactory dungeonResponseFactory = new StandardResponseFactory();
+
+
     public DungeonManiaController() {
     }
 
@@ -40,7 +48,8 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse newGame(String dungeonName, String gameMode) throws IllegalArgumentException {
-        return null;
+        currentGame = dungeonMaker.createNewDungeon(dungeonName, gameMode);
+        return dungeonResponseFactory.createDungeonResponse(currentGame);
     }
     
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {

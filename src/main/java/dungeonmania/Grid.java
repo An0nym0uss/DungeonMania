@@ -55,6 +55,10 @@ public class Grid implements GridSubject {
     public Entity[][][] getMap() {
         return this.map;
     }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
     
     /**
      * Getter for player.
@@ -122,6 +126,10 @@ public class Grid implements GridSubject {
         int layer = entity_position.getLayer();
 
         map[x][y][layer] = e;
+
+        if (e instanceof Player) {
+            setPlayer((Player) e);
+        }
     }
 
     /**
@@ -143,6 +151,12 @@ public class Grid implements GridSubject {
         int layer = entity_position.getLayer();
 
         map[x][y][layer] = null;
+
+        /*
+        if (e instanceof Player) {
+            setPlayer(null);
+        }
+        */
     }
 
 }
