@@ -1,16 +1,19 @@
 package dungeonmania.entities.enemy;
 
+import org.json.JSONObject;
+
 import dungeonmania.Grid;
 import dungeonmania.entities.Damage;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Health;
 import dungeonmania.entities.Moving;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 
 public class Mercenary extends Enemy {
 
-    public Mercenary(int speed, Health health, Moving moving, Damage damage) {
-        super(speed, health, moving, damage);
+    public Mercenary(Position position, int speed, Health health, Moving moving, Damage damage) {
+        super("mercenary", position, true, speed, health, moving, damage);
     }
 
     @Override

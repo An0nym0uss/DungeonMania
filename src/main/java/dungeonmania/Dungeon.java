@@ -1,24 +1,28 @@
 package dungeonmania;
 
-import dungeonmania.modes.*;
-import dungeonmania.response.models.*;
-import dungeonmania.goals.*;
-import dungeonmania.util.*;
-import dungeonmania.exceptions.*;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.json.JSONObject;
+
+import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.goals.ComponentGoal;
+import dungeonmania.modes.Mode;
+import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.util.Direction;
 
 public class Dungeon {
     
     private String dungeonId; // Dungeon game file.
     private String dungeonName; // Type of dungeon
-    private Mode gameMode;
-    private ComponentGoal goal;
-    private Grid grid;
+    private Mode gameMode = null;
+    private ComponentGoal goal = null;
+    private Grid grid = null;
 
-    public Dungeon(String id, String name, String mode) {
-        this.dungeonId = id;
+    public Dungeon(String name, Mode mode) {
+        this.dungeonId = name + LocalDateTime.now().toString();
         this.dungeonName = name;
-        //this.gameMode = new Mode(mode);
+        this.gameMode = mode;
 
     }
 
@@ -30,12 +34,24 @@ public class Dungeon {
         return this.dungeonName;
     }
 
+    public void setGameMode(Mode gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    public void setGoal(ComponentGoal goal) {
+        this.goal = goal;
+    }
+
     public Mode getGameMode() {
         return this.gameMode;
     }
 
     public ComponentGoal getGoal() {
         return this.goal;
+    }
+
+    public void setGrid(Grid grid) {
+        this.grid = grid;
     }
 
     public Grid getGrid() {
@@ -46,8 +62,8 @@ public class Dungeon {
 
     }
 
-    public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        return null;
+    public void tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
+        grid.movePlayer(movementDirection);
     }
 
     /**
@@ -74,11 +90,11 @@ public class Dungeon {
     private void useItem(String itemUsed) {
     }
 
-    public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
-        return null;
+    public void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+
     }
 
-    public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        return null;
+    public void build(String buildable) throws IllegalArgumentException, InvalidActionException {
+
     }   
 }

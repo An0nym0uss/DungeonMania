@@ -1,6 +1,7 @@
 package dungeonmania.entities.collectable;
 
 import dungeonmania.entities.player.StatusEffect;
+import dungeonmania.util.Position;
 
 public class InvisibilityPotion extends CollectableEntity {
 
