@@ -4,9 +4,8 @@ import dungeonmania.entities.player.Player;
 
 public class HealthPotion extends CollectableEntity{
 
-    public HealthPotion(String id) {
-        this.id = id;
-        this.type = "health_potion";
+    public HealthPotion(Position position) {
+        super("health_potion", position, false);
     }
 
     @Override
