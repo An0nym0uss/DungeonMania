@@ -1,12 +1,17 @@
 package dungeonmania.entities.collectable;
 
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.util.Position;
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.player.StatusEffect;
 
 public abstract class CollectableEntity extends Entity{
+    public CollectableEntity(String type, Position position, boolean isInteractable) {
+        super(type, position, isInteractable);
+    }
+
     public void useItem(Player player) {
 
     }
