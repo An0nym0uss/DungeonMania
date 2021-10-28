@@ -18,16 +18,6 @@ import dungeonmania.util.Position;
 public class FloorSwitch extends StaticEntity {
 
     /**
-     * Constructor for FloorSwitch.
-     * 
-     * @param position
-     */
-    public FloorSwitch(Position position) {
-        super("switch", position, false);
-        //TODO Auto-generated constructor stub
-    }
-
-    /**
      * Gets whether or not a boulder is on our floor switch.
      * @param grid The current grid we wish to check on.
      * @return True for triggered, false for not triggered

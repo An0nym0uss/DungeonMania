@@ -10,20 +10,33 @@ import dungeonmania.entities.collectable.Treasure;
  * A goal for collecting all treasure in a dungeon.
  * 
  * @author Enoch Kavur (z5258204)
+ * 
+ * @invariant grid is always a reference that current dungeon.
+ * 
  */
 public class CollectAllTreasureGoal implements ComponentGoal {
+    private Grid grid;
     private int n_treasure = -1; // flaged as not updated
+
+	/**
+	 * Constructor 
+	 * 
+	 * @param grid for the dungeon.
+	 * @pre grid is not null
+	 */
+	public CollectAllTreasureGoal(Grid grid) {
+		this.grid = grid;
+	}
 
 	/**
      * @apiNote Only update the counters for treasure when isAchieved is 
      * called otherwise set -1 to mean uncounted. Reason to only count is after isAchieved 
      * is called is so that we do less computation each tick.
      * 
-	 * @pre grid is a copy of the current grid state.
 	 * @post returns true if player has collected all treasure in dungeon.
 	 */
 	@Override
-	public boolean isAchieved(Grid grid) {
+	public boolean isAchieved() {
 
         n_treasure = 0;
 

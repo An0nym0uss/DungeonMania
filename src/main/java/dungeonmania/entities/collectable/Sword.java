@@ -6,14 +6,14 @@ public class Sword extends CollectableEntity implements Durable{
     private int durability;
     private int attack;
 
-    public Sword(Position position) {
-        super("sword", position, false);
+    public Sword(String type, Position position, boolean isInteractable) {
+        super(type, position, isInteractable);
         this.durability = 10;
         this.attack = 10;
     }
 
-    public Sword(Position position, int durability, int attack) {
-        this(position);
+    public Sword(String type, Position position, boolean isInteractable, int durability, int attack) {
+        this(type, position, isInteractable);
         this.durability = durability;
         this.attack = attack;
     }

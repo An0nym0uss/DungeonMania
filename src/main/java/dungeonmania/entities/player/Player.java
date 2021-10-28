@@ -32,8 +32,8 @@ public class Player extends Entity implements Damage, Health, Moving{
     private Direction movement;
     private List<Recipe> recipes;
 
-    public Player(Position position, Mode mode) {
-        super("player", position, false);
+    public Player(String type, Position position, boolean isInteractable, Mode mode) {
+        super(type, position, isInteractable);
         this.damage = 10;
         this.maxHealth = mode.getMaxPlayerHealth();
         this.currentHealth = mode.getMaxPlayerHealth();
@@ -43,8 +43,8 @@ public class Player extends Entity implements Damage, Health, Moving{
         this.recipes = allRecipes.getRecipes();
     }
 
-    public Player(Position position, Mode mode, int damage) {
-        this(position, mode);
+    public Player(String type, Position position, boolean isInteractable, Mode mode, int damage) {
+        this(type, position, isInteractable, mode);
         this.damage = damage;
     }
 
@@ -183,7 +183,7 @@ public class Player extends Entity implements Damage, Health, Moving{
      * Player coolect item and put it to inventory
      */
     public void collectItem(Entity e, Grid grid) {
-        List<Entity> entities = grid.getEntities(this.getPosition().getX(), this.getPosition().getY());
+        List<Entity> entities = grid.getEntities(this.position.getX(), this.position.getY());
         for (Entity entity : entities) {
             if (entity instanceof CollectableEntity) {
                 // player can only have one sword, armour, key and buildables
@@ -219,8 +219,8 @@ public class Player extends Entity implements Damage, Health, Moving{
      * player pushes boulder
      */
     private void pushBoulder(Boulder boulder, Grid grid) {
-        int newX = getPosition().getX() + movement.getOffset().getX();
-        int newY = getPosition().getY() + movement.getOffset().getY();
+        int newX = position.getX() + movement.getOffset().getX();
+        int newY = position.getY() + movement.getOffset().getY();
 
         // detach boulder form old position
         grid.dettach(boulder);
@@ -316,7 +316,7 @@ public class Player extends Entity implements Damage, Health, Moving{
         List<String> buildables = new ArrayList<>();
         for (Recipe recipe : this.recipes) {
             if (recipe.isCraftable(this.inventory)) {
-                buildables.add(recipe.getType());
+                buildables.add(type);
             }
         }
         return buildables;
@@ -327,8 +327,8 @@ public class Player extends Entity implements Damage, Health, Moving{
     public void move(Grid grid, Direction d) {
         this.movement = d;
         // check movement within border
-        int newX = getPosition().getX() + d.getOffset().getX();
-        int newY = getPosition().getY() + d.getOffset().getY();
+        int newX = position.getX() + d.getOffset().getX();
+        int newY = position.getY() + d.getOffset().getY();
         if (newX >= 0 && newX <= grid.getWidth() &&
             newY >= 0 && newY <= grid.getHeight()
         ) {
@@ -344,7 +344,7 @@ public class Player extends Entity implements Damage, Health, Moving{
 
             // player moves
             grid.dettach(this);
-            this.setPosition(new Position(newX, newY, this.getPosition().getLayer()));
+            this.position.translateBy(new Position(newX, newY, this.position.getLayer()));
             grid.attach(this);
 
             // player interacts with entities in the cell

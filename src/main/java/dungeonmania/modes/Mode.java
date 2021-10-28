@@ -1,12 +1,10 @@
 package dungeonmania.modes;
 
-import dungeonmania.GameToJSON;
-
 /**
  * An interface containing required methods for each game mode.
  * @author Lachlan Kerr (z5118613)
  */
-public interface Mode extends GameToJSON {
+public interface Mode {
     
     /**
      * Can an enemy attack the player character.

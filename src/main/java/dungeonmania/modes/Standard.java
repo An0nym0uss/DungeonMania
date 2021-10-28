@@ -1,7 +1,5 @@
 package dungeonmania.modes;
 
-import org.json.JSONObject;
-
 /**
  * Standard game rules.
  * @author Lachlan Kerr (z5118613)
@@ -39,14 +37,5 @@ public class Standard implements Mode {
     @Override
     public boolean canHaveInvincibilityEffect() {
         return invincibilityEffect;
-    }
-
-    @Override
-    public JSONObject getJSON() {
-        JSONObject mode = new JSONObject();
-
-        mode.put("mode", "standard");
-        
-        return mode;
     }
 }

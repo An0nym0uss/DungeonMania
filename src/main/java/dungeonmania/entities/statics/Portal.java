@@ -16,16 +16,13 @@ import dungeonmania.util.Position;
  */
 public class Portal extends StaticEntity {
     private Portal correspondingPortal;
-    private String colour;
 
     /**
      * Creates a new Portal entity with a corresponding portal to transport entities to.
      * @param correspondingPortal The corresponding portal to set.
      */
-    public Portal(Position position, String colour) {
-        super("portal", position, false);
-        this.correspondingPortal = null;
-        this.colour = colour;
+    public Portal(Portal correspondingPortal) {
+        this.correspondingPortal = correspondingPortal;
     }
 
     /**
@@ -36,19 +33,11 @@ public class Portal extends StaticEntity {
     }
 
     /**
-     * Sets a new corresponding portal, should only be called at dungeon creation.
+     * Sets a new corresponding portal.
      * @param correspondingPortal The corresponding portal to set.
      */
     public void setCorrespondingPortal(Portal correspondingPortal) {
         this.correspondingPortal = correspondingPortal;
-    }
-
-    /**
-     * Getter for colour.
-     * @return
-     */
-    public String getColour() {
-        return colour;
     }
 
     @Override

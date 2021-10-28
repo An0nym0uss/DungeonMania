@@ -11,6 +11,9 @@ import dungeonmania.entities.statics.Spawner;
  * A goal for destroying all enemies and spawners in a dungeon.
  * 
  * @author Enoch Kavur (z5258204)
+ * 
+ * @invariant grid is always a reference that current dungeon.
+ * 
  */
 public class DestroyAllEnemiesGoal implements ComponentGoal {
 
@@ -18,15 +21,24 @@ public class DestroyAllEnemiesGoal implements ComponentGoal {
     private int n_enemies = -1; // flaged as not updated
 
 	/**
+	 * Constructor 
+	 * 
+	 * @param grid for the dungeon.
+	 * @pre grid is not null
+	 */
+	public DestroyAllEnemiesGoal(Grid grid) {
+		this.grid = grid;
+	}
+
+	/**
      * @apiNote Only update the counters for enemy when isAchieved is 
      * called otherwise set -1 to mean uncounted. Reason to only count is after isAchieved 
      * is called is so that we do less computation each tick.
      * 
-	 * @pre grid is a copy of the current grid state.
 	 * @post returns true if player has destroyed all enemies and spawners have been destroyed.
 	 */
 	@Override
-	public boolean isAchieved(Grid grid) {
+	public boolean isAchieved() {
 
         n_enemies = 0;
 

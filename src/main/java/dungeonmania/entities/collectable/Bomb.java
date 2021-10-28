@@ -18,14 +18,15 @@ public class Bomb extends CollectableEntity{
     private int blastRadius;
     private boolean isPlaced;
 
-    public Bomb(Position position) {
-        super("bomb", position, false);
+    public Bomb(String type, Position position, boolean isInteractable) {
+        super(type, position, isInteractable);
+        this.isInteractable = true;
         this.blastRadius = 1;
         this.isPlaced = false;
     }
 
-    public Bomb(Position position, int blastRadius) {
-        this(position);
+    public Bomb(String type, Position position, boolean isInteractable, int blastRadius) {
+        this(type, position, isInteractable);
         this.blastRadius = blastRadius;
     }
 
@@ -38,7 +39,7 @@ public class Bomb extends CollectableEntity{
         Position position = player.getPosition();    
         
         if (checkPlaceValid(position, grid)) {
-            this.setPosition(new Position(position.getX(), position.getY(), Layer.ENEMY));
+            this.position = new Position(position.getX(), position.getY(), Layer.ENEMY);
             this.isPlaced = true;
             grid.attach(this);
 
@@ -71,8 +72,8 @@ public class Bomb extends CollectableEntity{
     }
 
     public boolean checkSwitchOn(Grid grid) {
-        int x = this.getPosition().getX();
-        int y = this.getPosition().getY();
+        int x = this.position.getX();
+        int y = this.position.getY();
 
         for (Position adjacentPosition : getCardinallyAdjacentPosition(x, y)) {
             if (adjacentPosition.getX() >= 0 && adjacentPosition.getY() >= 0) {
@@ -95,8 +96,8 @@ public class Bomb extends CollectableEntity{
     }
 
     public void blast(Grid grid) {
-        int x = this.getPosition().getX();
-        int y = this.getPosition().getY();
+        int x = this.position.getX();
+        int y = this.position.getY();
 
         for (int i = 0 - blastRadius; i <= blastRadius; i++) {
             int newX = x + i;

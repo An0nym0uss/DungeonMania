@@ -1,7 +1,5 @@
 package dungeonmania.modes;
 
-import org.json.JSONObject;
-
 /**
  * Enemies can not attack the player.
  * @author Lachlan Kerr (z5118613)
@@ -39,14 +37,5 @@ public class Peaceful implements Mode {
     @Override
     public boolean canHaveInvincibilityEffect() {
         return invincibilityEffect;
-    }
-
-    @Override
-    public JSONObject getJSON() {
-        JSONObject mode = new JSONObject();
-
-        mode.put("mode", "peaceful");
-        
-        return mode;
     }
 }
