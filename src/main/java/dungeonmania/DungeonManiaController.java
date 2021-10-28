@@ -49,7 +49,7 @@ public class DungeonManiaController {
 
     public DungeonResponse newGame(String dungeonName, String gameMode) throws IllegalArgumentException {
         currentGame = dungeonMaker.createNewDungeon(dungeonName, gameMode);
-        return dungeonResponseFactory.createDungeonResponse(currentGame);
+        return createDungeonResponse();
     }
     
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
@@ -65,7 +65,10 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        return null;
+
+        currentGame.tick(itemUsed, movementDirection);
+
+        return createDungeonResponse();
     }
 
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
@@ -74,5 +77,10 @@ public class DungeonManiaController {
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
         return null;
+    }
+
+    private DungeonResponse createDungeonResponse() {
+
+        return dungeonResponseFactory.createDungeonResponse(currentGame);
     }
 }

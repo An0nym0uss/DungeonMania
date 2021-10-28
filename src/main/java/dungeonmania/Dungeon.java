@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.json.JSONObject;
 
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.ComponentGoal;
 import dungeonmania.modes.Mode;
 import dungeonmania.response.models.DungeonResponse;
@@ -61,8 +62,8 @@ public class Dungeon {
 
     }
 
-    public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        return null;
+    public void tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
+        grid.movePlayer(movementDirection);
     }
 
     /**
@@ -89,11 +90,11 @@ public class Dungeon {
     private void useItem(String itemUsed) {
     }
 
-    public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
-        return null;
+    public void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+
     }
 
-    public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        return null;
+    public void build(String buildable) throws IllegalArgumentException, InvalidActionException {
+
     }   
 }
