@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import dungeonmania.Grid;
+
 /**
  * @author Enoch Kavur (z5258204)
  * 
@@ -37,12 +39,13 @@ public class OrCompositeGoal implements ComponentGoal {
 
     /**
      * 
+     * @pre grid is a copy of the current grid state.
      * @post will return true if any subgoal is achieved.
      */
     @Override
-    public boolean isAchieved() {
+    public boolean isAchieved(Grid grid) {
 
-        return subgoals.stream().filter(goal -> goal.isAchieved()).findAny().isPresent();
+        return subgoals.stream().filter(goal -> goal.isAchieved(grid)).findAny().isPresent();
     }
 
     /**

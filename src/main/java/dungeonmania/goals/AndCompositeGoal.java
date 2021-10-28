@@ -8,10 +8,11 @@ import java.util.stream.Collectors;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import dungeonmania.Grid;
+
 /**
  * @author Enoch Kavur (z5258204)
  * 
- * @invariant sub goals never change.
  */
 public class AndCompositeGoal implements ComponentGoal {
 
@@ -36,12 +37,13 @@ public class AndCompositeGoal implements ComponentGoal {
 
     /**
      * 
+     * @pre grid is a copy of the current grid state.
      * @post will return true if all subgoals are achieved.
      */
     @Override
-    public boolean isAchieved() {
+    public boolean isAchieved(Grid grid) {
 
-        return subgoals.stream().filter(goal -> !goal.isAchieved()).findAny().isEmpty();
+        return subgoals.stream().filter(goal -> !goal.isAchieved(grid)).findAny().isEmpty();
     }
 
     /**
