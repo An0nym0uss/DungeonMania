@@ -163,13 +163,18 @@ public class Player extends Entity implements Damage, Health, Moving{
             } else if (other instanceof Boulder) {
                 pushBoulder((Boulder)other, grid);
             } else if (other instanceof Enemy) {
+                /////////////////////////////////////////////////////////////////////////////
                 // enter battle
             } else if (other instanceof Door) {
                 // door not open
                 if (!((Door)other).getIsOpen()) {
+                    /////////////////////////////////////////////////////////////////////////////
                     // unlock door
                     // inventory.removeNonSpecificItem("key");
                 }
+            } else if (other instanceof Portal) {
+                /////////////////////////////////////////////////////////////////////////////
+                // teleport
             }
         }
     }
@@ -314,7 +319,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                 buildables.add(type);
             }
         }
-        return null;
+        return buildables;
     }
 
 
@@ -338,7 +343,9 @@ public class Player extends Entity implements Damage, Health, Moving{
             }
 
             // player moves
+            grid.dettach(this);
             this.position.translateBy(new Position(newX, newY, this.position.getLayer()));
+            grid.attach(this);
 
             // player interacts with entities in the cell
             for (Entity entity : grid.getEntities(newX, newY)) {
