@@ -16,18 +16,22 @@ import dungeonmania.util.Position;
 
 public class Bomb extends CollectableEntity{
     private int blastRadius;
+    private boolean isPlaced;
 
-    public Bomb(String id, Position position) {
-        this.id = id;
-        this.type = "bomb";
-        this.position = position;
+    public Bomb(String type, Position position, boolean isInteractable) {
+        super(type, position, isInteractable);
         this.isInteractable = true;
         this.blastRadius = 1;
+        this.isPlaced = false;
     }
 
-    public Bomb(String id, Position position, int blastRadius) {
-        this(id, position);
+    public Bomb(String type, Position position, boolean isInteractable, int blastRadius) {
+        this(type, position, isInteractable);
         this.blastRadius = blastRadius;
+    }
+
+    public boolean hasPlaced() {
+        return this.isPlaced;
     }
 
     @Override
@@ -36,6 +40,7 @@ public class Bomb extends CollectableEntity{
         
         if (checkPlaceValid(position, grid)) {
             this.position = new Position(position.getX(), position.getY(), Layer.ENEMY);
+            this.isPlaced = true;
             grid.attach(this);
 
             if (checkSwitchOn(grid)) {
