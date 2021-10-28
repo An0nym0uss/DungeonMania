@@ -4,7 +4,7 @@ import dungeonmania.entities.player.Player;
 
 public class HealthPotion extends CollectableEntity{
 
-    public HealthPotion(String id, String type) {
+    public HealthPotion(String id) {
         this.id = id;
         this.type = "health_potion";
     }
