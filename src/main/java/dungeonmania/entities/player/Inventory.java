@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.entities.collectable.CollectableEntity;
-import dungeonmania.response.models.ItemResponse;
 
 public class Inventory {
 
     private List<CollectableEntity> items;
     private List<Recipe> recipes;
+    private RecipeAll recipesAll;
 
 
     public Inventory() {
         items = new ArrayList<CollectableEntity>();
-        recipes = new ArrayList<Recipe>();
+        recipesAll = new RecipeAll();
+        recipes = recipesAll.getRecipes();
     }
-
 
     public void addItem(CollectableEntity item) {
         items.add(item);
@@ -44,7 +44,6 @@ public class Inventory {
         return null;
     }
 
-
     public void removeNonSpecificItem(String item) {
         for (CollectableEntity ownedItem : items) {
             if (item == ownedItem.getType()) {
@@ -64,8 +63,8 @@ public class Inventory {
         return numberOfItem;
     }
 
-    public void addRecipe(Recipe recipe) {
-        recipes.add(recipe);
+    public List<Recipe> getRecipes() {
+        return this.recipes;
     }
 
     public boolean checkRecipe(Recipe recipe) {
@@ -76,13 +75,5 @@ public class Inventory {
             }
         }
         return recipeExist;
-    }
-
-    public List<ItemResponse> inventoryItems () {
-        List<ItemResponse> itemsInfo = new ArrayList<ItemResponse>();
-        for (CollectableEntity item : items) {
-            itemsInfo.add(item.createItemResponse());
-        }
-        return itemsInfo;
     }
 }
