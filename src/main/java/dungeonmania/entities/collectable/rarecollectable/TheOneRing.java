@@ -1,10 +1,11 @@
 package dungeonmania.entities.collectable.rarecollectable;
 
+import dungeonmania.util.Position;
+
 public class TheOneRing extends RareCollectableEntities{
     
-    public TheOneRing(String id) {
-        this.id = id;
-        this.type = "the_one_ring";
-        this.dropRate = 1;
+    public TheOneRing(Position position) {
+        super("the_one_ring", position, false);
+        setDropRate(1);
     }
 }
