@@ -12,6 +12,7 @@ import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.FloorSwitch;
+import dungeonmania.entities.statics.Wall;
 import dungeonmania.util.Position;
 
 public class Bomb extends CollectableEntity{
@@ -38,9 +39,10 @@ public class Bomb extends CollectableEntity{
         Position position = player.getPosition();    
         
         if (checkPlaceValid(position, grid)) {
-            this.setPosition(new Position(position.getX(), position.getY(), Layer.ENEMY));
+            this.setPosition(new Position(position.getX(), position.getY(), Layer.STATIC));
             this.isPlaced = true;
             grid.attach(this);
+            player.getInventory().removeItem(this);
 
             if (checkSwitchOn(grid)) {
                 blast(grid);
@@ -107,7 +109,7 @@ public class Bomb extends CollectableEntity{
                         Iterator<Entity> itr = grid.getEntities(newX, newY).iterator();
                         while (itr.hasNext()) {
                             Entity entity = itr.next();
-                            if (!(entity instanceof Player || entity instanceof Exit)) {
+                            if (!(entity instanceof Player)) {
                                 grid.dettach(entity);
                             }
                         }

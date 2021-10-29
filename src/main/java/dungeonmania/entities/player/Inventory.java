@@ -44,6 +44,16 @@ public class Inventory {
         return null;
     }
 
+    public CollectableEntity getItemfromId(String id) {
+        for (CollectableEntity item : this.items) {
+            if (item.getId() == id) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
     public void removeNonSpecificItem(String item) {
         for (CollectableEntity ownedItem : items) {
             if (item == ownedItem.getType()) {
