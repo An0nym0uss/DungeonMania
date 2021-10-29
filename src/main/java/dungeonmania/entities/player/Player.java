@@ -177,7 +177,6 @@ public class Player extends Entity implements Damage, Health, Moving{
             } else if (other instanceof Boulder) {
                 pushBoulder((Boulder)other, grid);
             } else if (other instanceof Enemy) {
-                /////////////////////////////////////////////////////////////////////////////
                 enterBattle((Enemy)other);
             } else if (other instanceof Door) {
                 // door not open
@@ -187,8 +186,15 @@ public class Player extends Entity implements Damage, Health, Moving{
                     // inventory.removeNonSpecificItem("key");
                 }
             } else if (other instanceof Portal) {
-                /////////////////////////////////////////////////////////////////////////////
-                // teleport
+                if (this.isTeleported) {
+                    this.isTeleported = false;
+                } else {
+                    teleport((Portal)other, grid);
+                    this.isTeleported = true;
+                    for (Entity entity : grid.getEntities(this.getPosition().getX(), this.getPosition().getY())) {
+                        collidesWith(entity, grid);
+                    }
+                }
             }
         }
         statusEffect.tickDown();
@@ -277,16 +283,17 @@ public class Player extends Entity implements Damage, Health, Moving{
     public boolean canPushBoulder(Boulder boulder, Grid grid) {
         int x = boulder.getPosition().getX() + movement.getOffset().getX();
         int y = boulder.getPosition().getY() + movement.getOffset().getY();
-        if (x >= 0 && x <= grid.getWidth() &&
-            y >= 0 && y <= grid.getHeight()
+        if (x >= 0 && x < grid.getWidth() &&
+            y >= 0 && y < grid.getHeight()
         ) {
             for (Entity entity : grid.getEntities(x, y)) {
                 if (!boulder.canMoveInto(entity)) {
                     return false;
                 }
             }
+        } else {
+            return false;
         }
-
         return true;
     }
 
@@ -397,8 +404,8 @@ public class Player extends Entity implements Damage, Health, Moving{
         // check movement within border
         int newX = getPosition().getX() + d.getOffset().getX();
         int newY = getPosition().getY() + d.getOffset().getY();
-        if (newX >= 0 && newX <= grid.getWidth() &&
-            newY >= 0 && newY <= grid.getHeight()
+        if (newX >= 0 && newX < grid.getWidth() &&
+            newY >= 0 && newY < grid.getHeight()
         ) {
             for (Entity entity : grid.getEntities(newX, newY)) {
                 if (entity instanceof Boulder) {
