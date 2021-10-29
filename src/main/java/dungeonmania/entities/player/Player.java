@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.xml.namespace.QName;
-
 import dungeonmania.Grid;
 import dungeonmania.entities.Damage;
 import dungeonmania.entities.Entity;
@@ -75,10 +73,6 @@ public class Player extends Entity implements Damage, Health, Moving{
 
     public void setCurrentHealth(int currentHealth) {
         this.currentHealth = currentHealth;
-    }
-
-    public Inventory getInventory() {
-        return this.inventory;
     }
 
     public boolean hasArmour() {
