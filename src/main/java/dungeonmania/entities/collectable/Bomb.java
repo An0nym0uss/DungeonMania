@@ -63,21 +63,16 @@ public class Bomb extends CollectableEntity{
         return true;
     }
 
-    private List<Position> getCardinallyAdjacentPosition(int x, int y) {
-        List<Position> adjacentPositions = new ArrayList<>();
-        adjacentPositions.add(new Position(x  , y-1));
-        adjacentPositions.add(new Position(x+1, y));
-        adjacentPositions.add(new Position(x  , y+1));
-        adjacentPositions.add(new Position(x-1, y));
-        return adjacentPositions;
-    }
-
     public boolean checkSwitchOn(Grid grid) {
         int x = this.getPosition().getX();
         int y = this.getPosition().getY();
 
-        for (Position adjacentPosition : getCardinallyAdjacentPosition(x, y)) {
-            if (adjacentPosition.getX() >= 0 && adjacentPosition.getY() >= 0) {
+        Position newPosition = new Position(x, y, this.getPosition().getLayer());
+
+        for (Position adjacentPosition : newPosition.getAdjacentCardinalPositions()) {
+            if (adjacentPosition.getX() >= 0 && adjacentPosition.getX() < grid.getWidth() &&
+                adjacentPosition.getY() >= 0 && adjacentPosition.getY() < grid.getHeight()
+            ) {
                 boolean hasBoulder = false;
                 boolean hasSwitch = false;
                 for (Entity entity : grid.getEntities(adjacentPosition.getX(), adjacentPosition.getY())) {
