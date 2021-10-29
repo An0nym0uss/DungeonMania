@@ -12,28 +12,16 @@ import dungeonmania.entities.statics.Exit;
  * 
  * @author Enoch Kavur (z5258204)
  * 
- * @invarient grid is always a reference that current dungeon.
  */
 public class ReachedExitGoal implements ComponentGoal {
 
-	private Grid grid;
-
-	/**
-	 * Constructor 
-	 * 
-	 * @param grid for the dungeon.
-	 * @pre grid is not null
-	 */
-	public ReachedExitGoal(Grid grid) {
-		this.grid = grid;
-	}
-
 	/**
 	 * 
+	 * @pre grid is a copy of the current grid state.
 	 * @post returns true if player has reached the exit.
 	 */
 	@Override
-	public boolean isAchieved() {
+	public boolean isAchieved(Grid grid) {
 
 		// Loop through each cell of the grid.
 		for (int x = 0; x < grid.getWidth(); x++) {

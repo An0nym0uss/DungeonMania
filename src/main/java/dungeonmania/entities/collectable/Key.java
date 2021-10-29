@@ -1,9 +1,11 @@
 package dungeonmania.entities.collectable;
 
+import dungeonmania.util.Position;
+
 public class Key extends CollectableEntity{
 
-    public Key(String id, String type) {
-        this.id = id;
-        this.type = "key";
+    public Key(Position position) {
+        super("key", position, false);
     }
 }
+

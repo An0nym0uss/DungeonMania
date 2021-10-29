@@ -31,20 +31,22 @@ public class Player extends Entity implements Damage, Health, Moving{
     private Shield shield;
     private Direction movement;
     private List<Recipe> recipes;
+    private boolean isTeleported;
 
-    public Player(String type, Position position, boolean isInteractable, Mode mode) {
-        super(type, position, isInteractable);
+    public Player(Position position, Mode mode) {
+        super("player", position, false);
         this.damage = 10;
         this.maxHealth = mode.getMaxPlayerHealth();
         this.currentHealth = mode.getMaxPlayerHealth();
         this.inventory = new Inventory();
+        this.isTeleported = false;
 
         RecipeAll allRecipes = new RecipeAll();
         this.recipes = allRecipes.getRecipes();
     }
 
-    public Player(String type, Position position, boolean isInteractable, Mode mode, int damage) {
-        this(type, position, isInteractable, mode);
+    public Player(Position position, Mode mode, int damage) {
+        this(position, mode);
         this.damage = damage;
     }
 
@@ -173,8 +175,15 @@ public class Player extends Entity implements Damage, Health, Moving{
                     // inventory.removeNonSpecificItem("key");
                 }
             } else if (other instanceof Portal) {
-                /////////////////////////////////////////////////////////////////////////////
-                // teleport
+                if (this.isTeleported) {
+                    this.isTeleported = false;
+                } else {
+                    teleport((Portal)other, grid);
+                    this.isTeleported = true;
+                    for (Entity entity : grid.getEntities(this.getPosition().getX(), this.getPosition().getY())) {
+                        collidesWith(entity, grid);
+                    }
+                }
             }
         }
     }
@@ -183,7 +192,7 @@ public class Player extends Entity implements Damage, Health, Moving{
      * Player coolect item and put it to inventory
      */
     public void collectItem(Entity e, Grid grid) {
-        List<Entity> entities = grid.getEntities(this.position.getX(), this.position.getY());
+        List<Entity> entities = grid.getEntities(this.getPosition().getX(), this.getPosition().getY());
         for (Entity entity : entities) {
             if (entity instanceof CollectableEntity) {
                 // player can only have one sword, armour, key and buildables
@@ -219,8 +228,8 @@ public class Player extends Entity implements Damage, Health, Moving{
      * player pushes boulder
      */
     private void pushBoulder(Boulder boulder, Grid grid) {
-        int newX = position.getX() + movement.getOffset().getX();
-        int newY = position.getY() + movement.getOffset().getY();
+        int newX = getPosition().getX() + movement.getOffset().getX();
+        int newY = getPosition().getY() + movement.getOffset().getY();
 
         // detach boulder form old position
         grid.dettach(boulder);
@@ -237,17 +246,34 @@ public class Player extends Entity implements Damage, Health, Moving{
     public boolean canPushBoulder(Boulder boulder, Grid grid) {
         int x = boulder.getPosition().getX() + movement.getOffset().getX();
         int y = boulder.getPosition().getY() + movement.getOffset().getY();
-        if (x >= 0 && x <= grid.getWidth() &&
-            y >= 0 && y <= grid.getHeight()
+        if (x >= 0 && x < grid.getWidth() &&
+            y >= 0 && y < grid.getHeight()
         ) {
             for (Entity entity : grid.getEntities(x, y)) {
                 if (!boulder.canMoveInto(entity)) {
                     return false;
                 }
             }
+        } else {
+            return false;
         }
 
         return true;
+    }
+
+    /**
+     * move to position of the corresponding teleport
+     */
+    private void teleport(Portal portal, Grid grid) {
+        int x = portal.getCorrespondingPortal().getPosition().getX();
+        int y = portal.getCorrespondingPortal().getPosition().getY();
+
+        grid.dettach(this);
+        Position newPosition = new Position(x, y, this.getPosition().getLayer());
+        this.setPosition(newPosition);
+        grid.attach(this);
+
+        this.isTeleported = true;
     }
 
     @Override
@@ -316,7 +342,7 @@ public class Player extends Entity implements Damage, Health, Moving{
         List<String> buildables = new ArrayList<>();
         for (Recipe recipe : this.recipes) {
             if (recipe.isCraftable(this.inventory)) {
-                buildables.add(type);
+                buildables.add(recipe.getType());
             }
         }
         return buildables;
@@ -327,10 +353,10 @@ public class Player extends Entity implements Damage, Health, Moving{
     public void move(Grid grid, Direction d) {
         this.movement = d;
         // check movement within border
-        int newX = position.getX() + d.getOffset().getX();
-        int newY = position.getY() + d.getOffset().getY();
-        if (newX >= 0 && newX <= grid.getWidth() &&
-            newY >= 0 && newY <= grid.getHeight()
+        int newX = getPosition().getX() + d.getOffset().getX();
+        int newY = getPosition().getY() + d.getOffset().getY();
+        if (newX >= 0 && newX < grid.getWidth() &&
+            newY >= 0 && newY < grid.getHeight()
         ) {
             for (Entity entity : grid.getEntities(newX, newY)) {
                 if (entity instanceof Boulder) {
@@ -344,7 +370,7 @@ public class Player extends Entity implements Damage, Health, Moving{
 
             // player moves
             grid.dettach(this);
-            this.position.translateBy(new Position(newX, newY, this.position.getLayer()));
+            this.setPosition(new Position(newX, newY, this.getPosition().getLayer()));
             grid.attach(this);
 
             // player interacts with entities in the cell

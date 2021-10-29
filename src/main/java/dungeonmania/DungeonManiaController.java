@@ -2,6 +2,8 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.ResponseFactory;
+import dungeonmania.response.models.StandardResponseFactory;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
@@ -11,6 +13,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DungeonManiaController {
+
+    Dungeon currentGame = null;
+    DungeonMaker dungeonMaker = new StandardDungeonMaker();
+    ResponseFactory dungeonResponseFactory = new StandardResponseFactory();
+
+
     public DungeonManiaController() {
     }
 
@@ -40,7 +48,8 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse newGame(String dungeonName, String gameMode) throws IllegalArgumentException {
-        return null;
+        currentGame = dungeonMaker.createNewDungeon(dungeonName, gameMode);
+        return createDungeonResponse();
     }
     
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
@@ -56,7 +65,10 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        return null;
+
+        currentGame.tick(itemUsed, movementDirection);
+
+        return createDungeonResponse();
     }
 
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
@@ -65,5 +77,10 @@ public class DungeonManiaController {
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
         return null;
+    }
+
+    private DungeonResponse createDungeonResponse() {
+
+        return dungeonResponseFactory.createDungeonResponse(currentGame);
     }
 }

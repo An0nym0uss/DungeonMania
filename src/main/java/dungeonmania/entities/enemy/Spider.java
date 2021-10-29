@@ -18,8 +18,8 @@ public class Spider extends Enemy {
     private int directionCount;
     private boolean isReverse;
 
-    public Spider(int speed, Health health, Moving moving, Damage damage) {
-        super(speed, health, moving, damage);
+    public Spider(Position position, int speed, Health health, Moving moving, Damage damage) {
+        super("spider", position, false, speed, health, moving, damage);
         this.movementArray.addAll(Arrays.asList(Direction.RIGHT, Direction.DOWN, Direction.DOWN, Direction.LEFT,
             Direction.LEFT, Direction.UP,  Direction.UP,  Direction.RIGHT));
         this.directionCount = 0;
@@ -42,7 +42,7 @@ public class Spider extends Enemy {
         }
         // move to new position
         // probably should use move()
-        this.setPosition(newPosition.getX(), newPosition.getY());
+        this.setPosition(newPosition);
 
     }
 

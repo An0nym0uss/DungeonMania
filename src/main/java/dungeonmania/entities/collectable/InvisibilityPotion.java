@@ -1,16 +1,18 @@
 package dungeonmania.entities.collectable;
 
 import dungeonmania.entities.player.StatusEffect;
+import dungeonmania.util.Position;
 
 public class InvisibilityPotion extends CollectableEntity {
 
-    public InvisibilityPotion(String id, String type) {
-        this.id = id;
-        this.type = "invisible_potion";
+    public InvisibilityPotion(Position position) {
+        super("invisible_potion", position, false);
     }
 
     @Override
     public void useItemWithEffect(StatusEffect statusEffect) {
         statusEffect.setInvisible(true);
+        statusEffect.setInvisibleDuration(10);
     }
 }
+
