@@ -345,6 +345,7 @@ public class Player extends Entity implements Damage, Health, Moving{
     public void useItem(CollectableEntity e) {
         if (e.isInteractable()) {
             e.useItem(this);
+            e.useItemWithEffect(statusEffect);
             this.inventory.removeItem(e);
         }
     }
