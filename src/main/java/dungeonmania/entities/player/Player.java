@@ -331,8 +331,8 @@ public class Player extends Entity implements Damage, Health, Moving{
         // check movement within border
         int newX = getPosition().getX() + d.getOffset().getX();
         int newY = getPosition().getY() + d.getOffset().getY();
-        if (newX >= 0 && newX <= grid.getWidth() &&
-            newY >= 0 && newY <= grid.getHeight()
+        if (newX >= 0 && newX < grid.getWidth() &&
+            newY >= 0 && newY < grid.getHeight()
         ) {
             for (Entity entity : grid.getEntities(newX, newY)) {
                 if (entity instanceof Boulder) {

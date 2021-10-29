@@ -88,9 +88,17 @@ public class StandardDungeonMaker implements DungeonMaker {
             width = 20;
         }
 
+        ComponentGoal goal = null;
+
+        try {
+            goal = createGoal(dungeonData.getAsJsonObject("goal-condition"));
+        } catch (NullPointerException e) {
+            goal = null;
+        }
+
         // Setting dungeon's components
         dungeon.setGrid(createGrid(dungeonData.getAsJsonArray("entities"), height, width));
-        dungeon.setGoal(createGoal(dungeonData.getAsJsonObject("goal-condition")));
+        dungeon.setGoal(goal);
 
         return dungeon;
     }
