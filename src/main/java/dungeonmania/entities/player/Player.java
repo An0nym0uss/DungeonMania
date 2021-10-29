@@ -237,14 +237,16 @@ public class Player extends Entity implements Damage, Health, Moving{
     public boolean canPushBoulder(Boulder boulder, Grid grid) {
         int x = boulder.getPosition().getX() + movement.getOffset().getX();
         int y = boulder.getPosition().getY() + movement.getOffset().getY();
-        if (x >= 0 && x <= grid.getWidth() &&
-            y >= 0 && y <= grid.getHeight()
+        if (x >= 0 && x < grid.getWidth() &&
+            y >= 0 && y < grid.getHeight()
         ) {
             for (Entity entity : grid.getEntities(x, y)) {
                 if (!boulder.canMoveInto(entity)) {
                     return false;
                 }
             }
+        } else {
+            return false;
         }
 
         return true;
