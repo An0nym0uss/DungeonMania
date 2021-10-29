@@ -40,9 +40,7 @@ public class Player extends Entity implements Damage, Health, Moving{
         this.currentHealth = mode.getMaxPlayerHealth();
         this.inventory = new Inventory();
         this.statusEffect = new StatusEffect();
-
-        RecipeAll allRecipes = new RecipeAll();
-        this.recipes = allRecipes.getRecipes();
+        this.recipes = inventory.getRecipes();
     }
 
     public Player(Position position, Mode mode, int damage) {
@@ -136,7 +134,6 @@ public class Player extends Entity implements Damage, Health, Moving{
         }
         return 0;
     }
-
     /**
      * if player uses bow, decrease its duration
      */
