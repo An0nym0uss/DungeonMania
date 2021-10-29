@@ -192,6 +192,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                 // teleport
             }
         }
+        statusEffect.tickDown();
     }
 
     /**
@@ -404,6 +405,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                 collidesWith(entity, grid);
             }
         }
+        statusEffect.tickDown();
     }
 
 
