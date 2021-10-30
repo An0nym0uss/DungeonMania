@@ -78,6 +78,7 @@ public class Inventory {
         return recipeExist;
     }
 
+    /*
     public List<ItemResponse> inventoryItems () {
         List<ItemResponse> itemsInfo = new ArrayList<ItemResponse>();
         for (CollectableEntity item : items) {
@@ -85,4 +86,5 @@ public class Inventory {
         }
         return itemsInfo;
     }
+    */
 }
