@@ -33,7 +33,7 @@ import dungeonmania.util.Position;
  */
 public class StandardDungeonMaker implements DungeonMaker {
 
-    public static final String RESOURCE_PATH = "src\\main\\resources\\dungeons\\";
+    public static final String RESOURCE_PATH = "src/main/resources/dungeons/";
 
     private EntityFactory entityFactory = null;
 

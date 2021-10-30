@@ -63,7 +63,12 @@ public class Dungeon {
     }
 
     public void tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        grid.movePlayer(movementDirection);
+        if (movementDirection != null) {
+            grid.movePlayer(movementDirection);
+        }
+        if (itemUsed != null) {
+            grid.getPlayer().useItem(itemUsed, grid);
+        }
 
         if (this.goal != null && goal.isAchieved(grid)) {
             this.goal = null;

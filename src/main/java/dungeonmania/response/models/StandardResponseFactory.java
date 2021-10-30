@@ -28,8 +28,7 @@ public class StandardResponseFactory implements ResponseFactory {
         String dungeonId = dungeon.getDungeonId();
         String dungeonName = dungeon.getDungeonName();
         List<EntityResponse> entities = createEntityResponseList(dungeon.getGrid());
-        List<ItemResponse> inventory = new ArrayList<>();
-        //createItemResponseList(dungeon.getGrid().getPlayer().getInventory()); // Bad code right here.
+        List<ItemResponse> inventory = createItemResponseList(dungeon.getGrid().getPlayer().getInventory()); // Bad code right here.
         List<String> buildables = new ArrayList<>();// TODO
         String goals = "";
         if (dungeon.getGoal() != null) {
@@ -78,14 +77,19 @@ public class StandardResponseFactory implements ResponseFactory {
 
     @Override
     public List<ItemResponse> createItemResponseList(Inventory inventory) {
-        // TODO Auto-generated method stub
-        return null;
+
+        List<ItemResponse> items = new ArrayList<>();
+        
+        for (CollectableEntity item : inventory.getItems()) {
+            items.add(createItemResponse(item));
+        }
+        return items;
     }
 
     @Override
     public ItemResponse createItemResponse(CollectableEntity item) {
         // TODO Auto-generated method stub
-        return null;
+        return new ItemResponse(item.getId(), item.getType());
     }
     
 }
