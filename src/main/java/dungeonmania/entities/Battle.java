@@ -29,7 +29,7 @@ public class Battle {
             player.setCurrentHealth(player.getCurrentHealth() - enemyDamageDealt);
 
             if (!player.isDead()){
-                int playerDamageDealt = player.damageDealt();
+                //int playerDamageDealt = player.damageDealt();
                 ////////////////////////////////////////////////////////////////////////////////////////////////
                 // if (enemy.hasArmour) {
                     // playerDamageDealt = playerDamageDealt / 2;

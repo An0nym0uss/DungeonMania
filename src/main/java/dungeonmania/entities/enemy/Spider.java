@@ -1,10 +1,7 @@
 package dungeonmania.entities.enemy;
 
 import dungeonmania.Grid;
-import dungeonmania.entities.Damage;
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.Health;
-import dungeonmania.entities.Moving;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -18,8 +15,8 @@ public class Spider extends Enemy {
     private int directionCount;
     private boolean isReverse;
 
-    public Spider(int speed, int health, int damage) {
-        super(speed, health, damage);
+    public Spider(Position position,int speed, int health, int damage) {
+        super("spider", position, false, speed, health, damage);
         this.movementArray.addAll(Arrays.asList(Direction.RIGHT, Direction.DOWN, Direction.DOWN, Direction.LEFT,
             Direction.LEFT, Direction.UP,  Direction.UP,  Direction.RIGHT));
         this.directionCount = 0;

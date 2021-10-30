@@ -14,7 +14,6 @@ import dungeonmania.entities.statics.Spawner;
  */
 public class DestroyAllEnemiesGoal implements ComponentGoal {
 
-	private Grid grid;
     private int n_enemies = -1; // flaged as not updated
 
 	/**

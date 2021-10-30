@@ -1,12 +1,7 @@
 package dungeonmania.entities.enemy;
 
-import org.json.JSONObject;
-
 import dungeonmania.Grid;
-import dungeonmania.entities.Damage;
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.Health;
-import dungeonmania.entities.Moving;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Wall;
@@ -18,9 +13,8 @@ import java.util.List;
 import java.util.*;
 
 public class Mercenary extends Enemy {
-    public Mercenary(int speed, int health, int damage) {
-        super(speed, health, damage);
-        
+    public Mercenary(Position position, int speed, int health, int damage) {
+        super("mercenary", position, false, speed, health, damage);
     }
 
     @Override
@@ -34,7 +28,7 @@ public class Mercenary extends Enemy {
         // breadth first search
         // A* search
 
-        List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
+        //List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
         grid.getPlayer().getPosition().getAdjacentCardinalPositions();
 
         List<Position> shortestPath = this.breadthFirstSearch(grid);
@@ -45,7 +39,7 @@ public class Mercenary extends Enemy {
         }
         // Perform movement
         Position nextStep = shortestPath.get(1);
-        this.setPosition(nextStep.getX(), nextStep.getY());
+        this.setPosition(nextStep);
 
         // TODO: Bribing
 
@@ -70,7 +64,7 @@ public class Mercenary extends Enemy {
         // key - position; value - previous position
         Map<Position, Position> visited = new HashMap<>();
         visited.put(this.getPosition(), null);
-        boolean canMoveToPosition = true;
+        //boolean canMoveToPosition = true;
 //        visited.put(key, value);
 //        visited.get(key);
 //        visited.containsKey()

@@ -7,7 +7,6 @@ import dungeonmania.Dungeon;
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.collectable.CollectableEntity;
-import dungeonmania.entities.enemy.Enemy;
 import dungeonmania.entities.player.Inventory;
 import dungeonmania.util.Position;
 
@@ -36,7 +35,7 @@ public class StandardResponseFactory implements ResponseFactory {
         }
         List<AnimationQueue> animations = new ArrayList<>();
 
-        return new DungeonResponse(dungeonId, dungeonName, entities, inventory, buildables, goals);
+        return new DungeonResponse(dungeonId, dungeonName, entities, inventory, buildables, goals, animations);
     }
 
     /**

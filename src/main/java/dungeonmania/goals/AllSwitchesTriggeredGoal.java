@@ -31,6 +31,8 @@ public class AllSwitchesTriggeredGoal implements ComponentGoal {
         n_switches = 0;
         n_boulders = 0;
 
+		boolean hasSwitchWithoutBoulder = false;
+
 		// Loop through each cell of the grid.
 		for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
@@ -43,13 +45,13 @@ public class AllSwitchesTriggeredGoal implements ComponentGoal {
 					else if (entity instanceof Boulder) {hasBoulder = true; n_boulders++;}
                 }
 
-				// Return false if there is floor switch without a boulder on it
-				if (hasSwitch && !hasBoulder) return false;
+				// Falgs true if there is floor switch without a boulder on it
+				if (hasSwitch && !hasBoulder) hasSwitchWithoutBoulder = true;
             }
         }
 
 		// Return true if there doesn't exist a floor switch without a boulder.
-		return true;
+		return !hasSwitchWithoutBoulder;
 	}
 
 	/**

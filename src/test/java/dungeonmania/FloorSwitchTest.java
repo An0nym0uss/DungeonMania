@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,9 @@ public class FloorSwitchTest {
     public void testSwitchBasic() {
         DungeonManiaController controller = new DungeonManiaController();
 
+        // Changing where the files are loaded from.
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
+
         // start game
         controller.newGame("switch", "peaceful");
 
@@ -27,8 +31,10 @@ public class FloorSwitchTest {
         // wall impassable
         assertTrue(secondTick.getEntities().get(0).getType().equals("player") && secondTick.getEntities().get(0).getPosition().getX() == 1);
 
+        String bombId = secondTick.getInventory().get(0).getId();
+
         // place bomb
-        controller.tick("bomb", Direction.NONE);
+        controller.tick(bombId, Direction.NONE);
 
         // attempt to walk into wall
         DungeonResponse fourthTick = controller.tick(null, Direction.RIGHT);
@@ -37,6 +43,6 @@ public class FloorSwitchTest {
         assertTrue(fourthTick.getEntities().get(0).getType().equals("player") && fourthTick.getEntities().get(0).getPosition().getX() == 2);
 
         // finish game
-        controller.tick(null, Direction.RIGHT);
+        assertEquals("", controller.tick(null, Direction.RIGHT).getGoals());
     }
 }

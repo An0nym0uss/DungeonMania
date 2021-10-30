@@ -1,14 +1,12 @@
 package dungeonmania;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.json.JSONObject;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.ComponentGoal;
 import dungeonmania.modes.Mode;
-import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 
 public class Dungeon {
@@ -73,30 +71,6 @@ public class Dungeon {
         if (this.goal != null && goal.isAchieved(grid)) {
             this.goal = null;
         }
-    }
-
-    /**
-     * player movement
-     */
-    private void move(Direction movementDirection) {
-    }
-
-    /**
-     * enemies movement
-     */
-    private void moveEntities() {
-    }
-
-    /**
-     * battle starts when player and enemy appear in the same cell
-     */
-    private void battle() {
-    }
-
-    /**
-     * uses item in inventory
-     */
-    private void useItem(String itemUsed) {
     }
 
     public void interact(String entityId) throws IllegalArgumentException, InvalidActionException {

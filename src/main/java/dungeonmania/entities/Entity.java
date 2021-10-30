@@ -1,7 +1,5 @@
 package dungeonmania.entities;
 
-import java.util.UUID;
-
 import org.json.JSONObject;
 
 import dungeonmania.GameToJSON;

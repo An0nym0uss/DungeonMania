@@ -1,9 +1,5 @@
 package dungeonmania.entities;
 
-import java.util.Map;
-
-import java.util.HashMap;
-
 import com.google.gson.JsonObject;
 
 import dungeonmania.entities.statics.*;
@@ -16,8 +12,6 @@ import dungeonmania.entities.collectable.Bomb;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.collectable.Wood;
-import dungeonmania.entities.collectable.buildable.Shield;
-import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.player.Player;
 
 /**
@@ -65,7 +59,7 @@ public class StandardEntityFactory implements EntityFactory {
             return new Portal(new Position(x, y, Layer.STATIC), colour);
         // Zombie toast spawner TODO
         } else if (entityType.equalsIgnoreCase("zombietoastspawner")) {
-            return new ZombieToastSpawner(new Position(x, y, Layer.STATIC));
+            return new ZombieToastSpawner(new Position(x, y, Layer.STATIC), mode);
         // Door TODO
         } else if (entityType.equalsIgnoreCase("door")) {
             return new Door(new Position(x, y, Layer.ENEMY), null, false);
