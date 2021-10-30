@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
@@ -25,7 +26,7 @@ public class InventoryTest {
     }
     
     @Test
-    public void testInventoryRemove() {
+    public void testInventoryUse() {
 
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("items", "peaceful");
@@ -41,10 +42,19 @@ public class InventoryTest {
         assertTrue(noPotion.getInventory().isEmpty());
 
     }
+
+    @Test
+    public void testIllegalArgument() {
+
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("items", "peaceful");
+
+        controller.tick(null, Direction.RIGHT);
+
+        DungeonResponse hasTreasure = controller.tick(null, Direction.RIGHT);
+        assertTrue(hasTreasure.getInventory().get(0).getType() == "treasure");
+        String id = hasTreasure.getInventory().get(0).getId();
+        assertThrows(IllegalArgumentException.class, () -> controller.tick(id, null));
+
+    }
 }
-
-// for (EntityResponse entity : hasSword.getEntities()) {
-// if (entity.getType() == "player") {
-
-// }
-// }
