@@ -17,7 +17,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
-
+import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.StandardEntityFactory;
@@ -119,7 +119,7 @@ public class StandardDungeonMaker implements DungeonMaker {
 
     @Override
     public Grid createGrid(JsonArray gridData, int height, int width) {
-        Grid grid = new Grid(height, width, new Entity[width][height][4], null);
+        Grid grid = new Grid(height, width, new Entity[width][height][Layer.LAYER_SIZE], null);
 
         Iterator<JsonElement> gridDataIter = gridData.iterator();
 
