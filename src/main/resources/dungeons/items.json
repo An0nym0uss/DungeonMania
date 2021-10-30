@@ -49,6 +49,21 @@
             "x": 5,
             "y": 4,
             "type": "treasure"
+        },
+        {
+            "x": 3,
+            "y": 5,
+            "type": "wood"
+        },
+        {
+            "x": 4,
+            "y": 5,
+            "type": "wood"
+        },
+        {
+            "x": 5,
+            "y": 5,
+            "type": "key"
         }
     ],
     "width": 8,
