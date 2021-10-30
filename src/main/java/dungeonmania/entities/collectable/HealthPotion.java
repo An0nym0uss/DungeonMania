@@ -1,12 +1,12 @@
 package dungeonmania.entities.collectable;
 
 import dungeonmania.entities.player.Player;
+import dungeonmania.util.Position;
 
 public class HealthPotion extends CollectableEntity{
 
-    public HealthPotion(String id, String type) {
-        this.id = id;
-        this.type = "health_potion";
+    public HealthPotion(Position position) {
+        super("health_potion", position, false);
     }
 
     @Override

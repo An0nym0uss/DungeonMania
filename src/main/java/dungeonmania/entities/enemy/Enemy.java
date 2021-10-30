@@ -4,6 +4,7 @@ import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Health;
 import dungeonmania.entities.Moving;
+import dungeonmania.util.Position;
 import dungeonmania.entities.Damage;
 
 public abstract class Enemy extends Entity implements Moving, Health, Damage {
@@ -12,7 +13,8 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage {
     private Moving moving;
     private Damage damage;
 
-    public Enemy(int speed, Health health, Moving moving, Damage damage) {
+    public Enemy(String type, Position position, Boolean isInteractable, int speed, Health health, Moving moving, Damage damage) {
+        super(type, position, isInteractable);
         this.speed = speed;
         this.health = health;
         this.moving = moving;

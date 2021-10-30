@@ -1,9 +1,10 @@
 package dungeonmania.entities.collectable;
 
+import dungeonmania.util.Position;
+
 public class Treasure extends CollectableEntity{
     
-    public Treasure(String id, String type) {
-        this.id = id;
-        this.type = "treasure";
+    public Treasure(Position position) {
+        super("treasure", position, false);
     }
 }

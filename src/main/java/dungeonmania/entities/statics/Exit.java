@@ -11,6 +11,11 @@ import dungeonmania.util.Position;
  */
 public class Exit extends StaticEntity {
 
+    public Exit(Position position) {
+        super("exit", position, false);
+        //TODO Auto-generated constructor stub
+    }
+
     @Override
     public void collidesWith(Entity other, Grid grid) {
         Position exitPosition = this.getPosition();

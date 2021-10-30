@@ -1,6 +1,7 @@
 package dungeonmania.entities.player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import dungeonmania.Grid;
@@ -11,43 +12,47 @@ import dungeonmania.entities.Moving;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import dungeonmania.entities.statics.*;
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.modes.Mode;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.BuildableEntity;
 import dungeonmania.entities.collectable.buildable.Shield;
+import dungeonmania.entities.collectable.rarecollectable.RareCollectableEntities;
+import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
 
 public class Player extends Entity implements Damage, Health, Moving{
     private int damage;
     private int maxHealth;
     private int currentHealth;
     private Inventory inventory;
-    private int invisibilityDuration;
-    private int invincibilityDuration;
+    private StatusEffect statusEffect;
     private Sword sword;
     private Armour armour;
     private Bow bow;
     private Shield shield;
     private Direction movement;
-    private List<Recipe> recipes;
+    private boolean isTeleported;
 
-    public Player(String type, Position position, boolean isInteractable, Mode mode) {
-        super(type, position, isInteractable);
+    public Player(Position position, Mode mode) {
+        super("player", position, false);
         this.damage = 10;
         this.maxHealth = mode.getMaxPlayerHealth();
         this.currentHealth = mode.getMaxPlayerHealth();
         this.inventory = new Inventory();
-
-        RecipeAll allRecipes = new RecipeAll();
-        this.recipes = allRecipes.getRecipes();
+        this.statusEffect = new StatusEffect();
+        this.isTeleported = false;
     }
 
-    public Player(String type, Position position, boolean isInteractable, Mode mode, int damage) {
-        this(type, position, isInteractable, mode);
+    public Player(Position position, Mode mode, int damage) {
+        this(position, mode);
         this.damage = damage;
     }
 
+    public Inventory getInventory() {
+        return inventory;
+    }
 
     public int getDamage() {
         return this.damage;
@@ -67,22 +72,6 @@ public class Player extends Entity implements Damage, Health, Moving{
 
     public void setCurrentHealth(int currentHealth) {
         this.currentHealth = currentHealth;
-    }
-
-    public int getInvisibilityDuration() {
-        return this.invisibilityDuration;
-    }
-
-    public void setInvisibilityDuration(int duration) {
-        this.invisibilityDuration = duration;
-    }
-
-    public int getInvincibilityDuration() {
-        return this.invincibilityDuration;
-    }
-
-    public void setInvincibilityDuration(int duration) {
-        this.invincibilityDuration = duration;
     }
 
     public boolean hasArmour() {
@@ -121,6 +110,15 @@ public class Player extends Entity implements Damage, Health, Moving{
         return false;
     }
 
+    public boolean hasOneRing() {
+        for (CollectableEntity collectable : this.inventory.getItems()) {
+            if (collectable instanceof TheOneRing) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public int getShieldDefense() {
         return this.shield.getDefense();
     }
@@ -141,7 +139,6 @@ public class Player extends Entity implements Damage, Health, Moving{
         }
         return 0;
     }
-
     /**
      * if player uses bow, decrease its duration
      */
@@ -155,6 +152,26 @@ public class Player extends Entity implements Damage, Health, Moving{
         }
     }
 
+    public void useArmour() {
+        if (hasArmour()) {
+            this.armour.setDurability(this.armour.getDurability() - 1);
+            if (this.armour.isBroken()) {
+                this.inventory.removeItem(this.armour);
+                this.armour = null;
+            }
+        }
+    }
+
+    public void useShield() {
+        if (hasShield()) {
+            this.shield.setDurability(this.shield.getDurability() - 1);
+            if (this.shield.isBroken()) {
+                this.inventory.removeItem(this.shield);
+                this.shield = null;
+            }
+        }
+    }
+
     @Override
     public void collidesWith(Entity other, Grid grid) {
         if (canMoveInto(other)) {
@@ -163,8 +180,7 @@ public class Player extends Entity implements Damage, Health, Moving{
             } else if (other instanceof Boulder) {
                 pushBoulder((Boulder)other, grid);
             } else if (other instanceof Enemy) {
-                /////////////////////////////////////////////////////////////////////////////
-                // enter battle
+                enterBattle((Enemy)other);
             } else if (other instanceof Door) {
                 // door not open
                 if (!((Door)other).getIsOpen()) {
@@ -173,17 +189,25 @@ public class Player extends Entity implements Damage, Health, Moving{
                     // inventory.removeNonSpecificItem("key");
                 }
             } else if (other instanceof Portal) {
-                /////////////////////////////////////////////////////////////////////////////
-                // teleport
+                if (this.isTeleported) {
+                    this.isTeleported = false;
+                } else {
+                    teleport((Portal)other, grid);
+                    this.isTeleported = true;
+                    for (Entity entity : grid.getEntities(this.getPosition().getX(), this.getPosition().getY())) {
+                        collidesWith(entity, grid);
+                    }
+                }
             }
         }
+        statusEffect.tickDown();
     }
 
     /**
      * Player coolect item and put it to inventory
      */
     public void collectItem(Entity e, Grid grid) {
-        List<Entity> entities = grid.getEntities(this.position.getX(), this.position.getY());
+        List<Entity> entities = grid.getEntities(this.getPosition().getX(), this.getPosition().getY());
         for (Entity entity : entities) {
             if (entity instanceof CollectableEntity) {
                 // player can only have one sword, armour, key and buildables
@@ -219,16 +243,59 @@ public class Player extends Entity implements Damage, Health, Moving{
      * player pushes boulder
      */
     private void pushBoulder(Boulder boulder, Grid grid) {
-        int newX = position.getX() + movement.getOffset().getX();
-        int newY = position.getY() + movement.getOffset().getY();
+        int newX = getPosition().getX() + movement.getOffset().getX();
+        int newY = getPosition().getY() + movement.getOffset().getY();
 
-        // detach boulder form old position
+        // set new position of the boulder
         grid.dettach(boulder);
-
-        boulder.setPosition(new Position(newX, newY, boulder.getPosition().getLayer()));
-
-        // attach boulder at new position
+        Position newPosition = new Position(newX, newY, boulder.getPosition().getLayer());
+        boulder.setPosition(newPosition);
         grid.attach(boulder);
+
+        // if boulder is on switch, and there's a bomb around the cell, blast.
+        for (Entity e : grid.getEntities(newX, newY)) {
+            if (e instanceof FloorSwitch) {
+                for (Position pos : newPosition.getAdjacentCardinalPositions()) {
+                    int x = pos.getX();
+                    int y = pos.getY();
+                    if (x >= 0 && x < grid.getWidth() &&
+                        y >= 0 && y < grid.getHeight()
+                    ) {
+                        for (Entity entityAround : grid.getEntities(x, y)) {
+                            if (entityAround instanceof Bomb && ((Bomb)entityAround).hasPlaced()) {
+                                ((Bomb) entityAround).blast(grid);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void enterBattle(Enemy enemy) {
+        if (statusEffect.isInvisible()) {
+
+        } else if (statusEffect.isInvincible()) {
+            // uncomment after enemy setHealth take in an int
+            // enemy.setHealth(0);
+        } else {
+            while(!this.isDead() || !enemy.isDead()) {
+                // uncomment after enemy setHealth take in an int
+                // enemy.setHealth(enemy.getHealth() - this.damageDealt(enemy));
+                this.setCurrentHealth(this.getCurrentHealth() - defend(damageDealt(this)));
+            }
+        }
+
+        if (this.isDead()) {
+            // rip
+        } else if (enemy.isDead()) {
+            RareCollectableEntities theRing = new TheOneRing(new Position(0, 0));
+            theRing.spawnnRareCollectableEntities(inventory);
+            if (enemy instanceof Zombie) {
+                // case where enemy has armour
+            }
+        }
     }
 
     /**
@@ -237,17 +304,33 @@ public class Player extends Entity implements Damage, Health, Moving{
     public boolean canPushBoulder(Boulder boulder, Grid grid) {
         int x = boulder.getPosition().getX() + movement.getOffset().getX();
         int y = boulder.getPosition().getY() + movement.getOffset().getY();
-        if (x >= 0 && x <= grid.getWidth() &&
-            y >= 0 && y <= grid.getHeight()
+        if (x >= 0 && x < grid.getWidth() &&
+            y >= 0 && y < grid.getHeight()
         ) {
             for (Entity entity : grid.getEntities(x, y)) {
                 if (!boulder.canMoveInto(entity)) {
                     return false;
                 }
             }
+        } else {
+            return false;
         }
-
         return true;
+    }
+
+    /**
+     * move to position of the corresponding teleport
+     */
+    private void teleport(Portal portal, Grid grid) {
+        int x = portal.getCorrespondingPortal().getPosition().getX();
+        int y = portal.getCorrespondingPortal().getPosition().getY();
+
+        grid.dettach(this);
+        Position newPosition = new Position(x, y, this.getPosition().getLayer());
+        this.setPosition(newPosition);
+        grid.attach(this);
+
+        this.isTeleported = true;
     }
 
     @Override
@@ -289,48 +372,104 @@ public class Player extends Entity implements Damage, Health, Moving{
         }
     }
 
-    public void useItem(CollectableEntity e) {
-        if (e.isInteractable()) {
-            e.useItem(this);
-            this.inventory.removeItem(e);
+    private int defend(int incomingAttack) {
+        if (hasArmour()) {
+            useArmour();
+            incomingAttack = incomingAttack - this.getShieldDefense();
+        }
+        if (hasShield() && incomingAttack != 0) {
+            useShield();
+            incomingAttack = incomingAttack / 2;;
+        }
+        return incomingAttack;
+    }
+
+    public void useItem(String itemId, Grid grid) {
+        CollectableEntity collectable = this.inventory.getItemfromId(itemId);
+        if (collectable instanceof Bomb) {
+            ((Bomb)collectable).placeBomb(this, grid);
+        } else if (collectable instanceof HealthPotion) {
+            collectable.useItem(this);
+            this.inventory.removeItem(collectable);
+        } else if (collectable instanceof InvincibilityPotion ||
+                   collectable instanceof InvisibilityPotion
+        ) {
+            collectable.useItemWithEffect(this.statusEffect);
+            this.inventory.removeItem(collectable);
+        } else if (collectable == null) {
+            throw new InvalidActionException("Item is not in inventory.");
+        } else {
+            throw new IllegalArgumentException("Item cannot be used.");
         }
     }
 
     public void craftItem(String buildable) {
         if (buildable.equals("bow")) {
+            Recipe recipe = getAvailableRecipe(buildable);
+            if (recipe == null) {
+                throw new InvalidActionException("You do not have sufficient items to craft bow.");
+            }
             if (!hasBow()) {
+                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
+                    for (int i = 0; i < ingredient.getValue(); i++) {
+                        this.inventory.removeNonSpecificItem(ingredient.getKey());
+                    }
+                }
                 Bow bow = new Bow(buildable, new Position(0, 0), false);
                 this.bow = bow;
                 this.inventory.addItem(bow);
             }
         } else if (buildable.equals("shield")) {
+            Recipe recipe = getAvailableRecipe(buildable);
+            if (recipe == null) {
+                throw new InvalidActionException("You do not have sufficient items to craft shield.");
+            }
             if (!hasShield()) {
+                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
+                    for (int i = 0; i < ingredient.getValue(); i++) {
+                        this.inventory.removeNonSpecificItem(ingredient.getKey());
+                    }
+                }
                 Shield shield = new Shield(buildable, new Position(0, 0), false);
                 this.shield = shield;
                 this.inventory.addItem(shield);
             }
+        } else {
+            throw new IllegalArgumentException("Only bow and shield is buildable.");
         }
     }
 
     public List<String> getBuildables() {
         List<String> buildables = new ArrayList<>();
-        for (Recipe recipe : this.recipes) {
-            if (recipe.isCraftable(this.inventory)) {
-                buildables.add(type);
+        for (Recipe recipe : this.inventory.getRecipes()) {
+            if (!buildables.contains(recipe.getType()) && recipe.isCraftable(this.inventory)) {
+                buildables.add(recipe.getType());
             }
         }
         return buildables;
     }
 
+    private Recipe getAvailableRecipe(String buildable) {
+        BuildableEntity e = (BuildableEntity) this.inventory.getItem(buildable);
+        if (e == null) {
+            return null;
+        }
+        for (Recipe recipe : e.getRecipes()) {
+            if (recipe.isCraftable(this.inventory)) {
+                return recipe;
+            }
+        }
+        return null;
+    }
 
     @Override
     public void move(Grid grid, Direction d) {
         this.movement = d;
         // check movement within border
-        int newX = position.getX() + d.getOffset().getX();
-        int newY = position.getY() + d.getOffset().getY();
-        if (newX >= 0 && newX <= grid.getWidth() &&
-            newY >= 0 && newY <= grid.getHeight()
+        int newX = getPosition().getX() + d.getOffset().getX();
+        int newY = getPosition().getY() + d.getOffset().getY();
+        if (newX >= 0 && newX < grid.getWidth() &&
+            newY >= 0 && newY < grid.getHeight()
         ) {
             for (Entity entity : grid.getEntities(newX, newY)) {
                 if (entity instanceof Boulder) {
@@ -344,7 +483,7 @@ public class Player extends Entity implements Damage, Health, Moving{
 
             // player moves
             grid.dettach(this);
-            this.position.translateBy(new Position(newX, newY, this.position.getLayer()));
+            this.setPosition(new Position(newX, newY, this.getPosition().getLayer()));
             grid.attach(this);
 
             // player interacts with entities in the cell
@@ -352,6 +491,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                 collidesWith(entity, grid);
             }
         }
+        statusEffect.tickDown();
     }
 
 
