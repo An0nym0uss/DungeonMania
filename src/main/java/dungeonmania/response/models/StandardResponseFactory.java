@@ -88,7 +88,7 @@ public class StandardResponseFactory implements ResponseFactory {
 
     @Override
     public ItemResponse createItemResponse(CollectableEntity item) {
-        // TODO Auto-generated method stub
+
         return new ItemResponse(item.getId(), item.getType());
     }
     
