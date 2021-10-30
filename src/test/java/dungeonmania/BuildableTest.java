@@ -92,31 +92,30 @@ public class BuildableTest {
         assertTrue(hasBow.getBuildables().isEmpty());
     }
 
-    // uncommnet when key added to standardEntityFactory
-    // @Test
-    // public void testBuildShieldAlt() {
+    @Test
+    public void testBuildShieldAlt() {
 
-    //     DungeonManiaController controller = new DungeonManiaController();
-    //     controller.newGame("items", "peaceful");
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("items", "peaceful");
 
-    //     controller.tick(null, Direction.DOWN);
-    //     controller.tick(null, Direction.DOWN);
-    //     controller.tick(null, Direction.DOWN);
-    //     for (int i = 0; i < 4; i++) {
-    //         controller.tick(null, Direction.RIGHT);
-    //     }
-    //     controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        for (int i = 0; i < 4; i++) {
+            controller.tick(null, Direction.RIGHT);
+        }
+        controller.tick(null, Direction.DOWN);
 
-    //     DungeonResponse canBuildShield = controller.tick(null, Direction.RIGHT);
-    //     assertEquals(4, canBuildShield.getInventory().size());
-    //     assertFalse(canBuildShield.getBuildables().isEmpty());
-    //     String id = canBuildShield.getBuildables().get(0);
+        DungeonResponse canBuildShield = controller.tick(null, Direction.RIGHT);
+        assertEquals(4, canBuildShield.getInventory().size());
+        assertFalse(canBuildShield.getBuildables().isEmpty());
+        String id = canBuildShield.getBuildables().get(0);
 
-    //     DungeonResponse hasBow = controller.build(id);
-    //     assertEquals(1, hasBow.getInventory().size());
-    //     assertTrue(hasBow.getInventory().get(0).getType() == "shield");
-    //     assertTrue(hasBow.getBuildables().isEmpty());
-    // }
+        DungeonResponse hasBow = controller.build(id);
+        assertEquals(1, hasBow.getInventory().size());
+        assertTrue(hasBow.getInventory().get(0).getType() == "shield");
+        assertTrue(hasBow.getBuildables().isEmpty());
+    }
 
     @Test
     public void testInvalidAction() {
