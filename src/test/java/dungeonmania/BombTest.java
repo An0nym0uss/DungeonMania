@@ -23,16 +23,5 @@ public class BombTest {
         response = controller.tick(bombId, null);
 
         assertEquals(0, response.getInventory().size());
-    }
-
-    @Test
-    public void testBomb() {
-
-    }
-
-    public static void main(String[] args) {
-        BombTest test = new BombTest();
-        test.testBombBasic();
-    }
-    
+    }  
 }
