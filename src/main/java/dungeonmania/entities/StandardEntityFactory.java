@@ -47,28 +47,28 @@ public class StandardEntityFactory implements EntityFactory {
         // Static variables.
         // Wall
         if (entityType.equalsIgnoreCase("wall")) {
-            return new Wall(new Position(x, y, 0));
+            return new Wall(new Position(x, y, Layer.STATIC));
         // Exit
         } else if (entityType.equalsIgnoreCase("exit")) {
-            return new Exit(new Position(x, y, 0));
+            return new Exit(new Position(x, y, Layer.STATIC));
         // Switch
         } else if (entityType.equalsIgnoreCase("switch")) {
-            return new FloorSwitch(new Position(x, y, 0));
+            return new FloorSwitch(new Position(x, y, Layer.STATIC));
         // Boulder
         } else if (entityType.equalsIgnoreCase("boulder")) {
-            return new Boulder(new Position(x, y, 2));
+            return new Boulder(new Position(x, y, Layer.ENEMY));
         // Portal
         } else if (entityType.equalsIgnoreCase("portal")) {
 
             String colour = entityData.get("colour").getAsString();
 
-            return new Portal(new Position(x, y, 2), colour);
+            return new Portal(new Position(x, y, Layer.STATIC), colour);
         // Zombie toast spawner TODO
         } else if (entityType.equalsIgnoreCase("zombietoastspawner")) {
-            return new ZombieToastSpawner(new Position(x, y, 0));
+            return new ZombieToastSpawner(new Position(x, y, Layer.STATIC));
         // Door TODO
         } else if (entityType.equalsIgnoreCase("door")) {
-            return new Door(new Position(x, y, 2), null, false);
+            return new Door(new Position(x, y, Layer.STATIC), null, false);
         // Enemies TODO
         // Mercancy TODO
         } else if (entityType.equalsIgnoreCase("mercenary")) {
@@ -96,7 +96,7 @@ public class StandardEntityFactory implements EntityFactory {
 
             if (mode == null) throw new InternalError("tried to create a player without selecting a mode.");
 
-            return new Player(new Position(x,y, 3), mode, 10);
+            return new Player(new Position(x,y, Layer.PLAYER), mode, 10);
         }
 
         return null;
