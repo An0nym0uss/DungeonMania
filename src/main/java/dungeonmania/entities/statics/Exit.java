@@ -1,7 +1,5 @@
 package dungeonmania.entities.statics;
 
-import java.util.List;
-
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 import dungeonmania.util.Position;
