@@ -2,9 +2,12 @@ package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.security.KeyStore.Entry;
+
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 
 public class PortalTest {
@@ -21,7 +24,17 @@ public class PortalTest {
         // attempt to walk into portal
         DungeonResponse firstTick = controller.tick(null, Direction.RIGHT);
 
+        int playerId = 0;
+
+        // get playerId
+        for( int i = 0; i < firstTick.getEntities().size(); i++) {
+            EntityResponse entResponse = firstTick.getEntities().get(i);
+            if (entResponse.getType().equals("player")) {
+                playerId = i;
+            }
+        }
+
         // player teleports to corresponding portal
-        assertTrue(firstTick.getEntities().get(0).getType().equals("player") && firstTick.getEntities().get(0).getPosition().getX() == 4 && firstTick.getEntities().get(0).getPosition().getY() == 0);
+        assertTrue(firstTick.getEntities().get(playerId).getType().equals("player") && firstTick.getEntities().get(playerId).getPosition().getX() == 4 && firstTick.getEntities().get(playerId).getPosition().getY() == 0);
     }
 }

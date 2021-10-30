@@ -16,7 +16,8 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage {
     
     private int damage;
 
-    public Enemy(int speed, int health, int damage) {
+    public Enemy(String type, Position position, Boolean isInteractable, int speed, int health, int damage) {
+        super(type, position, isInteractable);
         this.speed = speed;
         this.health = health;
         this.damage = damage;

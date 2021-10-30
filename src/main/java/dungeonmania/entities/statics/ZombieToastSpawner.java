@@ -39,7 +39,7 @@ public class ZombieToastSpawner extends StaticEntity implements Spawner  {
 
             List<Position> validPositions = zombieSpawnerPosition.getAdjacentCardinalPositions();
 
-            Zombie zombie = new Zombie(zombieSpawnerPosition, 1); //use a temp position for now
+            Zombie zombie = new Zombie(zombieSpawnerPosition, 1, 1, 1); //use a temp position for now
 
             for (Position position : validPositions) {
                 List<Entity> entitiesAtAdjacentPosition = grid.getEntities(position.getX(), position.getY());

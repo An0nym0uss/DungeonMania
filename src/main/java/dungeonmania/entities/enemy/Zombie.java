@@ -20,8 +20,8 @@ import java.util.Random;
 
 public class Zombie extends Enemy {
 
-    public Zombie(int speed, int health, int damage) {
-        super(speed, health, damage);
+    public Zombie(Position position, int speed, int health, int damage) {
+        super("zombie", position, false, speed, health, damage);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class Zombie extends Enemy {
         // for(int i = 0; i < speed; i++) // requirement cannot backtrack
         for (Position position : adjacentSquares) {
             if (this.canMoveToPosition(grid, position)) {
-                this.setPosition(position.getX(), position.getY());
+                this.setPosition(position);
             }
         }
     }

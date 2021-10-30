@@ -65,7 +65,7 @@ public class StandardEntityFactory implements EntityFactory {
             return new Portal(new Position(x, y, Layer.STATIC), colour);
         // Zombie toast spawner TODO
         } else if (entityType.equalsIgnoreCase("zombietoastspawner")) {
-            return new ZombieToastSpawner(new Position(x, y, Layer.STATIC));
+            return new ZombieToastSpawner(new Position(x, y, Layer.STATIC), mode);
         // Door TODO
         } else if (entityType.equalsIgnoreCase("door")) {
             return new Door(new Position(x, y, Layer.ENEMY), null, false);
