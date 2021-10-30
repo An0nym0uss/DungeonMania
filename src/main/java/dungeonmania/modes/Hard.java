@@ -1,5 +1,7 @@
 package dungeonmania.modes;
 
+import org.json.JSONObject;
+
 /**
  * Zombies spawn every 15 ticks.
  * The player has less health points to begin with (75).
@@ -39,5 +41,14 @@ public class Hard implements Mode {
     @Override
     public boolean canHaveInvincibilityEffect() {
         return invincibilityEffect;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject mode = new JSONObject();
+
+        mode.put("mode", "hard");
+        
+        return mode;
     }
 }

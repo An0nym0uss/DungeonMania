@@ -12,24 +12,11 @@ import dungeonmania.entities.statics.FloorSwitch;
  * 
  * @author Enoch Kavur (z5258204)
  * 
- * @invariant grid is always a reference that current dungeon.
- * 
  */
 public class AllSwitchesTriggeredGoal implements ComponentGoal {
 
-	private Grid grid;
     private int n_switches = -1; // flaged as not updated
     private int n_boulders = -1;
-
-	/**
-	 * Constructor 
-	 * 
-	 * @param grid for the dungeon.
-	 * @pre grid is not null
-	 */
-	public AllSwitchesTriggeredGoal(Grid grid) {
-		this.grid = grid;
-	}
 
 	/**
      * @apiNote Only update the counters for switches and boulders when isAchieved is 
@@ -39,7 +26,7 @@ public class AllSwitchesTriggeredGoal implements ComponentGoal {
 	 * @post returns true if player has triggered all the floor switches in the dungeon.
 	 */
 	@Override
-	public boolean isAchieved() {
+	public boolean isAchieved(Grid grid) {
 
         n_switches = 0;
         n_boulders = 0;
@@ -66,7 +53,8 @@ public class AllSwitchesTriggeredGoal implements ComponentGoal {
 	}
 
 	/**
-     * 
+	 * 
+     * @pre grid is a copy of the current grid state.
      * @post return object as a JSONObject representation 
 	 * {"goal": "switch"}
      */

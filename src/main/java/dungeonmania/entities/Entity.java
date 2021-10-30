@@ -1,13 +1,35 @@
 package dungeonmania.entities;
 
+import java.util.UUID;
+
+import org.json.JSONObject;
+
+import dungeonmania.GameToJSON;
 import dungeonmania.Grid;
 import dungeonmania.util.Position;
 
-public abstract class Entity implements ObserverEntity {
-    protected String id;
-    protected String type;
-    protected Position position;
-    protected boolean isInteractable;
+public abstract class Entity implements ObserverEntity, GameToJSON {
+
+    private static int n_entities = 0;
+    private String id;
+    private String type;
+    private Position position;
+    private boolean isInteractable;
+
+    /**
+     * Constructor for Entity.
+     * 
+     * @param id
+     * @param type
+     * @param position
+     * @param isInteractable
+     */
+    public Entity(String type, Position position, boolean isInteractable) {
+        this.id = Integer.toString(Entity.n_entities++);
+        this.type = type;
+        this.position = position;
+        this.isInteractable = isInteractable;
+    }
 
     /**
      * Getter for entity id.
@@ -35,18 +57,6 @@ public abstract class Entity implements ObserverEntity {
      */
     public Position getPosition() {
         return position;
-    }
-
-    /**
-     * Setter for position
-     * 
-     * @param position
-     * 
-     * @pre 0 <= x < WIDTH
-     * @pre 0 <= y < HEIGHT
-     */
-    public void setPosition(int x, int y) {
-        position = position.translateBy(x, y);
     }
 
     /**
@@ -90,6 +100,18 @@ public abstract class Entity implements ObserverEntity {
      */
     public boolean canMoveInto(Entity other) {
         // For subclasses to override otherwise by default returns true.
-        return true;
+        return other.getPosition().getLayer() != getPosition().getLayer();
+    }
+
+    @Override
+    public JSONObject getJSON() {
+
+        JSONObject entity = new JSONObject();
+
+        entity.put("x", getPosition().getX());
+        entity.put("y", getPosition().getY());
+        entity.put("type", getType());
+
+        return entity;
     }
 }

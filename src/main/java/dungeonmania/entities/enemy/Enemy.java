@@ -22,6 +22,11 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage {
         this.damage = damage;
     }
 
+    public Enemy(String type, Position position, Boolean isInteractable, int speed) {
+        super(type, position, isInteractable);
+        this.speed = speed;
+    }
+
     public int getSpeed() {
         return speed;
     }
