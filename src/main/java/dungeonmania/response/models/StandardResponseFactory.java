@@ -29,7 +29,7 @@ public class StandardResponseFactory implements ResponseFactory {
         String dungeonName = dungeon.getDungeonName();
         List<EntityResponse> entities = createEntityResponseList(dungeon.getGrid());
         List<ItemResponse> inventory = createItemResponseList(dungeon.getGrid().getPlayer().getInventory()); // Bad code right here.
-        List<String> buildables = new ArrayList<>();// TODO
+        List<String> buildables = dungeon.getGrid().getPlayer().getBuildables();// TODO
         String goals = "";
         if (dungeon.getGoal() != null) {
             goals = dungeon.getGoal().toString();
