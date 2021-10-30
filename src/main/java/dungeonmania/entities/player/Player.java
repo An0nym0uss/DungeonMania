@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import dungeonmania.Grid;
+import dungeonmania.entities.Battle;
 import dungeonmania.entities.Damage;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Health;
@@ -191,7 +192,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                 // if mercenary is ally do not enter battle
                 //
             } else if (other instanceof Enemy) {
-                enterBattle((Enemy)other);
+                Battle.battle(this, (Enemy)other, grid);
             } else if (other instanceof Door) {
                 // door not open
                 if (!((Door)other).getIsOpen()) {
@@ -285,10 +286,6 @@ public class Player extends Entity implements Damage, Health, Moving{
         }
     }
 
-    public void enterBattle(Enemy enemy) {
-
-    }
-
     /**
      * check if boulder can be pushed
      */
@@ -326,7 +323,6 @@ public class Player extends Entity implements Damage, Health, Moving{
 
     @Override
     public boolean canMoveInto(Entity other) {
-        
         if (other instanceof Wall)                      {return false;}
         else if (other instanceof ZombieToastSpawner)   {return false;}
         // else if (other instanceof Door) {
@@ -361,18 +357,6 @@ public class Player extends Entity implements Damage, Health, Moving{
         } else {
             return (this.currentHealth * this.damage) / 5;
         }
-    }
-
-    private int defend(int incomingAttack) {
-        if (hasArmour()) {
-            useArmour();
-            incomingAttack = incomingAttack - this.getShieldDefense();
-        }
-        if (hasShield() && incomingAttack != 0) {
-            useShield();
-            incomingAttack = incomingAttack / 2;;
-        }
-        return incomingAttack;
     }
 
     public void useItem(String itemId, Grid grid) {
