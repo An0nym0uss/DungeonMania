@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.DungeonManiaController;
 
 public class DoorTest {
     @Test

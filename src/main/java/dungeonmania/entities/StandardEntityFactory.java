@@ -6,12 +6,8 @@ import dungeonmania.entities.statics.*;
 import dungeonmania.modes.Mode;
 import dungeonmania.util.Position;
 import dungeonmania.constants.Layer;
-import dungeonmania.entities.collectable.Armour;
-import dungeonmania.entities.collectable.Arrow;
-import dungeonmania.entities.collectable.Bomb;
-import dungeonmania.entities.collectable.Sword;
-import dungeonmania.entities.collectable.Treasure;
-import dungeonmania.entities.collectable.Wood;
+import dungeonmania.entities.collectable.*;
+import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.player.Player;
 
 /**
@@ -66,10 +62,11 @@ public class StandardEntityFactory implements EntityFactory {
         // Enemies TODO
         // Mercancy TODO
         } else if (entityType.equalsIgnoreCase("mercenary")) {
-        // Spider TODO
+            return new Mercenary(new Position(x, y, Layer.ENEMY), 1, 1, 1);
         } else if (entityType.equalsIgnoreCase("spider")) {
-        // zombie TODO
+            return new Spider(new Position(x, y, Layer.ENEMY), 1, 1, 1);
         } else if (entityType.equalsIgnoreCase("zombie")) {
+            return new Zombie(new Position(x, y, Layer.ENEMY), 1, 1, 1);
         // Collectables
         } else if (entityType.equalsIgnoreCase("bomb")) {
             return new Bomb(new Position(x, y, Layer.COLLECTABLE));

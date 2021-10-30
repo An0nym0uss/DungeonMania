@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.util.Direction;
+import dungeonmania.DungeonManiaController;
 
 public class ExitTest {
     @Test
