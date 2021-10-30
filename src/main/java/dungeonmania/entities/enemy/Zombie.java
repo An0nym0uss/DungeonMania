@@ -20,8 +20,8 @@ import java.util.Random;
 
 public class Zombie extends Enemy {
 
-    public Zombie(int speed, Health health, Moving moving, Damage damage) {
-        super(speed, health, moving, damage);
+    public Zombie(int speed, int health, int damage) {
+        super(speed, health, damage);
     }
 
     @Override
@@ -43,30 +43,8 @@ public class Zombie extends Enemy {
 
         // for(int i = 0; i < speed; i++) // requirement cannot backtrack
         for (Position position : adjacentSquares) {
-            // Check if position is free
-            //
-            List<Entity> positionEntities = grid.getEntities(position.getX(), position.getY());
-            // zombie -
-            // - free spaces = portal, collectables,
-            // - non-free spaces = wall, doors, boulders, other moving entities
-            // positionEntities = [Coin, Zombie, Exit]
-            // nonFreeSpaces = [Wall, Door, Boulder, EnemyEntity, Player]
-            //List<Entity> nonFreeSpaces = Wall, Door, Boulder, Enemy, Player;
-
-            // isEntityConstraint() --> false; true
-            boolean canMoveToPosition = true;
-            for (Entity positionEntity : positionEntities) {
-                if (this.movingConstraints(positionEntity)) {
-                    // Entity cannot move to this square -> check the next square
-                    canMoveToPosition = false;
-                    break;
-                }
-            }
-
-            // if square is "free" perform the actual movement
-            if (canMoveToPosition) {
+            if (this.canMoveToPosition(grid, position)) {
                 this.setPosition(position.getX(), position.getY());
-                break;
             }
         }
     }
