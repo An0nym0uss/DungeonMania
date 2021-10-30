@@ -18,8 +18,8 @@ public class Spider extends Enemy {
     private int directionCount;
     private boolean isReverse;
 
-    public Spider(Position position, int speed, Health health, Moving moving, Damage damage) {
-        super("spider", position, false, speed, health, moving, damage);
+    public Spider(int speed, int health, int damage) {
+        super(speed, health, damage);
         this.movementArray.addAll(Arrays.asList(Direction.RIGHT, Direction.DOWN, Direction.DOWN, Direction.LEFT,
             Direction.LEFT, Direction.UP,  Direction.UP,  Direction.RIGHT));
         this.directionCount = 0;
