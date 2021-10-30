@@ -24,6 +24,10 @@ public class Zombie extends Enemy {
         super("zombie", position, false, speed, health, moving, damage);
     }
 
+    public Zombie(Position position, int speed) {
+        super("zombie", position, false, speed);
+    }
+
     @Override
     public void update(Grid grid) {
         // TODO: Incorporate speed?
