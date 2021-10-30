@@ -57,9 +57,9 @@ public class StandardEntityFactory implements EntityFactory {
             String colour = entityData.get("colour").getAsString();
 
             return new Portal(new Position(x, y, 2), colour);
-        // Zombie toast spawner TODO
+        // Zombie toast spawner
         } else if (entityType.equalsIgnoreCase("zombietoastspawner")) {
-            return new ZombieToastSpawner(new Position(x, y, 0));
+            return new ZombieToastSpawner(new Position(x, y, 0), mode);
         // Door TODO
         } else if (entityType.equalsIgnoreCase("door")) {
             return new Door(new Position(x, y, 2), null, false);
