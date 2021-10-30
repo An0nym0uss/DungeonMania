@@ -34,7 +34,6 @@ public class Player extends Entity implements Damage, Health, Moving{
     private Shield shield;
     private Direction movement;
     private boolean isTeleported;
-    private Mercenary mercenary;
 
     public Player(Position position, Mode mode) {
         super("player", position, false);
@@ -73,6 +72,10 @@ public class Player extends Entity implements Damage, Health, Moving{
 
     public void setCurrentHealth(int currentHealth) {
         this.currentHealth = currentHealth;
+    }
+
+    public StatusEffect getStatusEffect() {
+        return this.statusEffect;
     }
 
     public boolean hasArmour() {
@@ -121,7 +124,10 @@ public class Player extends Entity implements Damage, Health, Moving{
     }
 
     public int getShieldDefense() {
-        return this.shield.getDefense();
+        if (this.hasShield()) {
+            return this.shield.getDefense();
+        }
+        return 0;
     }
 
     /**
@@ -180,19 +186,24 @@ public class Player extends Entity implements Damage, Health, Moving{
                 collectItem(other, grid);
             } else if (other instanceof Boulder) {
                 pushBoulder((Boulder)other, grid);
+            } else if (other instanceof Mercenary) {
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // if mercenary is ally do not enter battle
+                //
             } else if (other instanceof Enemy) {
                 enterBattle((Enemy)other);
             } else if (other instanceof Door) {
                 // door not open
                 if (!((Door)other).getIsOpen()) {
-                    /////////////////////////////////////////////////////////////////////////////
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////
                     // unlock door
                     // inventory.removeNonSpecificItem("key");
+                    //
                 }
             } else if (other instanceof Portal) {
                 if (this.isTeleported) {
                     this.isTeleported = false;
-                } else {
+                } else if (((Portal)other).getCorrespondingPortal() != null) {
                     teleport((Portal)other, grid);
                     this.isTeleported = true;
                     for (Entity entity : grid.getEntities(this.getPosition().getX(), this.getPosition().getY())) {
@@ -275,28 +286,7 @@ public class Player extends Entity implements Damage, Health, Moving{
     }
 
     public void enterBattle(Enemy enemy) {
-        if (statusEffect.isInvisible()) {
 
-        } else if (statusEffect.isInvincible()) {
-            // uncomment after enemy setHealth take in an int
-            // enemy.setHealth(0);
-        } else {
-            while(!this.isDead() || !enemy.isDead()) {
-                // uncomment after enemy setHealth take in an int
-                // enemy.setHealth(enemy.getHealth() - this.damageDealt(enemy));
-                this.setCurrentHealth(this.getCurrentHealth() - defend(damageDealt(this)));
-            }
-        }
-
-        if (this.isDead()) {
-            // rip
-        } else if (enemy.isDead()) {
-            RareCollectableEntities theRing = new TheOneRing(new Position(0, 0));
-            theRing.spawnnRareCollectableEntities(inventory);
-            if (enemy instanceof Zombie) {
-                // case where enemy has armour
-            }
-        }
     }
 
     /**
@@ -340,7 +330,7 @@ public class Player extends Entity implements Damage, Health, Moving{
         if (other instanceof Wall)                      {return false;}
         else if (other instanceof ZombieToastSpawner)   {return false;}
         // else if (other instanceof Door) {
-        //     /////////////////////////////////////////////////////////////////////
+        //     /////////////////////////////////////////////////////////////////////////////////////
         //     // if door is unlocked, return true
         //     // if player has the key, return true
         //     // if player doesnt have the key, return false;
@@ -352,7 +342,7 @@ public class Player extends Entity implements Damage, Health, Moving{
     }
 
     @Override
-    public int damageDealt(Entity e) {
+    public int damageDealt() {
         int totalDamageDealt = attack();
         // bow allows player to attack twice
         if (hasBow()) {

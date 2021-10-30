@@ -72,7 +72,7 @@ public class Zombie extends Enemy {
     }
 
     @Override
-    public int damageDealt(Entity e) {
+    public int damageDealt() {
         return 0;
     }
 
