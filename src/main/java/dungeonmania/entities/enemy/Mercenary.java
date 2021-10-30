@@ -1,5 +1,7 @@
 package dungeonmania.entities.enemy;
 
+import org.json.JSONObject;
+
 import dungeonmania.Grid;
 import dungeonmania.entities.Damage;
 import dungeonmania.entities.Entity;
