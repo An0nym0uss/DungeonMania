@@ -27,6 +27,16 @@ import dungeonmania.util.Position;
  */
 public class Boulder extends StaticEntity {
 
+    /**
+     * Constructor for Boulder.
+     * 
+     * @param type
+     * @param position
+     */
+    public Boulder(Position position) {
+        super("boulder", position, false);
+    }
+
     @Override
     public void collidesWith(Entity other, Grid grid) {
         if (other instanceof Player) {
@@ -69,8 +79,9 @@ public class Boulder extends StaticEntity {
     
     @Override
     public boolean canMoveInto(Entity other) {
+        if (!super.canMoveInto(other))                   { return false; }
         //player
-            if (other instanceof Player)                { return false; }   //required
+        else if (other instanceof Player)               { return false; }   //required
 
         //static entities
         else if (other instanceof Wall)                 { return false; }   //required
@@ -82,7 +93,6 @@ public class Boulder extends StaticEntity {
             else                                        { return false; } } //required
         else if (other instanceof Portal)               { return true; }    //assumption
         else if (other instanceof ZombieToastSpawner)   { return false; }   //assumption
-        
         /* can uncomment when these extend Entity
         //moving entities
         else if (other instanceof Spider)               { return false; }   //required

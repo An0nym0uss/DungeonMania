@@ -12,21 +12,21 @@ import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.FloorSwitch;
+import dungeonmania.entities.statics.Wall;
 import dungeonmania.util.Position;
 
 public class Bomb extends CollectableEntity{
     private int blastRadius;
     private boolean isPlaced;
 
-    public Bomb(String type, Position position, boolean isInteractable) {
-        super(type, position, isInteractable);
-        this.isInteractable = true;
+    public Bomb(Position position) {
+        super("bomb", position, false);
         this.blastRadius = 1;
         this.isPlaced = false;
     }
 
-    public Bomb(String type, Position position, boolean isInteractable, int blastRadius) {
-        this(type, position, isInteractable);
+    public Bomb(Position position, int blastRadius) {
+        this(position);
         this.blastRadius = blastRadius;
     }
 
@@ -39,9 +39,10 @@ public class Bomb extends CollectableEntity{
         Position position = player.getPosition();    
         
         if (checkPlaceValid(position, grid)) {
-            this.position = new Position(position.getX(), position.getY(), Layer.ENEMY);
+            this.setPosition(new Position(position.getX(), position.getY(), Layer.STATIC));
             this.isPlaced = true;
             grid.attach(this);
+            player.getInventory().removeItem(this);
 
             if (checkSwitchOn(grid)) {
                 blast(grid);
@@ -62,21 +63,16 @@ public class Bomb extends CollectableEntity{
         return true;
     }
 
-    private List<Position> getCardinallyAdjacentPosition(int x, int y) {
-        List<Position> adjacentPositions = new ArrayList<>();
-        adjacentPositions.add(new Position(x  , y-1));
-        adjacentPositions.add(new Position(x+1, y));
-        adjacentPositions.add(new Position(x  , y+1));
-        adjacentPositions.add(new Position(x-1, y));
-        return adjacentPositions;
-    }
-
     public boolean checkSwitchOn(Grid grid) {
-        int x = this.position.getX();
-        int y = this.position.getY();
+        int x = this.getPosition().getX();
+        int y = this.getPosition().getY();
 
-        for (Position adjacentPosition : getCardinallyAdjacentPosition(x, y)) {
-            if (adjacentPosition.getX() >= 0 && adjacentPosition.getY() >= 0) {
+        Position newPosition = new Position(x, y, this.getPosition().getLayer());
+
+        for (Position adjacentPosition : newPosition.getAdjacentCardinalPositions()) {
+            if (adjacentPosition.getX() >= 0 && adjacentPosition.getX() < grid.getWidth() &&
+                adjacentPosition.getY() >= 0 && adjacentPosition.getY() < grid.getHeight()
+            ) {
                 boolean hasBoulder = false;
                 boolean hasSwitch = false;
                 for (Entity entity : grid.getEntities(adjacentPosition.getX(), adjacentPosition.getY())) {
@@ -96,8 +92,8 @@ public class Bomb extends CollectableEntity{
     }
 
     public void blast(Grid grid) {
-        int x = this.position.getX();
-        int y = this.position.getY();
+        int x = this.getPosition().getX();
+        int y = this.getPosition().getY();
 
         for (int i = 0 - blastRadius; i <= blastRadius; i++) {
             int newX = x + i;
@@ -108,7 +104,7 @@ public class Bomb extends CollectableEntity{
                         Iterator<Entity> itr = grid.getEntities(newX, newY).iterator();
                         while (itr.hasNext()) {
                             Entity entity = itr.next();
-                            if (!(entity instanceof Player || entity instanceof Exit)) {
+                            if (!(entity instanceof Player)) {
                                 grid.dettach(entity);
                             }
                         }

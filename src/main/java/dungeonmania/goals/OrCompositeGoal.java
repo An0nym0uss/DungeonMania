@@ -2,15 +2,18 @@ package dungeonmania.goals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import dungeonmania.Grid;
+
 /**
  * @author Enoch Kavur (z5258204)
  * 
- * @invarient sub goals never change.
+ * @invariant sub goals never change.
  */
 
 public class OrCompositeGoal implements ComponentGoal {
@@ -36,12 +39,13 @@ public class OrCompositeGoal implements ComponentGoal {
 
     /**
      * 
+     * @pre grid is a copy of the current grid state.
      * @post will return true if any subgoal is achieved.
      */
     @Override
-    public boolean isAchieved() {
+    public boolean isAchieved(Grid grid) {
 
-        return subgoals.stream().filter(goal -> goal.isAchieved()).findAny().isPresent();
+        return subgoals.stream().filter(goal -> goal.isAchieved(grid)).findAny().isPresent();
     }
 
     /**
@@ -69,8 +73,18 @@ public class OrCompositeGoal implements ComponentGoal {
      */
     @Override
     public String toString() {
+
+        // Would just be smarter to have an interface for leaf and composite, bad code right here.
+        Function<ComponentGoal, String> toString =
+            (subgoal) -> {
+                if (subgoal instanceof OrCompositeGoal || subgoal instanceof AndCompositeGoal){
+                    return "(" + subgoal.toString() + ")";
+                } else {
+                    return subgoal.toString();
+                }
+        };
         
-        return String.join(" OR ", getSubgoals().stream().map(subgoal -> subgoal.toString()).collect(Collectors.toList()));
+        return String.join(" OR ", getSubgoals().stream().map(toString).collect(Collectors.toList()));
     }
 
 }
