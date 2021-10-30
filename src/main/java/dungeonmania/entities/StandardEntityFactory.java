@@ -16,6 +16,8 @@ import dungeonmania.entities.collectable.Bomb;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.collectable.Wood;
+import dungeonmania.entities.collectable.InvincibilityPotion;
+import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.player.Player;
@@ -89,7 +91,11 @@ public class StandardEntityFactory implements EntityFactory {
             return new Sword(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("armour")) {
             return new Armour(new Position(x, y, Layer.COLLECTABLE));
-        } 
+        } else if (entityType.equalsIgnoreCase("invincibility_potion")) {
+            return new InvincibilityPotion(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("invisibility_potion")) {
+            return new InvisibilityPotion(new Position(x, y, Layer.COLLECTABLE));
+        }
 
 
         else if (entityType.equalsIgnoreCase("player")) {
