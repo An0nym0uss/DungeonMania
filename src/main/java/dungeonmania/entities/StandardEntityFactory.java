@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 import dungeonmania.entities.statics.*;
 import dungeonmania.modes.Mode;
 import dungeonmania.util.Position;
+import dungeonmania.constants.Layer;
+import dungeonmania.entities.collectable.Bomb;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.player.Player;
 
@@ -69,6 +71,8 @@ public class StandardEntityFactory implements EntityFactory {
         // zombie TODO
         } else if (entityType.equalsIgnoreCase("zombie")) {
         // Collectables
+        } else if (entityType.equalsIgnoreCase("bomb")) {
+            return new Bomb(new Position(x, y, Layer.COLLECTABLE));
         }
 
 
