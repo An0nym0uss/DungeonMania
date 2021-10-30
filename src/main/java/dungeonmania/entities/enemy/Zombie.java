@@ -15,7 +15,7 @@ import java.util.List;
 public class Zombie extends Enemy {
 
     public Zombie(Position position, int speed, int health, int damage) {
-        super("zombie", position, false, speed, health, damage);
+        super("zombie_toast", position, false, speed, health, damage);
     }
 
     @Override

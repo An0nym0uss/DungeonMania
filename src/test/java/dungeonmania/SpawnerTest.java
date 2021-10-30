@@ -28,7 +28,7 @@ public class SpawnerTest {
 
         // count any zombies in dungeon
         for (EntityResponse entity : response.getEntities()) {
-            if (entity.getType() == "zombie_toast") {
+            if (entity.getType().equals("zombie_toast")) {
                 totalZombies++;
             }
         }
@@ -43,7 +43,7 @@ public class SpawnerTest {
 
         // count any zombies in dungeon
         for (EntityResponse entity : response.getEntities()) {
-            if (entity.getType() == "zombie_toast") {
+            if (entity.getType().equals("zombie_toast")) {
                 totalZombies++;
             }
         }

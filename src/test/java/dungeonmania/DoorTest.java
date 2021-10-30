@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.DungeonManiaController;
 
@@ -22,8 +23,18 @@ public class DoorTest {
         // attempt to walk into door
         DungeonResponse firstTick = controller.tick(null, Direction.RIGHT);
 
+        int playerId = 0;
+
+        // get playerId
+        for( int i = 0; i < firstTick.getEntities().size(); i++) {
+            EntityResponse entResponse = firstTick.getEntities().get(i);
+            if (entResponse.getType().equals("player")) {
+                playerId = i;
+            }
+        }
+
         // door locked
-        assertTrue(firstTick.getEntities().get(0).getType().equals("player") && firstTick.getEntities().get(0).getPosition().getX() == 0);
+        assertTrue(firstTick.getEntities().get(playerId).getType().equals("player") && firstTick.getEntities().get(playerId).getPosition().getX() == 0);
 
         // get key
         controller.tick(null, Direction.UP);
@@ -33,7 +44,7 @@ public class DoorTest {
         DungeonResponse fouthTick = controller.tick(null, Direction.RIGHT);
 
         // door unlocked
-        assertTrue(fouthTick.getEntities().get(0).getType().equals("player") && fouthTick.getEntities().get(0).getPosition().getX() == 1);
+        assertTrue(fouthTick.getEntities().get(playerId).getType().equals("player") && fouthTick.getEntities().get(playerId).getPosition().getX() == 1);
 
         // finish game
         controller.tick(null, Direction.RIGHT);

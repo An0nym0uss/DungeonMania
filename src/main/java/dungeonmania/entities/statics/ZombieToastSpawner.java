@@ -25,7 +25,7 @@ public class ZombieToastSpawner extends StaticEntity implements Spawner  {
      * @param mode The current game mode.
      */
     public ZombieToastSpawner(Position position, Mode mode) {
-        super("zombietoastspawner", position, true);
+        super("zombie_toast_spawner", position, true);
         spawnRate = mode.getZombieSpawnRate();
     }
 

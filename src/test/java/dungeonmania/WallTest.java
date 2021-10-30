@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.DungeonManiaController;
 
@@ -22,11 +23,24 @@ public class WallTest {
         // attempt to walk into wall
         DungeonResponse firstTick = controller.tick(null, Direction.RIGHT);
 
+        int playerId = 0;
+        int spiderId = 0;
+
+        // get playerId and spider
+        for( int i = 0; i < firstTick.getEntities().size(); i++) {
+            EntityResponse entResponse = firstTick.getEntities().get(i);
+            if (entResponse.getType().equals("player")) {
+                playerId = i;
+            } else if (entResponse.getType().equals("spider")) {
+                spiderId = i;
+            }
+        }
+
         // wall impassable
-        assertTrue(firstTick.getEntities().get(0).getType().equals("player") && firstTick.getEntities().get(0).getPosition().getX() == 0);
+        assertTrue(firstTick.getEntities().get(playerId).getType().equals("player") && firstTick.getEntities().get(playerId).getPosition().getX() == 0);
 
         // spider can move onto wall
-        assertTrue(firstTick.getEntities().get(2).getType().equals("spider") && firstTick.getEntities().get(2).getPosition().getX() == 1 && firstTick.getEntities().get(2).getPosition().getY() == 0);
+        assertTrue(firstTick.getEntities().get(spiderId).getType().equals("spider") && firstTick.getEntities().get(spiderId).getPosition().getX() == 1 && firstTick.getEntities().get(spiderId).getPosition().getY() == 0);
 
         // finish game
         controller.tick(null, Direction.DOWN);

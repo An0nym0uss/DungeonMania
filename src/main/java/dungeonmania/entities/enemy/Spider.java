@@ -6,12 +6,13 @@ import dungeonmania.entities.statics.Boulder;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Spider extends Enemy {
 
-    private List<Direction> movementArray;
+    private List<Direction> movementArray = new ArrayList<Direction>();
     private int directionCount;
     private boolean isReverse;
 

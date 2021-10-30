@@ -54,7 +54,7 @@ public class StandardEntityFactory implements EntityFactory {
 
             return new Portal(new Position(x, y, Layer.STATIC), colour);
         // Zombie toast spawner TODO
-        } else if (entityType.equalsIgnoreCase("zombietoastspawner")) {
+        } else if (entityType.equalsIgnoreCase("zombie_toast_spawner")) {
             return new ZombieToastSpawner(new Position(x, y, Layer.STATIC), mode);
         // Door TODO
         } else if (entityType.equalsIgnoreCase("door")) {
@@ -65,7 +65,7 @@ public class StandardEntityFactory implements EntityFactory {
             return new Mercenary(new Position(x, y, Layer.ENEMY), 1, 1, 1);
         } else if (entityType.equalsIgnoreCase("spider")) {
             return new Spider(new Position(x, y, Layer.ENEMY), 1, 1, 1);
-        } else if (entityType.equalsIgnoreCase("zombie")) {
+        } else if (entityType.equalsIgnoreCase("zombie_toast")) {
             return new Zombie(new Position(x, y, Layer.ENEMY), 1, 1, 1);
         // Collectables
         } else if (entityType.equalsIgnoreCase("bomb")) {
@@ -80,8 +80,9 @@ public class StandardEntityFactory implements EntityFactory {
             return new Sword(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("armour")) {
             return new Armour(new Position(x, y, Layer.COLLECTABLE));
-        } 
-
+        } else if (entityType.equalsIgnoreCase("key")) {
+            return new Key(new Position(x, y, Layer.COLLECTABLE));
+        }
 
         else if (entityType.equalsIgnoreCase("player")) {
 

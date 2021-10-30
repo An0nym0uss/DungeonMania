@@ -71,6 +71,8 @@ public class Dungeon {
         if (this.goal != null && goal.isAchieved(grid)) {
             this.goal = null;
         }
+
+        grid.notifyObserverEntities();
     }
 
     public void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
