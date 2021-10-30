@@ -10,7 +10,13 @@ import dungeonmania.entities.statics.*;
 import dungeonmania.modes.Mode;
 import dungeonmania.util.Position;
 import dungeonmania.constants.Layer;
+import dungeonmania.entities.collectable.Armour;
+import dungeonmania.entities.collectable.Arrow;
 import dungeonmania.entities.collectable.Bomb;
+import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.collectable.Treasure;
+import dungeonmania.entities.collectable.Wood;
+import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.player.Player;
 
@@ -73,7 +79,17 @@ public class StandardEntityFactory implements EntityFactory {
         // Collectables
         } else if (entityType.equalsIgnoreCase("bomb")) {
             return new Bomb(new Position(x, y, Layer.COLLECTABLE));
-        }
+        } else if (entityType.equalsIgnoreCase("treasure")) {
+            return new Treasure(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("wood")) {
+            return new Wood(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("arrow")) {
+            return new Arrow(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("sword")) {
+            return new Sword(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("armour")) {
+            return new Armour(new Position(x, y, Layer.COLLECTABLE));
+        } 
 
 
         else if (entityType.equalsIgnoreCase("player")) {

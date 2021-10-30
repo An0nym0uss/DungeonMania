@@ -27,7 +27,10 @@
         "spider": "images/tileset/entities/spider_00.png",
         "mercenary": "images/tileset/entities/ranger.png",
         "switch": "images/tileset/floor_switch.png",
+        "sword": "images/tileset/items/sword_silver.png",
+        "armour": "images/tileset/items/armour.png",
         "invincibility_potion": "images/tileset/items/potion_10.png",
-        "sword": "images/tileset/items/sword_silver.png"
+        "invisible_potion": "images/tileset/items/potion_2",
+        "health_potion": "images/tileset/items/potion_4"
     }
 }

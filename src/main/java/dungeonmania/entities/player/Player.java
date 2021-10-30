@@ -34,6 +34,7 @@ public class Player extends Entity implements Damage, Health, Moving{
     private Shield shield;
     private Direction movement;
     private boolean isTeleported;
+    private Mercenary mercenary;
 
     public Player(Position position, Mode mode) {
         super("player", position, false);
@@ -336,7 +337,7 @@ public class Player extends Entity implements Damage, Health, Moving{
     @Override
     public boolean canMoveInto(Entity other) {
         
-        if (other instanceof Wall)                      {return false;} 
+        if (other instanceof Wall)                      {return false;}
         else if (other instanceof ZombieToastSpawner)   {return false;}
         // else if (other instanceof Door) {
         //     /////////////////////////////////////////////////////////////////////

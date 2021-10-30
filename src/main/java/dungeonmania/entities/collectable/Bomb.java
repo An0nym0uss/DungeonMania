@@ -97,10 +97,10 @@ public class Bomb extends CollectableEntity{
 
         for (int i = 0 - blastRadius; i <= blastRadius; i++) {
             int newX = x + i;
-            if (newX >= 0) {
+            if (newX >= 0 && newX < grid.getWidth()) {
                 for (int j = 0 - blastRadius; j <= blastRadius; j++) {
                     int newY = y + j;
-                    if (newY >= 0) {
+                    if (newY >= 0 && newY < grid.getHeight()) {
                         Iterator<Entity> itr = grid.getEntities(newX, newY).iterator();
                         while (itr.hasNext()) {
                             Entity entity = itr.next();

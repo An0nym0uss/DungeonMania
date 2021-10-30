@@ -5,13 +5,13 @@ import dungeonmania.util.Position;
 public class Armour extends CollectableEntity implements Durable{
     private int durability;
 
-    public Armour(String type, Position position, boolean isInteractable) {
-        super(type, position, isInteractable);
+    public Armour(Position position) {
+        super("armour", position, false);
         this.durability = 10;
     }
 
-    public Armour(String type, Position position, boolean isInteractable, int durability) {
-        this(type, position, isInteractable);
+    public Armour(Position position, int durability) {
+        this(position);
         this.durability = durability;
     }
 
