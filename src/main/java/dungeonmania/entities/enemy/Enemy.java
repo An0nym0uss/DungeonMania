@@ -68,4 +68,17 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage, Sp
         return true;
 
     }
+
+    // TODO temporary code for testing battle
+    public boolean isdead() {
+        if (this.health <= 0) {
+            return true;
+        }
+        return false;
+    }
+
+    // TODO temporary code for testing battle
+    public int damageDealt() {
+        return this.getDamage();
+    }
 }
