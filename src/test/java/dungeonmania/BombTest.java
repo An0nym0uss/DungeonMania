@@ -13,6 +13,7 @@ public class BombTest {
     @Test
     public void testBombBasic() {
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
 
         controller.newGame("bomb-1", "standard");
 
@@ -35,6 +36,7 @@ public class BombTest {
     @Test
     public void TestExit() {
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
 
         controller.newGame("bomb-1", "standard");
 
@@ -49,6 +51,7 @@ public class BombTest {
     @Test
     public void TestBombBasic2() {
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
 
         controller.newGame("bomb-1", "standard");
 

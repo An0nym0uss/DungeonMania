@@ -37,17 +37,12 @@ public class Player extends Entity implements Damage, Health, Moving{
 
     public Player(Position position, Mode mode) {
         super("player", position, false);
-        this.damage = 10;
         this.maxHealth = mode.getMaxPlayerHealth();
         this.currentHealth = mode.getMaxPlayerHealth();
         this.inventory = new Inventory();
         this.statusEffect = new StatusEffect();
         this.isTeleported = false;
-    }
-
-    public Player(Position position, Mode mode, int damage) {
-        this(position, mode);
-        this.damage = damage;
+        this.damage = 10;
     }
 
     public Inventory getInventory() {

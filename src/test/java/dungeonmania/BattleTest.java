@@ -164,7 +164,7 @@ public class BattleTest {
         player.move(grid, Direction.DOWN);
         player.move(grid, Direction.UP);
         assertTrue(player.getMaxHealth() - player.getCurrentHealth() > damageTaken);
-    }
+    } 
     
 }
 

@@ -55,6 +55,8 @@ public class StandardEntityFactory implements EntityFactory {
             return new Portal(new Position(x, y, Layer.STATIC), colour);
         // Zombie toast spawner TODO
         } else if (entityType.equalsIgnoreCase("zombie_toast_spawner")) {
+            if (mode == null) throw new InternalError("tried to create a player without selecting a mode.");
+
             return new ZombieToastSpawner(new Position(x, y, Layer.STATIC), mode);
         // Door TODO
         } else if (entityType.equalsIgnoreCase("door")) {
@@ -92,9 +94,9 @@ public class StandardEntityFactory implements EntityFactory {
 
         else if (entityType.equalsIgnoreCase("player")) {
 
-            if (mode == null) throw new InternalError("tried to create a player without selecting a mode.");
+            if (mode == null) {throw new InternalError("tried to create a player without selecting a mode.");}
 
-            return new Player(new Position(x,y, Layer.PLAYER), mode, 10);
+            return new Player(new Position(x,y, Layer.PLAYER), mode);
         }
 
         return null;
