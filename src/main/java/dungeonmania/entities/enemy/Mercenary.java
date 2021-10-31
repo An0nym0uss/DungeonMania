@@ -45,7 +45,7 @@ public class Mercenary extends Enemy {
 
         // Perform movement
         Position nextStep = shortestPath.get(1);
-        this.setPosition(nextStep.getX(), nextStep.getY());
+        this.setPosition(nextStep);
 
         // TODO: Bribing
         boolean bribed = this.isBribed();
