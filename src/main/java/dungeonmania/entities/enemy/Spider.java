@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.*;
 
 public class Spider extends Enemy {
-    private List<Direction> movesUpWhenSpawns;
-    private List<Direction> movementArray;
+    private List<Direction> movesUpWhenSpawns = new ArrayList<Direction>();
+    private List<Direction> movementArray = new ArrayList<Direction>();
     private int directionCount;
     private boolean isReverse;
 
