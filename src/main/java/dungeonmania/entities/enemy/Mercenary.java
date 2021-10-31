@@ -1,5 +1,6 @@
 package dungeonmania.entities.enemy;
 
+import dungeonmania.entities.collectable.CollectableEntity;
 import org.json.JSONObject;
 
 import dungeonmania.Grid;
@@ -18,6 +19,8 @@ import java.util.List;
 import java.util.*;
 
 public class Mercenary extends Enemy {
+    private boolean hasBeenBribed;
+
     public Mercenary(int speed, int health, int damage) {
         super(speed, health, damage);
         
@@ -39,18 +42,13 @@ public class Mercenary extends Enemy {
 
         List<Position> shortestPath = this.breadthFirstSearch(grid);
         //                Path - (1,1) (2,1) (2,2)
-        // TODO: What if the path doesn't exist, or is less than 1?
-        if (shortestPath == null) {
 
-        }
         // Perform movement
         Position nextStep = shortestPath.get(1);
         this.setPosition(nextStep.getX(), nextStep.getY());
 
         // TODO: Bribing
-
-
-
+        boolean bribed = this.isBribed();
 
 //        visited = {
 //                "position": "parent"
@@ -61,6 +59,25 @@ public class Mercenary extends Enemy {
 //
 //                Path - (1,1) (2,1) (2,2)
 //        }
+    }
+
+    public boolean isBribed() {
+        if (isHasBeenBribed()) {
+            // Mercenary follows player
+            return true;
+        }
+        else {
+            // Mercenary attacks player
+            return false;
+        }
+    }
+
+    public boolean isHasBeenBribed() {
+        return hasBeenBribed;
+    }
+
+    public void setHasBeenBribed(boolean hasBeenBribed) {
+        this.hasBeenBribed = hasBeenBribed;
     }
 
     // Returns the shortest path between the start (mercenary) and the goal (player)
@@ -147,5 +164,10 @@ public class Mercenary extends Enemy {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void spawn(Entity entity, Grid grid) {
+        grid.attach(entity);
     }
 }
