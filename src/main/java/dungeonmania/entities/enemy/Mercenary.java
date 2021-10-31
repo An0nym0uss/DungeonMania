@@ -1,5 +1,8 @@
 package dungeonmania.entities.enemy;
 
+import dungeonmania.entities.collectable.CollectableEntity;
+import org.json.JSONObject;
+
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.statics.Boulder;
@@ -13,6 +16,7 @@ import java.util.List;
 import java.util.*;
 
 public class Mercenary extends Enemy {
+    
     public Mercenary(Position position, int speed, int health, int damage) {
         super("mercenary", position, false, speed, health, damage);
     }
@@ -33,18 +37,12 @@ public class Mercenary extends Enemy {
 
         List<Position> shortestPath = this.breadthFirstSearch(grid);
         //                Path - (1,1) (2,1) (2,2)
-        // TODO: What if the path doesn't exist, or is less than 1?
-        if (shortestPath == null) {
 
-        }
         // Perform movement
         Position nextStep = shortestPath.get(1);
         this.setPosition(nextStep);
-        */
         // TODO: Bribing
-
-
-
+        boolean bribed = this.isBribed();
 
 //        visited = {
 //                "position": "parent"
@@ -55,6 +53,25 @@ public class Mercenary extends Enemy {
 //
 //                Path - (1,1) (2,1) (2,2)
 //        }
+    }
+
+    public boolean isBribed() {
+        if (isHasBeenBribed()) {
+            // Mercenary follows player
+            return true;
+        }
+        else {
+            // Mercenary attacks player
+            return false;
+        }
+    }
+
+    public boolean isHasBeenBribed() {
+        return hasBeenBribed;
+    }
+
+    public void setHasBeenBribed(boolean hasBeenBribed) {
+        this.hasBeenBribed = hasBeenBribed;
     }
 
     // Returns the shortest path between the start (mercenary) and the goal (player)
@@ -97,7 +114,7 @@ public class Mercenary extends Enemy {
 //        while node is not null:
 //           add current node to path
 //           set current node as parent
-
+        /*
         List<Position> path = new ArrayList<Position>();
         Position currentNode = grid.getPlayer().getPosition();
         while (currentNode != null) {
@@ -106,6 +123,7 @@ public class Mercenary extends Enemy {
         }
         Collections.reverse(path);
         return path;
+        */
     }
 
     @Override
@@ -141,5 +159,10 @@ public class Mercenary extends Enemy {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void spawn(Entity entity, Grid grid) {
+        grid.attach(entity);
     }
 }

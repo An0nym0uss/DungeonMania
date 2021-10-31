@@ -47,7 +47,7 @@ public class ZombieToastSpawner extends StaticEntity implements Spawner  {
                 zombie.setPosition(position);
                 boolean canMove = true;
 
-                //check if theres anything in position that won't allow our zombie
+                //check if there's anything in position that won't allow our zombie
                 for (Entity entity : entitiesAtAdjacentPosition) {
                     if (zombie.movingConstraints(entity)) {
                         canMove = false;
