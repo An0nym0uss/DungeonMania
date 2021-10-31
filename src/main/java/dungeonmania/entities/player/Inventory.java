@@ -69,6 +69,16 @@ public class Inventory {
         }
     }
 
+    public int checkItem(String item) {
+        int numberOfItem = 0;
+        for (CollectableEntity ownedItem : items) {
+            if (item.equals(ownedItem.getType())) {
+                numberOfItem++;
+            }
+        }
+        return numberOfItem;
+    }
+
     public List<Recipe> getRecipes() {
         return this.recipes;
     }
