@@ -69,27 +69,7 @@ public class Inventory {
         }
     }
 
-    public int checkItem(String item) {
-        int numberOfItem = 0;
-        for (CollectableEntity ownedItem : items) {
-            if (item.equals(ownedItem.getType())) {
-                numberOfItem++;
-            }
-        }
-        return numberOfItem;
-    }
-
     public List<Recipe> getRecipes() {
         return this.recipes;
-    }
-
-    public boolean checkRecipe(Recipe recipe) {
-        boolean recipeExist = false;
-        for (Recipe ownedRecipe : recipes) {
-            if (ownedRecipe.getIngredients() == ownedRecipe.getIngredients()) {
-                recipeExist = true;
-            }
-        }
-        return recipeExist;
     }
 }
