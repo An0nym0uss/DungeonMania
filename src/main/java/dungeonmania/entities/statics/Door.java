@@ -52,9 +52,10 @@ public class Door extends StaticEntity {
      * Sets the key needed to open the door.
      * @param key The specific key needed to open the door.
      */
+    /* we never need to set
     public void setKey(int keyNumber) {
         this.keyNumber = keyNumber;
-    }
+    }*/
 
     /**
      * Sets the status of the door.
@@ -64,6 +65,7 @@ public class Door extends StaticEntity {
         this.isOpen = isOpen;
     }
 
+    /*
     @Override
     public void collidesWith(Entity other, Grid grid) {
         if (other instanceof Player) {
@@ -82,12 +84,12 @@ public class Door extends StaticEntity {
             }
 
             //can uncomment when Player has method
-            if (/*!player.hasItem(this.getKey()) &&*/ !this.getIsOpen()) {
+            if (*!player.hasItem(this.getKey()) &&/ !this.getIsOpen()) {
                 canMove = false;
             }
 
             if (canMove) {
-                /*player.removeItem(this.getKey());*/ //can uncomment when Player has method
+                /player.removeItem(this.getKey());/ //can uncomment when Player has method
                 this.setIsOpen(true);
                 player.setPosition(doorPosition); //player moves to door position
             }
@@ -98,21 +100,21 @@ public class Door extends StaticEntity {
     public boolean canMoveInto(Entity other) {
         if (this.getIsOpen()) {
             if (other instanceof Player)                    { return true; }   //required
-            /* //can uncomment when these extend Entity
+            / //can uncomment when these extend Entity
             //moving entities
             else if (other instanceof Spider)               { return true; }   //required
             else if (other instanceof Zombie)               { return true; }   //required
             else if (other instanceof Mercenary)            { return true; }   //required
-            */
+            *
         }
         else {
             if (other instanceof Player)    { 
-                /* can uncomment when Player has method
+                / can uncomment when Player has method
                 if (((Player)other).hasItem(this.getKey())) { return true; }    //required
                 
-                else */                                     { return false; } } //required
+                else /                                     { return false; } } //required
         }
 
         return false;
-    }
+    }*/
 }
