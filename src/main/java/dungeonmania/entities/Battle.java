@@ -29,18 +29,15 @@ public class Battle {
             player.setCurrentHealth(player.getCurrentHealth() - enemyDamageDealt);
 
             if (!player.isDead()){
-                //int playerDamageDealt = player.damageDealt();
-                ////////////////////////////////////////////////////////////////////////////////////////////////
+                int playerDamageDealt = player.damageDealt();
+                //////////////////////////////////////////////////////////////////////////////////////////////
                 // if (enemy.hasArmour) {
-                    // playerDamageDealt = playerDamageDealt / 2;
+                //     playerDamageDealt = playerDamageDealt / 2;
                 // }
-                // enemy.setHealth(enemy.getHealth() - playerDamageDealt);
+                enemy.setHealth(enemy.getHealth() - playerDamageDealt);
 
-                // enemy is dead
                 if (enemy.isDead()) {
                     ////////////////////////////////////////////////////////////////////////////////////////////////
-                    // if enemy has armour
-                    // take the armour if player does not have one
                     grid.dettach(enemy);
                     RareCollectableEntities ring = new TheOneRing(new Position(0, 0));
                     ring.spawnnRareCollectableEntities(player.getInventory());
