@@ -82,6 +82,7 @@ public class BuildableTest {
 
         // should be able to build bow
         DungeonResponse canBuildShield = controller.tick(null, Direction.RIGHT);
+        assertFalse(canBuildShield.getBuildables().isEmpty());
         assertEquals(3, canBuildShield.getInventory().size());
         String id = canBuildShield.getBuildables().get(0);
 
@@ -89,8 +90,8 @@ public class BuildableTest {
         // no longer able to build a bow
         DungeonResponse hasBow = controller.build(id);
         assertEquals(1, hasBow.getInventory().size());
-        assertFalse(hasBow.getBuildables().isEmpty());
-        assertTrue(hasBow.getInventory().get(0).getType() == "shield");
+        assertTrue(hasBow.getBuildables().isEmpty());
+        assertTrue(hasBow.getInventory().get(0).getType().equals("shield"));
         assertTrue(hasBow.getBuildables().isEmpty());
     }
 
@@ -116,7 +117,8 @@ public class BuildableTest {
 
         DungeonResponse hasBow = controller.build(id);
         assertEquals(1, hasBow.getInventory().size());
-        assertTrue(hasBow.getInventory().get(0).getType() == "shield");
+        assertTrue(hasBow.getBuildables().isEmpty());
+        assertTrue(hasBow.getInventory().get(0).getType().equals("shield"));
         assertTrue(hasBow.getBuildables().isEmpty());
     }
 
