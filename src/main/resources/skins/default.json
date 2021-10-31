@@ -36,6 +36,8 @@
         "key_silver": "images/tileset/items/key_silver.png",
         "key_gold": "images/tileset/items/key_gold.png",
         "door_locked_silver": "images/tileset/walls/wooden/door_locked_silver.png",
-        "door_unlocked": "images/tileset/walls/wooden/door_unlocked.png"
+        "door_unlocked": "images/tileset/walls/wooden/door_unlocked.png",
+        "portal_blue": "images/tileset/entities/portal_00.png",
+        "portal_red": "images/tileset/entities/portal_04.png"
     }
 }

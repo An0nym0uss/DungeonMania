@@ -51,10 +51,12 @@ public class StandardEntityFactory implements EntityFactory {
             return new Boulder(new Position(x, y, Layer.ENEMY));
         // Portal
         } else if (entityType.equalsIgnoreCase("portal")) {
-
             String colour = entityData.get("colour").getAsString();
-
-            return new Portal(new Position(x, y, Layer.STATIC), colour);
+            if (colour.equalsIgnoreCase("blue")) {
+                return new Portal("portal_blue", new Position(x, y, Layer.STATIC), colour);
+            } else if (colour.equalsIgnoreCase("red")) {
+                return new Portal("portal_red", new Position(x, y, Layer.STATIC), colour);
+            }
         // Zombie toast spawner TODO
         } else if (entityType.equalsIgnoreCase("zombie_toast_spawner")) {
             if (mode == null) throw new InternalError("tried to create a player without selecting a mode.");
