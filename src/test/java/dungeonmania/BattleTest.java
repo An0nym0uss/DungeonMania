@@ -21,10 +21,6 @@ import dungeonmania.modes.Standard;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-import java.util.HashMap;
-import java.util.Map;
-import dungeonmania.entities.player.Recipe;
-
 public class BattleTest {
     @Test
     public void testBattleEnemy() {
@@ -162,7 +158,7 @@ public class BattleTest {
         // kill the second enemy and compare damage
         player.move(grid, Direction.DOWN);
         player.move(grid, Direction.UP);
-        assertTrue(player.getMaxHealth() - player.getCurrentHealth() > damageTaken);
+        assertTrue(player.getMaxHealth() - player.getCurrentHealth() < damageTaken);
         damageTaken = player.getMaxHealth() - player.getCurrentHealth();
         player.setCurrentHealth(player.getMaxHealth());
 
@@ -172,10 +168,11 @@ public class BattleTest {
         player.move(grid, Direction.RIGHT);
         assertTrue(player.getBuildables().size() > 0);
         player.craftItem(player.getBuildables().get(0));
+
         // kill the third enemy and compare damage
         player.move(grid, Direction.DOWN);
         player.move(grid, Direction.UP);
-        assertTrue(player.getMaxHealth() - player.getCurrentHealth() > damageTaken);
+        assertTrue(player.getMaxHealth() - player.getCurrentHealth() < damageTaken);
     } 
 
     @Test
