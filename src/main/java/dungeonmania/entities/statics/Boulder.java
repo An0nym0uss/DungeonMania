@@ -4,6 +4,7 @@ import java.util.List;
 
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.collectable.Bomb;
 /*
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.Arrow;
@@ -93,6 +94,9 @@ public class Boulder extends StaticEntity {
             else                                        { return false; } } //required
         else if (other instanceof Portal)               { return true; }    //assumption
         else if (other instanceof ZombieToastSpawner)   { return false; }   //assumption
+        else if (other instanceof Bomb) {
+            if (((Bomb)other).hasPlaced())              {return false; }
+        }
         /* can uncomment when these extend Entity
         //moving entities
         else if (other instanceof Spider)               { return false; }   //required

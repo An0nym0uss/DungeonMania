@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.sound.sampled.Port;
 
+import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.ObserverEntity;
 import dungeonmania.entities.player.Player;
@@ -26,7 +27,7 @@ public class Grid implements GridSubject {
 
     private final int HEIGHT;
     private final int WIDTH;
-    private final int LAYER_SIZE = 4;
+    private final int LAYER_SIZE = Layer.LAYER_SIZE;
     private Entity[][][] map;
     private Player player;
     private Map<String, Position> portalMapping = new HashMap<>();

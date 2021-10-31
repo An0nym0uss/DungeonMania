@@ -1,6 +1,8 @@
 package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,14 +16,53 @@ public class BombTest {
 
         controller.newGame("bomb-1", "standard");
 
+        // collect bomb on the right
         DungeonResponse response = controller.tick(null, Direction.RIGHT);
-
         assertEquals(1, response.getInventory().size());
 
-        String bombId = response.getInventory().get(0).getId();
+        // push boulder on the right
+        controller.tick(null, Direction.RIGHT);
 
+        // place bomb, bomb explodes
+        String bombId = response.getInventory().get(0).getId();
+        response = controller.tick(bombId, null);
+        // no item in entity
+        assertEquals(0, response.getInventory().size());
+        // entities in blast radius get destroyed
+        assertEquals(15, response.getEntities().size());
+    }
+
+    @Test
+    public void TestExit() {
+        DungeonManiaController controller = new DungeonManiaController();
+
+        controller.newGame("bomb-1", "standard");
+
+        // collect bomb
+        DungeonResponse response = controller.tick(null, Direction.RIGHT);
+        // go to exit
+        response = controller.tick(null, Direction.DOWN);
+        // wins the game
+        assertEquals("", response.getGoals());
+    }
+
+    @Test
+    public void TestBombBasic2() {
+        DungeonManiaController controller = new DungeonManiaController();
+
+        controller.newGame("bomb-1", "standard");
+
+        // collect bomb
+        DungeonResponse response = controller.tick(null, Direction.RIGHT);
+        // place bomb
+        String bombId = response.getInventory().get(0).getId();
         response = controller.tick(bombId, null);
 
-        assertEquals(0, response.getInventory().size());
-    }  
+        // player cannot go to placed bomb cell
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.RIGHT);
+        response = controller.tick(null, Direction.DOWN);
+
+        assertNotEquals("", response.getGoals());
+    }
 }

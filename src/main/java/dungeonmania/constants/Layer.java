@@ -1,6 +1,8 @@
 package dungeonmania.constants;
 
 public class Layer {
+    public static final int LAYER_SIZE = 5;
+
     public static final int STATIC = 0;
 
     public static final int COLLECTABLE = 1;
@@ -8,7 +10,9 @@ public class Layer {
     // when a bomb is placed it is also at layer 2
     public static final int ENEMY = 2;
 
-    public static final int PLAYER = 3;
+    public static final int SPIDER = 3;
+
+    public static final int PLAYER = 4;
     
 }
 
