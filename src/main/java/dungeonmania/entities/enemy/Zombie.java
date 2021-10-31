@@ -62,8 +62,8 @@ public class Zombie extends Enemy {
      */
     @Override
     public boolean movingConstraints(Entity e) {
-        if (!super.canMoveInto(e))                   { return false; }
-        else if (e instanceof Wall) {
+        
+        if (e instanceof Wall) {
             return true;
         }
         if (e instanceof Door && ((Door) e).getIsOpen() == false) {

@@ -61,8 +61,7 @@ public class Spider extends Enemy {
 
     @Override
     public boolean movingConstraints(Entity e) {
-        if (!super.canMoveInto(e))                   { return false; }
-        else if (e instanceof Boulder) {
+    if (e instanceof Boulder) {
             return true;
         }
         return false;
