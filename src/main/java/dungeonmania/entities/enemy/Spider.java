@@ -9,25 +9,30 @@ import dungeonmania.entities.statics.Boulder;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Spider extends Enemy {
-
+    private List<Direction> movesUpWhenSpawns;
     private List<Direction> movementArray;
     private int directionCount;
     private boolean isReverse;
 
     public Spider(int speed, int health, int damage) {
         super(speed, health, damage);
-        this.movementArray.addAll(Arrays.asList(Direction.RIGHT, Direction.DOWN, Direction.DOWN, Direction.LEFT,
-            Direction.LEFT, Direction.UP,  Direction.UP,  Direction.RIGHT));
+        this.movesUpWhenSpawns.addAll(Arrays.asList(Direction.UP));
+        this.movementArray.addAll(Arrays.asList(Direction.RIGHT,
+                Direction.DOWN, Direction.DOWN,
+                Direction.LEFT, Direction.LEFT,
+                Direction.UP,  Direction.UP,
+                Direction.RIGHT));
         this.directionCount = 0;
         this.isReverse = false;
     }
 
     @Override
     public void update(Grid grid) {
+        //spawns
+        Direction upDirection = movesUpWhenSpawns.get(directionCount);
         // tries to move to next position
         Direction nextDirection = movementArray.get(directionCount);
         Position newPosition = this.getPosition().translateBy(isReverse ? Direction.getOppositeDirection(nextDirection) : nextDirection);
@@ -44,6 +49,11 @@ public class Spider extends Enemy {
         // probably should use move()
         this.setPosition(newPosition);
 
+    }
+
+    @Override
+    public void spawn(Entity entity, Grid grid) {
+        grid.attach(entity);
     }
 
     @Override
