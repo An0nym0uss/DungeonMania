@@ -190,10 +190,9 @@ public class Player extends Entity implements Damage, Health, Moving{
             } else if (other instanceof Door) {
                 // door not open
                 if (!((Door)other).getIsOpen()) {
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // unlock door
-                    // inventory.removeNonSpecificItem("key");
-                    //
+                    ((Door)other).setType("door_unlocked");
+                    ((Door)other).setIsOpen(true);
+                    inventory.removeNonSpecificItem("key");
                 }
             } else if (other instanceof Portal) {
                 if (this.isTeleported) {
@@ -319,6 +318,19 @@ public class Player extends Entity implements Damage, Health, Moving{
     public boolean canMoveInto(Entity other) {
         if (other instanceof Wall)                      {return false;}
         else if (other instanceof ZombieToastSpawner)   {return false;}
+        else if (other instanceof Door) {
+            if (!((Door)other).getIsOpen()) {
+                int keyNumber = ((Door)other).getKey();
+                for (CollectableEntity e : this.inventory.getItems()) {
+                    if (e instanceof Key) {
+                        if (((Key)e).getKeyNumber() == keyNumber) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
         // else if (other instanceof Door) {
         //     /////////////////////////////////////////////////////////////////////////////////////
         //     // if door is unlocked, return true

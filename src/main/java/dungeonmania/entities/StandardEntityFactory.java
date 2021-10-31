@@ -1,5 +1,7 @@
 package dungeonmania.entities;
 
+import javax.sound.sampled.SourceDataLine;
+
 import com.google.gson.JsonObject;
 
 import dungeonmania.entities.statics.*;
@@ -59,8 +61,9 @@ public class StandardEntityFactory implements EntityFactory {
 
             return new ZombieToastSpawner(new Position(x, y, Layer.STATIC), mode);
         // Door TODO
-        } else if (entityType.equalsIgnoreCase("door")) {
-            return new Door(new Position(x, y, Layer.ENEMY), null, false);
+        } else if (entityType.equalsIgnoreCase("door_locked_silver")) {
+            int keyNumber = entityData.get("key").getAsInt();
+            return new Door("door_locked_silver", new Position(x, y, Layer.ENEMY), keyNumber, false);
         // Enemies TODO
         // Mercancy TODO
         } else if (entityType.equalsIgnoreCase("mercenary")) {
@@ -82,8 +85,12 @@ public class StandardEntityFactory implements EntityFactory {
             return new Sword(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("armour")) {
             return new Armour(new Position(x, y, Layer.COLLECTABLE));
-        } else if (entityType.equalsIgnoreCase("key")) {
-            return new Key(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("key_silver")) {
+            int keyNumber = entityData.get("key").getAsInt();
+            return new Key("key_silver", new Position(x, y, Layer.COLLECTABLE), keyNumber);
+        } else if (entityType.equalsIgnoreCase("key_gold")) {
+            int keyNumber = entityData.get("key").getAsInt();
+            return new Key("key_gold", new Position(x, y, Layer.COLLECTABLE), keyNumber);
         } else if (entityType.equalsIgnoreCase("invincibility_potion")) {
             return new InvincibilityPotion(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("invisibility_potion")) {
@@ -98,7 +105,9 @@ public class StandardEntityFactory implements EntityFactory {
 
             return new Player(new Position(x,y, Layer.PLAYER), mode);
         }
-
+        if (entityType != null) {
+            System.out.println(entityType);
+        }
         return null;
     }
     

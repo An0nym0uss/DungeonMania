@@ -30,7 +30,11 @@
         "sword": "images/tileset/items/sword_silver.png",
         "armour": "images/tileset/items/armour.png",
         "invincibility_potion": "images/tileset/items/potion_10.png",
-        "invisible_potion": "images/tileset/items/potion_2",
-        "health_potion": "images/tileset/items/potion_4"
+        "invisible_potion": "images/tileset/items/potion_2.png",
+        "health_potion": "images/tileset/items/potion_4.png",
+        "key_silver": "images/tileset/items/key_silver.png",
+        "key_gold": "images/tileset/items/key_gold.png",
+        "door_locked_silver": "images/tileset/walls/wooden/door_locked_silver.png",
+        "door_unlocked": "images/tileset/walls/wooden/door_unlocked.png"
     }
 }

@@ -47,6 +47,14 @@ public abstract class Entity implements ObserverEntity, GameToJSON {
         return type;
     }
 
+    /**
+     * Setter for entity type.
+     * @param type
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
 
     /**
      * Getter for position.

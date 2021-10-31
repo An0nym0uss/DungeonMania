@@ -43,10 +43,25 @@ public class DoorTest {
         // attempt to unlock door
         DungeonResponse fouthTick = controller.tick(null, Direction.RIGHT);
 
+        // get playerId
+        for( int i = 0; i < fouthTick.getEntities().size(); i++) {
+            EntityResponse entResponse = fouthTick.getEntities().get(i);
+            if (entResponse.getType().equals("player")) {
+                playerId = i;
+            }
+        }
+
         // door unlocked
         assertTrue(fouthTick.getEntities().get(playerId).getType().equals("player") && fouthTick.getEntities().get(playerId).getPosition().getX() == 1);
 
         // finish game
         controller.tick(null, Direction.RIGHT);
+    }
+
+    public static void main(String[] args) {
+        DungeonManiaController controller = new DungeonManiaController();
+
+        // start game
+        controller.newGame("door", "peaceful");
     }
 }
