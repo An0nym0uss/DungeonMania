@@ -125,7 +125,8 @@ public class Mercenary extends Enemy {
 
     @Override
     public boolean movingConstraints(Entity e) {
-        if (e instanceof Wall) {
+        if (!super.canMoveInto(e))                   { return false; }
+        else if (e instanceof Wall) {
             return true;
         }
         if (e instanceof Door && ((Door) e).getIsOpen() == false) {
