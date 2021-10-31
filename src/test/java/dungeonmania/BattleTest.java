@@ -2,17 +2,12 @@ package dungeonmania;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.rarecollectable.*;
 import dungeonmania.entities.player.Player;
-import dungeonmania.entities.statics.Boulder;
-import dungeonmania.entities.statics.Door;
-import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.enemy.Enemy;
-import dungeonmania.entities.enemy.Mercenary;
 import dungeonmania.entities.enemy.Spider;
 import dungeonmania.entities.Entity;
 
@@ -21,9 +16,6 @@ import dungeonmania.modes.Standard;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-import java.util.HashMap;
-import java.util.Map;
-import dungeonmania.entities.player.Recipe;
 
 public class BattleTest {
     @Test
@@ -36,6 +28,10 @@ public class BattleTest {
         grid.attach(player);
         grid.attach(enemy);
         grid.attach(shelob);
+
+        // set player damage
+        player.setDamage(20);
+        assertTrue(player.getDamage() == 20);
 
         // enemy dead
         player.move(grid, Direction.RIGHT);
@@ -177,22 +173,30 @@ public class BattleTest {
     } 
 
     @Test
-    public void testMerc() {
-        Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
-        Position p = new Position(1,1);
-        Mercenary m = new Mercenary(new Position(1,1), 1, 1, 1);
+    public void testBuildavle() {
 
-        m.damageDealt();
-        m.isDead();
+    Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
+    CollectableEntity sword = new Sword(new Position(2, 1, Layer.COLLECTABLE));
+    CollectableEntity wood = new Wood(new Position(3, 1, Layer.COLLECTABLE));
+    CollectableEntity arrow1 = new Arrow(new Position(4, 1, Layer.COLLECTABLE));
+    CollectableEntity arrow2 = new Arrow(new Position(5, 1, Layer.COLLECTABLE));
+    CollectableEntity arrow3 = new Arrow(new Position(6, 1, Layer.COLLECTABLE));
+    Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
+    grid.attach(player);
+    grid.attach(sword);
+    grid.attach(wood);
+    grid.attach(arrow1);
+    grid.attach(arrow2);
+    grid.attach(arrow3);
 
-        assertFalse(m.movingConstraints(new Sword(p, 1, 1)));
-        assertTrue(m.movingConstraints(new Wall(p)));
-        assertTrue(m.movingConstraints(new Door("door_locked_silver", p, 1, false)));
-        assertTrue(m.movingConstraints(new Boulder(p)));
-        assertTrue(m.movingConstraints(m));
-        assertTrue(m.movingConstraints(new Player(new Position(1, 1, Layer.PLAYER), new Standard())));
-        m.spawn(new Wall(p), grid);
+    // get the potion
+    for (int i = 0; i < 5; i++){
+        player.move(grid, Direction.RIGHT);
     }
-    
+
+    assertTrue(player.getInventory().getRecipes().get(0).getType().equals("bow"));
+    assertTrue(player.getBuildables().size() > 0);
+
+    }
 }
 
