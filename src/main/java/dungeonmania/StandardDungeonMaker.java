@@ -113,7 +113,8 @@ public class StandardDungeonMaker implements DungeonMaker {
         Iterator<JsonElement> gridDataIter = gridData.iterator();
 
         while(gridDataIter.hasNext()) {
-            grid.attach(createEntity(gridDataIter.next().getAsJsonObject()));
+            Entity e = createEntity(gridDataIter.next().getAsJsonObject());
+            grid.attach(e);
         }
         return grid;
     }

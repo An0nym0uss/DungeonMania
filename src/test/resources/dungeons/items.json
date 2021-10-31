@@ -63,7 +63,8 @@
         {
             "x": 5,
             "y": 5,
-            "type": "key"
+            "type": "key_silver",
+            "key": 1
         }
     ],
     "width": 8,

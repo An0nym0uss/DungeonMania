@@ -18,7 +18,7 @@ import dungeonmania.util.Position;
  * If the player has the correct key, moving through it will open the door.
  */
 public class Door extends StaticEntity {
-    private Key key;
+    private int keyNumber;
     private boolean isOpen;
 
     /**
@@ -26,9 +26,9 @@ public class Door extends StaticEntity {
      * @param key The specific key needed to open the door.
      * @param isOpen The status of the door. True for open, false for closed.
      */
-    public Door(Position position, Key key, boolean isOpen) {
-        super("door", position, false);
-        this.key = key;
+    public Door(String type, Position position, int keyNumber, boolean isOpen) {
+        super(type, position, false);
+        this.keyNumber = keyNumber;
         this.isOpen = isOpen;
     }
 
@@ -36,8 +36,8 @@ public class Door extends StaticEntity {
      * Gets the key needed to open the door.
      * @return
      */
-    public Key getKey() {
-        return key;
+    public int getKey() {
+        return keyNumber;
     }
 
     /**
@@ -52,8 +52,8 @@ public class Door extends StaticEntity {
      * Sets the key needed to open the door.
      * @param key The specific key needed to open the door.
      */
-    public void setKey(Key key) {
-        this.key = key;
+    public void setKey(int keyNumber) {
+        this.keyNumber = keyNumber;
     }
 
     /**
