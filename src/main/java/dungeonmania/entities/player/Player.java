@@ -109,15 +109,6 @@ public class Player extends Entity implements Damage, Health, Moving{
         return false;
     }
 
-    public boolean hasOneRing() {
-        for (CollectableEntity collectable : this.inventory.getItems()) {
-            if (collectable instanceof TheOneRing) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public int getShieldDefense() {
         if (this.hasShield()) {
             return this.shield.getDefense();
@@ -190,9 +181,10 @@ public class Player extends Entity implements Damage, Health, Moving{
             } else if (other instanceof Door) {
                 // door not open
                 if (!((Door)other).getIsOpen()) {
-                    ((Door)other).setType("door_unlocked");
-                    ((Door)other).setIsOpen(true);
-                    inventory.removeNonSpecificItem("key");
+                    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // unlock door
+                    // inventory.removeNonSpecificItem("key");
+                    //
                 }
             } else if (other instanceof Portal) {
                 if (this.isTeleported) {
@@ -224,14 +216,6 @@ public class Player extends Entity implements Damage, Health, Moving{
                 } else if (entity instanceof Armour && !hasArmour()) {
                     this.inventory.addItem((CollectableEntity)entity);
                     this.armour = (Armour) entity;
-                    grid.dettach(entity);
-                } else if (entity instanceof Bow && !hasBow()) {
-                    this.inventory.addItem((CollectableEntity)entity);
-                    this.bow = (Bow) entity;
-                    grid.dettach(entity);
-                } else if (entity instanceof Shield && !hasShield()) {
-                    this.inventory.addItem((CollectableEntity)entity);
-                    this.shield = (Shield) entity;
                     grid.dettach(entity);
                 } else if (!(entity instanceof Sword && hasSword() ||
                     entity instanceof Shield && hasShield() ||
@@ -318,21 +302,6 @@ public class Player extends Entity implements Damage, Health, Moving{
     public boolean canMoveInto(Entity other) {
         if (other instanceof Wall)                      {return false;}
         else if (other instanceof ZombieToastSpawner)   {return false;}
-        else if (other instanceof Door) {
-            if (((Door)other).getIsOpen()) {
-                return true;
-            } else if (!((Door)other).getIsOpen()) {
-                int keyNumber = ((Door)other).getKey();
-                for (CollectableEntity e : this.inventory.getItems()) {
-                    if (e instanceof Key) {
-                        if (((Key)e).getKeyNumber() == keyNumber) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
         // else if (other instanceof Door) {
         //     /////////////////////////////////////////////////////////////////////////////////////
         //     // if door is unlocked, return true
@@ -433,12 +402,8 @@ public class Player extends Entity implements Damage, Health, Moving{
     }
 
     private Recipe getAvailableRecipe(String buildable) {
-        BuildableEntity e = (BuildableEntity) this.inventory.getItem(buildable);
-        if (e == null) {
-            return null;
-        }
-        for (Recipe recipe : e.getRecipes()) {
-            if (recipe.isCraftable(this.inventory)) {
+        for (Recipe recipe : this.inventory.getRecipes()) {
+            if (recipe.getType().equals(buildable) && recipe.isCraftable(this.inventory)) {
                 return recipe;
             }
         }
