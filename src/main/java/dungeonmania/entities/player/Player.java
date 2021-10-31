@@ -328,6 +328,8 @@ public class Player extends Entity implements Damage, Health, Moving{
                         }
                     }
                 }
+            } else {
+                return true;
             }
             return false;
         }
