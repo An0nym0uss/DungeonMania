@@ -218,9 +218,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                     this.armour = (Armour) entity;
                     grid.dettach(entity);
                 } else if (!(entity instanceof Sword && hasSword() ||
-                    entity instanceof Shield && hasShield() ||
-                    entity instanceof Armour && hasArmour() ||
-                    entity instanceof Bow && hasBow())
+                    entity instanceof Armour && hasArmour())
                 ) {
                     this.inventory.addItem((CollectableEntity)entity);
                     grid.dettach(entity);
