@@ -59,12 +59,12 @@ public class Spider extends Enemy {
 
     @Override
     public int damageDealt() {
-        return 0;
+        return super.getDamage();
     }
 
     @Override
     public boolean isDead() {
-        return false;
+        return super.isdead();
     }
 
     @Override
