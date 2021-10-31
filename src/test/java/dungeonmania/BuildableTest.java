@@ -82,7 +82,7 @@ public class BuildableTest {
 
         // should be able to build bow
         DungeonResponse canBuildShield = controller.tick(null, Direction.RIGHT);
-        assertEquals(4, canBuildShield.getInventory().size());
+        assertEquals(3, canBuildShield.getInventory().size());
         String id = canBuildShield.getBuildables().get(0);
 
         // build a bow which shoud be added to the inventory and player is
@@ -104,13 +104,13 @@ public class BuildableTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
         for (int i = 0; i < 4; i++) {
             controller.tick(null, Direction.RIGHT);
         }
-        controller.tick(null, Direction.DOWN);
 
         DungeonResponse canBuildShield = controller.tick(null, Direction.RIGHT);
-        assertEquals(4, canBuildShield.getInventory().size());
+        assertEquals(3, canBuildShield.getInventory().size());
         assertFalse(canBuildShield.getBuildables().isEmpty());
         String id = canBuildShield.getBuildables().get(0);
 
