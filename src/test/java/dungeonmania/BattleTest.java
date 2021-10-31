@@ -2,12 +2,17 @@ package dungeonmania;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.rarecollectable.*;
 import dungeonmania.entities.player.Player;
+import dungeonmania.entities.statics.Boulder;
+import dungeonmania.entities.statics.Door;
+import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.enemy.Enemy;
+import dungeonmania.entities.enemy.Mercenary;
 import dungeonmania.entities.enemy.Spider;
 import dungeonmania.entities.Entity;
 
@@ -165,6 +170,24 @@ public class BattleTest {
         player.move(grid, Direction.UP);
         assertTrue(player.getMaxHealth() - player.getCurrentHealth() > damageTaken);
     } 
+
+    @Test
+    public void testMerc() {
+        Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
+        Position p = new Position(1,1);
+        Mercenary m = new Mercenary(new Position(1,1), 1, 1, 1);
+
+        m.damageDealt();
+        m.isDead();
+
+        assertFalse(m.movingConstraints(new Sword(p, 1, 1)));
+        assertTrue(m.movingConstraints(new Wall(p)));
+        assertTrue(m.movingConstraints(new Door("door_locked_silver", p, 1, false)));
+        assertTrue(m.movingConstraints(new Boulder(p)));
+        assertTrue(m.movingConstraints(m));
+        assertTrue(m.movingConstraints(new Player(new Position(1, 1, Layer.PLAYER), new Standard())));
+        m.spawn(new Wall(p), grid);
+    }
     
 }
 

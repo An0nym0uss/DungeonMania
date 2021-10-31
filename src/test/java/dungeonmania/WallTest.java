@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 import dungeonmania.DungeonManiaController;
 
 public class WallTest {
@@ -44,5 +45,22 @@ public class WallTest {
 
         // finish game
         controller.tick(null, Direction.DOWN);
+
+        (new Position(1, 2)).getAdjacentPositions();
+    }
+
+    @Test
+    public void testPushBoulderIntoWall() {
+        // Test end
+        DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
+        controller.newGame("boulders", "peaceful");
+
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
     }
 }

@@ -80,45 +80,13 @@ public class Boulder extends StaticEntity {
     
     @Override
     public boolean canMoveInto(Entity other) {
-        if (!super.canMoveInto(other))                   { return false; }
-        //player
-        else if (other instanceof Player)               { return false; }   //required
-
-        //static entities
-        else if (other instanceof Wall)                 { return false; }   //required
-        else if (other instanceof Exit)                 { return true; }    //assumption
-        else if (other instanceof Boulder)              { return false; }   //required
+        if (other instanceof Exit)                 { return true; }    //assumption
         else if (other instanceof FloorSwitch)          { return true; }    //required
         else if (other instanceof Door)                 { 
             if (((Door)other).getIsOpen())              { return true; }    //assumption
             else                                        { return false; } } //required
         else if (other instanceof Portal)               { return true; }    //assumption
-        else if (other instanceof ZombieToastSpawner)   { return false; }   //assumption
-        else if (other instanceof Bomb) {
-            if (((Bomb)other).hasPlaced())              {return false; }
-        }
-        /* can uncomment when these extend Entity
-        //moving entities
-        else if (other instanceof Spider)               { return false; }   //required
-        else if (other instanceof Zombie)               { return false; }   //required
-        else if (other instanceof Mercenary)            { return false; }   //required
 
-        //collectable entities
-        else if (other instanceof Treasure)             { return true; }   //assumption
-        else if (other instanceof Key)                  { return true; }   //assumption
-        else if (other instanceof HealthPotion)         { return true; }   //assumption
-        else if (other instanceof InvincibilityPotion)  { return true; }   //assumption
-        else if (other instanceof InvisibilityPotion)   { return true; }   //assumption
-        else if (other instanceof Wood)                 { return true; }   //assumption
-        else if (other instanceof Arrow)                { return true; }   //assumption
-        else if (other instanceof Bomb)                 { 
-            if (((Bomb)other).getIsPlaced())            { return false; }  //assumption
-            else                                        { return true; } } //assumption
-        }   //required
-        else if (other instanceof Sword)                { return true; }   //assumption
-        else if (other instanceof Armour)               { return true; }   //assumption
-        */
-
-        return true;
+        return false;
     }
 }

@@ -29,6 +29,40 @@ public class GoalsTest {
 
         assertEquals("treasure", treasureGoal.getJSON().get("goal"));
 
+        ComponentGoal enemyGoal = new DestroyAllEnemiesGoal();
+
+        assertEquals("enemies", enemyGoal.getJSON().get("goal"));
+
+        ComponentGoal switchGoal = new AllSwitchesTriggeredGoal();
+
+        switchGoal.toString();
+
+        assertEquals("boulders", switchGoal.getJSON().get("goal"));
+
+        OrCompositeGoal orGoal = new OrCompositeGoal();
+        OrCompositeGoal orGoal2 = new OrCompositeGoal();
+        AndCompositeGoal andGoal2 = new AndCompositeGoal();
+
+        orGoal.toString();
+        orGoal.getJSON();
+
+        orGoal.addSubgoal(exitGoal);
+        orGoal.addSubgoal(orGoal2);
+        orGoal.addSubgoal(andGoal2);
+
+        assertEquals("OR", orGoal.getJSON().get("goal"));
+
+        AndCompositeGoal andGoal = new AndCompositeGoal();
+
+        andGoal.toString();
+        andGoal.getJSON();
+
+        andGoal.addSubgoal(exitGoal);
+        andGoal.addSubgoal(orGoal2);
+        andGoal.addSubgoal(andGoal2);
+
+        assertEquals("AND", andGoal.getJSON().get("goal"));
+
     }
 
     @Test
@@ -90,6 +124,66 @@ public class GoalsTest {
         controller.newGame("advanced-2", "peaceful");
 
         DungeonResponse noTreasure = controller.tick(null, Direction.RIGHT);
+
+    }
+
+    @Test
+    public void testOR() {
+        // Test end
+        DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
+        controller.newGame("advancedOR", "peaceful");
+
+        DungeonResponse noTreasure = controller.tick(null, Direction.RIGHT);
+
+    }
+
+    @Test
+    public void testSwitch() {
+        // Test end
+        DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
+        controller.newGame("boulders", "peaceful");
+
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.DOWN);
+        assertEquals("", controller.tick(null, Direction.RIGHT).getGoals());;
+
 
     }
 

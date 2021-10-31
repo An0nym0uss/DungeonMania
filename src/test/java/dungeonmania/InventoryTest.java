@@ -4,11 +4,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.player.Inventory;
+import dungeonmania.util.Position;
 import dungeonmania.exceptions.InvalidActionException;
 
 public class InventoryTest {
@@ -78,6 +82,36 @@ public class InventoryTest {
         // item is not in the inventory
         assertThrows(InvalidActionException.class, () -> controller.tick("invincibility_potion", null));
 
+    }
+
+    @Test
+    public void testRemoveWrongItem() {
+        Inventory inventory = new Inventory();
+
+        Sword sword = new Sword(new Position(1, 1), 1, 1);
+
+        inventory.addItem(sword);
+
+        assertNull(inventory.getItem("invalid item"));
+        inventory.getItem("sword");
+        inventory.checkItem("sword");
+        inventory.removeNonSpecificItem("sword");
+        inventory.removeNonSpecificItem("invalid item");
+
+
+        
+    }
+
+    @Test
+    public void testSword() {
+
+        Sword sword = new Sword(new Position(1, 1), 1, 1);
+        
+        assertTrue(sword.getAttack() == 1);
+        assertTrue(sword.getDurability() == 1);
+        assertFalse(sword.isBroken());
+        sword.setDurability(0);
+        assertTrue(sword.isBroken());
     }
 }
 
