@@ -103,7 +103,7 @@ public class StandardDungeonMaker implements DungeonMaker {
             return new Hard();
         }
 
-        throw new IllegalAccessError("IllegalAccessError: game mode given doesn't exist");
+        throw new IllegalArgumentException("game mode given doesn't exist");
     }
 
     @Override
