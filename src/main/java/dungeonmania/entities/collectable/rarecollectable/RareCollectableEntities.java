@@ -22,10 +22,18 @@ public abstract class RareCollectableEntities extends CollectableEntity {
     }
 
     public void spawnnRareCollectableEntities(Inventory inventory) {
-        Random random = new Random();
-        int draw = random.nextInt(100);
-        if (draw + 1 <= this.dropRate) {
-            inventory.addItem(this);
+        boolean hasRareCollectable = false;
+        for (CollectableEntity entity : inventory.getItems()) {
+            if (entity instanceof RareCollectableEntities) {
+                hasRareCollectable = true;
+            }
+        }
+        if (!hasRareCollectable) {
+            Random random = new Random();
+            int draw = random.nextInt(100);
+            if (draw + 1 <= this.dropRate) {
+                inventory.addItem(this);
+            }
         }
     }
 
