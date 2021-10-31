@@ -24,14 +24,13 @@ public class FloorSwitch extends StaticEntity {
      */
     public FloorSwitch(Position position) {
         super("switch", position, false);
-        //TODO Auto-generated constructor stub
     }
 
     /**
      * Gets whether or not a boulder is on our floor switch.
      * @param grid The current grid we wish to check on.
      * @return True for triggered, false for not triggered
-     */
+     *//* not used
     public boolean getIsTriggered(Grid grid) {
         Position floorSwitchPosition = this.getPosition();
 
@@ -70,5 +69,5 @@ public class FloorSwitch extends StaticEntity {
     public boolean canMoveInto(Entity other) {
         //Switches behave like empty squares, so other entities can appear on top of them.
         return true;
-    }
+    }*/
 }
