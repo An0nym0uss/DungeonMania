@@ -319,7 +319,9 @@ public class Player extends Entity implements Damage, Health, Moving{
         if (other instanceof Wall)                      {return false;}
         else if (other instanceof ZombieToastSpawner)   {return false;}
         else if (other instanceof Door) {
-            if (!((Door)other).getIsOpen()) {
+            if (((Door)other).getIsOpen()) {
+                return true;
+            } else if (!((Door)other).getIsOpen()) {
                 int keyNumber = ((Door)other).getKey();
                 for (CollectableEntity e : this.inventory.getItems()) {
                     if (e instanceof Key) {
@@ -328,8 +330,6 @@ public class Player extends Entity implements Damage, Health, Moving{
                         }
                     }
                 }
-            } else {
-                return true;
             }
             return false;
         }
