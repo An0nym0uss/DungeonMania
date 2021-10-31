@@ -51,6 +51,7 @@ public class Battle {
                 if (player.getInventory().checkItem("the_one_ring") > 0) {
                     player.setCurrentHealth(player.getMaxHealth());
                     player.getInventory().removeNonSpecificItem("the_one_ring");
+                    grid.dettach(enemy);
                 } else {
                     // player dies   
                     grid.dettach(player);

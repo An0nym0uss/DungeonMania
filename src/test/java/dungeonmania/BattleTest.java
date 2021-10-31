@@ -21,13 +21,17 @@ import dungeonmania.modes.Standard;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
+import java.util.HashMap;
+import java.util.Map;
+import dungeonmania.entities.player.Recipe;
+
 public class BattleTest {
     @Test
     public void testBattleEnemy() {
 
         Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
         Enemy enemy = new Spider(new Position(2, 1), 1, 1, 1);
-        Enemy shelob = new Spider(new Position(3, 1), 1, 20, 20);
+        Enemy shelob = new Spider(new Position(3, 1), 1, 100, 100);
         Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
         grid.attach(player);
         grid.attach(enemy);
@@ -36,12 +40,12 @@ public class BattleTest {
         // enemy dead
         player.move(grid, Direction.RIGHT);
         assertTrue(grid.getEntities(2, 1).size() == 1);
-        assertTrue(grid.getEntities(2, 1).get(0).getType() == "player");
+        assertTrue(grid.getEntities(2, 1).get(0).getType().equals("player"));
 
         // player dead
         player.move(grid, Direction.RIGHT);
         assertTrue(grid.getEntities(3, 1).size() == 1);
-        assertTrue(grid.getEntities(3, 1).get(0).getType() == "spider");
+        assertTrue(grid.getEntities(3, 1).get(0).getType().equals("spider"));
     }
 
     @Test
@@ -49,15 +53,16 @@ public class BattleTest {
 
         Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
         Enemy enemy = new Spider(new Position(2, 1), 1, 1, 1);
-        CollectableEntity hpPotion = new HealthPotion(new Position(4, 1, Layer.COLLECTABLE));
+        CollectableEntity hpPotion = new HealthPotion(new Position(3, 1, Layer.COLLECTABLE));
         Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
         grid.attach(player);
         grid.attach(enemy);
+        grid.attach(hpPotion);
 
         // enemy dead, player injured
         player.move(grid, Direction.RIGHT);
         assertTrue(grid.getEntities(2, 1).size() == 1);
-        assertTrue(grid.getEntities(2, 1).get(0).getType() == "player");
+        assertTrue(grid.getEntities(2, 1).get(0).getType().equals("player"));
         assertTrue(player.getCurrentHealth() < player.getMaxHealth());
 
         // pick up health potion
@@ -70,7 +75,7 @@ public class BattleTest {
     public void testOneRing() {
 
         Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
-        Enemy shelob = new Spider(new Position(2, 1), 1, 20, 20);
+        Enemy shelob = new Spider(new Position(2, 1), 1, 100, 100);
         Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
         grid.attach(player);
         grid.attach(shelob);
@@ -84,7 +89,7 @@ public class BattleTest {
         // shelob dead, player at max health
         player.move(grid, Direction.RIGHT);
         assertTrue(grid.getEntities(2, 1).size() == 1);
-        assertTrue(grid.getEntities(2, 1).get(0).getType() == "player");
+        assertTrue(grid.getEntities(2, 1).get(0).getType().equals("player"));
         assertTrue(player.getCurrentHealth() == player.getMaxHealth());
 
     }
@@ -191,31 +196,3 @@ public class BattleTest {
     
 }
 
-    // @Test
-    // public void testDamage() {
-
-    //     Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
-    //     CollectableEntity sword = new Sword(new Position(2, 1, Layer.COLLECTABLE));
-    //     CollectableEntity wood = new Wood(new Position(3, 1, Layer.COLLECTABLE));
-    //     CollectableEntity arrow1 = new Arrow(new Position(4, 1, Layer.COLLECTABLE));
-    //     CollectableEntity arrow2 = new Arrow(new Position(5, 1, Layer.COLLECTABLE));
-    //     CollectableEntity arrow3 = new Arrow(new Position(6, 1, Layer.COLLECTABLE));
-    //     Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
-    //     grid.attach(player);
-    //     grid.attach(sword);
-    //     grid.attach(wood);
-    //     grid.attach(arrow1);
-    //     grid.attach(arrow2);
-    //     grid.attach(arrow3);
-
-    //     // get the potion
-    //     for (int i = 0; i < 5; i++){
-    //         player.move(grid, Direction.RIGHT);
-    //     }
-    //     Map<String, Integer> map = new HashMap<String, Integer>();
-    //     map.put("wood",1);
-    //     map.put("arrow", 3);
-    //     Recipe recipe = new Recipe("bow",map);
-    //     assertTrue(recipe.isCraftable(player.getInventory()));
-    //     assertTrue(player.getBuildables().size() > 0);
-    // }
