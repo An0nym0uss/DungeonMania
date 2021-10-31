@@ -5,6 +5,7 @@ import java.util.List;
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.collectable.Bomb;
+import dungeonmania.entities.enemy.Enemy;
 /*
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.Arrow;
@@ -80,13 +81,16 @@ public class Boulder extends StaticEntity {
     
     @Override
     public boolean canMoveInto(Entity other) {
-        if (other instanceof Exit)                 { return true; }    //assumption
-        else if (other instanceof FloorSwitch)          { return true; }    //required
+        if (other instanceof Wall)                      { return false; }
+        else if (other instanceof ZombieToastSpawner)   { return false; }
+        else if (other instanceof Boulder)              { return false; }
+        else if (other instanceof Bomb && 
+                ((Bomb)other).hasPlaced())              { return false; }
+        if (other instanceof Enemy)                     { return false; }
         else if (other instanceof Door)                 { 
             if (((Door)other).getIsOpen())              { return true; }    //assumption
             else                                        { return false; } } //required
-        else if (other instanceof Portal)               { return true; }    //assumption
 
-        return false;
+        return true;
     }
 }
