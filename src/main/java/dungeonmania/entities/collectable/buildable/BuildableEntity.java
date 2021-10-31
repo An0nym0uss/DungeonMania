@@ -18,12 +18,12 @@ public abstract class BuildableEntity extends CollectableEntity{
         return this.recipes;
     }
 
-    public boolean isBuildable(Inventory inventory) {
-        for (Recipe recipe : recipes) {
-            if (!recipe.isCraftable(inventory)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    // public boolean isBuildable(Inventory inventory) {
+    //     for (Recipe recipe : recipes) {
+    //         if (!recipe.isCraftable(inventory)) {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // }
 }

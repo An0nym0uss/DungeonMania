@@ -54,17 +54,17 @@ public class ReadRecipe {
 
         return recipeCollection;
     }
-    public static void main(String[] args) {
-        ReadRecipe read = new ReadRecipe();
-        String filename = "/dungeonmania/entities/collectable/buildable/recipes/bowRecipe.json";
+    // public static void main(String[] args) {
+    //     ReadRecipe read = new ReadRecipe();
+    //     String filename = "/dungeonmania/entities/collectable/buildable/recipes/bowRecipe.json";
         
-        for (Recipe recipe : read.readRecipes(filename)) {
-            System.out.println("------------------");
-            System.out.println(recipe.getType() + ": ");
-            for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
-                System.out.println(ingredient.getKey() + " " + ingredient.getValue());
-            }
-        }
-    }
+    //     for (Recipe recipe : read.readRecipes(filename)) {
+    //         System.out.println("------------------");
+    //         System.out.println(recipe.getType() + ": ");
+    //         for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
+    //             System.out.println(ingredient.getKey() + " " + ingredient.getValue());
+    //         }
+    //     }
+    // }
     
 }

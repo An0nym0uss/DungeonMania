@@ -41,27 +41,27 @@ public class Boulder extends StaticEntity {
 
     @Override
     public void collidesWith(Entity other, Grid grid) {
-        if (other instanceof Player) {
-            Position playerPosition = other.getPosition();
-            Position boulderPosition = this.getPosition();
-            Position newPosition = reflectPosition(boulderPosition, playerPosition);
+        // if (other instanceof Player) {
+        //     Position playerPosition = other.getPosition();
+        //     Position boulderPosition = this.getPosition();
+        //     Position newPosition = reflectPosition(boulderPosition, playerPosition);
 
-            List<Entity> entitiesAtNewPosition = grid.getEntities(newPosition.getX(), newPosition.getY());
+        //     List<Entity> entitiesAtNewPosition = grid.getEntities(newPosition.getX(), newPosition.getY());
 
-            boolean canMove = true;
+        //     boolean canMove = true;
 
-            //check if theres anything in new position that won't allow our boulder
-            for (Entity entity : entitiesAtNewPosition) {
-                if (!this.canMoveInto(entity)) {
-                    canMove = false;
-                }
-            }
+        //     //check if theres anything in new position that won't allow our boulder
+        //     for (Entity entity : entitiesAtNewPosition) {
+        //         if (!this.canMoveInto(entity)) {
+        //             canMove = false;
+        //         }
+        //     }
 
-            if (canMove) {
-                this.setPosition(newPosition); //boulder moves to new position
-                other.setPosition(boulderPosition); //player moves to boulders old position
-            }
-        }
+        //     if (canMove) {
+        //         this.setPosition(newPosition); //boulder moves to new position
+        //         other.setPosition(boulderPosition); //player moves to boulders old position
+        //     }
+        // }
         //assume nothing else can move a boulder (since spiders are mean't to turn around, and the other moving entities are based off of it)
     }
 
@@ -73,11 +73,11 @@ public class Boulder extends StaticEntity {
      * @param toReflect The position we wish to reflect.
      * @return The reflection of our given position.
      */
-    private Position reflectPosition(Position origin, Position toReflect) {
-        int xOffset = origin.getX() - toReflect.getX();
-        int yOffset = origin.getY() - toReflect.getY();
-        return new Position(origin.getX() + xOffset, origin.getY() + yOffset);
-    }
+    // private Position reflectPosition(Position origin, Position toReflect) {
+    //     int xOffset = origin.getX() - toReflect.getX();
+    //     int yOffset = origin.getY() - toReflect.getY();
+    //     return new Position(origin.getX() + xOffset, origin.getY() + yOffset);
+    // }
     
     @Override
     public boolean canMoveInto(Entity other) {
