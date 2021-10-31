@@ -7,7 +7,11 @@
         },
         {
             "wood": 2,
-            "key": 1
+            "key_silver": 1
+        },
+        {
+            "wood": 2,
+            "key_gold": 1
         }
     ]
 }
