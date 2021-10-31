@@ -11,9 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.player.Inventory;
 import dungeonmania.util.Position;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.entities.player.Player;
+import dungeonmania.modes.Standard;
+import dungeonmania.constants.Layer;
+import dungeonmania.entities.Entity;
 
 public class InventoryTest {
     @Test
@@ -112,6 +117,48 @@ public class InventoryTest {
         assertFalse(sword.isBroken());
         sword.setDurability(0);
         assertTrue(sword.isBroken());
+    }
+
+    @Test
+    public void testMultipleSword() {
+
+        Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
+        Sword sword1 = new Sword(new Position(2, 1));
+        Sword sword2 = new Sword(new Position(3, 1));
+        Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
+        grid.attach(sword1);
+        grid.attach(sword2);
+
+        assertTrue(player.getInventory().getItems().size() == 0);
+
+        // pick up first sword, inventory has one item
+        player.move(grid, Direction.RIGHT);
+        assertTrue(player.getInventory().getItems().size() == 1);
+
+        // cant pick up duplicate sword, item count remain at one
+        player.move(grid, Direction.RIGHT);
+        assertTrue(player.getInventory().getItems().size() == 1);
+    }
+
+    @Test
+    public void testMultipleArmour() {
+
+        Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
+        Armour armour1 = new Armour(new Position(2, 1));
+        Armour armour2 = new Armour(new Position(3, 1));
+        Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
+        grid.attach(armour1);
+        grid.attach(armour2);
+
+        assertTrue(player.getInventory().getItems().size() == 0);
+
+        // pick up first armour, inventory has one item
+        player.move(grid, Direction.RIGHT);
+        assertTrue(player.getInventory().getItems().size() == 1);
+
+        // cant pick up duplicate armour, item count remain at one
+        player.move(grid, Direction.RIGHT);
+        assertTrue(player.getInventory().getItems().size() == 1);
     }
 }
 
