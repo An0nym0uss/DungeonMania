@@ -129,6 +129,7 @@ public class BuildableTest {
         controller.newGame("items", "peaceful");
 
         assertThrows(InvalidActionException.class,() -> controller.build("bow"));
+        assertThrows(InvalidActionException.class,() -> controller.build("shield"));
     }
 
     @Test
