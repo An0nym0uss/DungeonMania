@@ -50,5 +50,20 @@ public class SpawnerTest {
 
         // must be only 1 zombie spawned after 20 ticks
         assertTrue(totalZombies == 1);
+
+        // run for a lot more ticks
+        for (int i = 0; i < 400; i++) {
+            response = controller.tick(null, Direction.NONE);
+        }
+
+        // count any zombies in dungeon
+        for (EntityResponse entity : response.getEntities()) {
+            if (entity.getType().equals("zombie_toast")) {
+                totalZombies++;
+            }
+        }
+
+        // should be more zombies spawned
+        assertTrue(totalZombies > 1);
     }
 }

@@ -49,7 +49,7 @@ public class ZombieToastSpawner extends StaticEntity implements Spawner  {
 
                 //check if theres anything in position that won't allow our zombie
                 for (Entity entity : entitiesAtAdjacentPosition) {
-                    if (!zombie.canMoveInto(entity)) {
+                    if (zombie.movingConstraints(entity)) {
                         canMove = false;
                     }
                 }
@@ -65,16 +65,5 @@ public class ZombieToastSpawner extends StaticEntity implements Spawner  {
     @Override
     public void spawn(Entity entity, Grid grid) {
         grid.attach(entity);
-    }
-
-    @Override
-    public void collidesWith(Entity other, Grid grid) {
-        //zombie toast spawner can not move
-    }
-
-    @Override
-    public boolean canMoveInto(Entity other) {
-        // nothing can move into a zombie toast spawner
-        return false;
     }
 }
