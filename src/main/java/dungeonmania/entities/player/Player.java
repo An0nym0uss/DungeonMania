@@ -2,6 +2,7 @@ package dungeonmania.entities.player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import dungeonmania.Grid;
@@ -181,10 +182,15 @@ public class Player extends Entity implements Damage, Health, Moving{
             } else if (other instanceof Door) {
                 // door not open
                 if (!((Door)other).getIsOpen()) {
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // unlock door
-                    // inventory.removeNonSpecificItem("key");
-                    //
+                    ((Door)other).setType("door_unlocked");
+                    ((Door)other).setIsOpen(true);
+                    Iterator<CollectableEntity> itr = inventory.getItems().iterator();
+                    while (itr.hasNext()) {
+                        CollectableEntity e = itr.next();
+                        if (e instanceof Key) {
+                            itr.remove();
+                        }
+                    }
                 }
             } else if (other instanceof Portal) {
                 if (this.isTeleported) {
@@ -300,13 +306,19 @@ public class Player extends Entity implements Damage, Health, Moving{
     public boolean canMoveInto(Entity other) {
         if (other instanceof Wall)                      {return false;}
         else if (other instanceof ZombieToastSpawner)   {return false;}
-        // else if (other instanceof Door) {
-        //     /////////////////////////////////////////////////////////////////////////////////////
-        //     // if door is unlocked, return true
-        //     // if player has the key, return true
-        //     // if player doesnt have the key, return false;
-            
-        // }
+        else if (other instanceof Door) {
+            if (((Door)other).getIsOpen()) {
+                return true;
+            } else if (!((Door)other).getIsOpen()) {
+                int keyNumber = ((Door)other).getKey();
+                for (CollectableEntity e : this.inventory.getItems()) {
+                    if (e instanceof Key && ((Key)e).getKeyNumber() == keyNumber) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         else if (other instanceof Bomb && 
                 ((Bomb)other).hasPlaced())              {return false;}
         else                                            {return true;}
