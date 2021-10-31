@@ -27,7 +27,7 @@ public class Mercenary extends Enemy {
         // get player
         // breadth first search
         // A* search
-
+        /*
         //List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
         grid.getPlayer().getPosition().getAdjacentCardinalPositions();
 
@@ -40,7 +40,7 @@ public class Mercenary extends Enemy {
         // Perform movement
         Position nextStep = shortestPath.get(1);
         this.setPosition(nextStep);
-
+        */
         // TODO: Bribing
 
 
@@ -71,7 +71,7 @@ public class Mercenary extends Enemy {
 //        for (Position value : visited.values()) {
 //
 //        }
-
+    /*
         while (queue.size() != 0) {
             Position v = queue.remove(0);
 //            if (v == grid.getPlayer().getPosition()) {
@@ -85,7 +85,7 @@ public class Mercenary extends Enemy {
                 }
             }
         }
-
+        */
 
 
         // visited

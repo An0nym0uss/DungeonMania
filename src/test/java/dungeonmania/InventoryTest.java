@@ -16,6 +16,7 @@ public class InventoryTest {
     public void testInventoryAdd() {
 
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
         controller.newGame("items", "peaceful");
 
         DungeonResponse noTreasure = controller.tick(null, Direction.RIGHT);
@@ -32,6 +33,7 @@ public class InventoryTest {
     public void testInventoryUse() {
 
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
         controller.newGame("items", "peaceful");
 
         controller.tick(null, Direction.DOWN);
@@ -51,6 +53,7 @@ public class InventoryTest {
     public void testIllegalArgument() {
 
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
         controller.newGame("items", "peaceful");
 
         controller.tick(null, Direction.RIGHT);
@@ -67,6 +70,7 @@ public class InventoryTest {
     public void testInvalidAction() {
 
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
         controller.newGame("items", "peaceful");
 
         controller.tick(null, Direction.RIGHT);

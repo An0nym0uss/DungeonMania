@@ -41,6 +41,7 @@ public class BuildableTest {
     public void testBuildBow() {
 
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
         controller.newGame("items", "peaceful");
 
         // pick up ingredients
@@ -68,6 +69,7 @@ public class BuildableTest {
     public void testBuildShield() {
 
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
         controller.newGame("items", "peaceful");
 
         // pick up ingredients
@@ -96,6 +98,7 @@ public class BuildableTest {
     public void testBuildShieldAlt() {
 
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
         controller.newGame("items", "peaceful");
 
         controller.tick(null, Direction.DOWN);
@@ -119,7 +122,7 @@ public class BuildableTest {
 
     @Test
     public void testInvalidAction() {
-
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("items", "peaceful");
 
@@ -128,7 +131,7 @@ public class BuildableTest {
 
     @Test
     public void testIllegalArgument() {
-
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("items", "peaceful");
 

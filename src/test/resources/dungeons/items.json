@@ -67,5 +67,8 @@
         }
     ],
     "width": 8,
-    "height": 8
+    "height": 8,
+    "goal-condition" : {
+        "goal" : "treasure"
+    }
 }
