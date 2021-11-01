@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.DungeonManiaController;
 
 public class SpawnerTest {
     @Test
@@ -27,7 +28,7 @@ public class SpawnerTest {
 
         // count any zombies in dungeon
         for (EntityResponse entity : response.getEntities()) {
-            if (entity.getType() == "zombie_toast") {
+            if (entity.getType().equals("zombie_toast")) {
                 totalZombies++;
             }
         }
@@ -42,12 +43,27 @@ public class SpawnerTest {
 
         // count any zombies in dungeon
         for (EntityResponse entity : response.getEntities()) {
-            if (entity.getType() == "zombie_toast") {
+            if (entity.getType().equals("zombie_toast")) {
                 totalZombies++;
             }
         }
 
         // must be only 1 zombie spawned after 20 ticks
         assertTrue(totalZombies == 1);
+
+        // run for a lot more ticks
+        for (int i = 0; i < 400; i++) {
+            response = controller.tick(null, Direction.NONE);
+        }
+
+        // count any zombies in dungeon
+        for (EntityResponse entity : response.getEntities()) {
+            if (entity.getType().equals("zombie_toast")) {
+                totalZombies++;
+            }
+        }
+
+        // should be more zombies spawned
+        assertTrue(totalZombies > 1);
     }
 }

@@ -25,7 +25,7 @@ public class ZombieToastSpawner extends StaticEntity implements Spawner  {
      * @param mode The current game mode.
      */
     public ZombieToastSpawner(Position position, Mode mode) {
-        super("zombietoastspawner", position, true);
+        super("zombie_toast_spawner", position, true);
         spawnRate = mode.getZombieSpawnRate();
     }
 
@@ -39,7 +39,7 @@ public class ZombieToastSpawner extends StaticEntity implements Spawner  {
 
             List<Position> validPositions = zombieSpawnerPosition.getAdjacentCardinalPositions();
 
-            Zombie zombie = new Zombie(zombieSpawnerPosition, 1); //use a temp position for now
+            Zombie zombie = new Zombie(zombieSpawnerPosition, 1, 1, 1); //use a temp position for now
 
             for (Position position : validPositions) {
                 List<Entity> entitiesAtAdjacentPosition = grid.getEntities(position.getX(), position.getY());
@@ -49,7 +49,7 @@ public class ZombieToastSpawner extends StaticEntity implements Spawner  {
 
                 //check if there's anything in position that won't allow our zombie
                 for (Entity entity : entitiesAtAdjacentPosition) {
-                    if (!zombie.canMoveInto(entity)) {
+                    if (zombie.movingConstraints(entity)) {
                         canMove = false;
                     }
                 }
@@ -65,16 +65,5 @@ public class ZombieToastSpawner extends StaticEntity implements Spawner  {
     @Override
     public void spawn(Entity entity, Grid grid) {
         grid.attach(entity);
-    }
-
-    @Override
-    public void collidesWith(Entity other, Grid grid) {
-        //zombie toast spawner can not move
-    }
-
-    @Override
-    public boolean canMoveInto(Entity other) {
-        // nothing can move into a zombie toast spawner
-        return false;
     }
 }

@@ -391,25 +391,25 @@
       {
         "x": 15,
         "y": 9,
-        "type": "door",
+        "type": "door_locked_silver",
         "key": 1
       },
       {
         "x": 4,
         "y": 10,
-        "type": "door",
+        "type": "door_locked_silver",
         "key": 2
       },
       {
         "x": 11,
         "y": 10,
-        "type": "key",
+        "type": "key_silver",
         "key": 1
       },
       {
         "x": 12,
         "y": 10,
-        "type": "key",
+        "type": "key_gold",
         "key": 2
       },
       {

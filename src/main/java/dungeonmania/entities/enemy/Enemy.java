@@ -17,16 +17,11 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage, Sp
     
     private int damage;
 
-
-    public Enemy(int speed, int health, int damage) {
+    public Enemy(String type, Position position, Boolean isInteractable, int speed, int health, int damage) {
+        super(type, position, isInteractable);
         this.speed = speed;
         this.health = health;
         this.damage = damage;
-    }
-
-    public Enemy(String type, Position position, Boolean isInteractable, int speed) {
-        super(type, position, isInteractable);
-        this.speed = speed;
     }
 
     public int getSpeed() {
@@ -72,5 +67,18 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage, Sp
 
         return true;
 
+    }
+
+    // TODO temporary code for testing battle
+    public boolean isdead() {
+        if (this.health <= 0) {
+            return true;
+        }
+        return false;
+    }
+
+    // TODO temporary code for testing battle
+    public int damageDealt() {
+        return this.getDamage();
     }
 }

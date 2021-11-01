@@ -1,11 +1,11 @@
 package dungeonmania;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.DungeonManiaController;
 
 public class ExitTest {
     @Test
@@ -14,13 +14,14 @@ public class ExitTest {
      */
     public void testExitBasic() {
         DungeonManiaController controller = new DungeonManiaController();
+        // Changing where the files are loaded from.
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
 
         // start game
-        controller.newGame("exit", "peaceful");
+        assertEquals(":exit", controller.newGame("exit", "peaceful").getGoals());
 
         // finish game
-        controller.tick(null, Direction.RIGHT);
-
-        // how do we check game is actually finished?
+        assertEquals("", controller.tick(null, Direction.RIGHT).getGoals());
+        
     }
 }

@@ -4,10 +4,7 @@ import dungeonmania.entities.collectable.CollectableEntity;
 import org.json.JSONObject;
 
 import dungeonmania.Grid;
-import dungeonmania.entities.Damage;
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.Health;
-import dungeonmania.entities.Moving;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Wall;
@@ -19,11 +16,9 @@ import java.util.List;
 import java.util.*;
 
 public class Mercenary extends Enemy {
-    private boolean hasBeenBribed;
-
-    public Mercenary(int speed, int health, int damage) {
-        super(speed, health, damage);
-        
+    
+    public Mercenary(Position position, int speed, int health, int damage) {
+        super("mercenary", position, false, speed, health, damage);
     }
 
     @Override
@@ -36,8 +31,8 @@ public class Mercenary extends Enemy {
         // get player
         // breadth first search
         // A* search
-
-        List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
+        /*
+        //List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
         grid.getPlayer().getPosition().getAdjacentCardinalPositions();
 
         List<Position> shortestPath = this.breadthFirstSearch(grid);
@@ -46,7 +41,6 @@ public class Mercenary extends Enemy {
         // Perform movement
         Position nextStep = shortestPath.get(1);
         this.setPosition(nextStep);
-
         // TODO: Bribing
         boolean bribed = this.isBribed();
 
@@ -87,14 +81,14 @@ public class Mercenary extends Enemy {
         // key - position; value - previous position
         Map<Position, Position> visited = new HashMap<>();
         visited.put(this.getPosition(), null);
-        boolean canMoveToPosition = true;
+        //boolean canMoveToPosition = true;
 //        visited.put(key, value);
 //        visited.get(key);
 //        visited.containsKey()
 //        for (Position value : visited.values()) {
 //
 //        }
-
+    /*
         while (queue.size() != 0) {
             Position v = queue.remove(0);
 //            if (v == grid.getPlayer().getPosition()) {
@@ -108,7 +102,7 @@ public class Mercenary extends Enemy {
                 }
             }
         }
-
+        */
 
 
         // visited
@@ -120,7 +114,7 @@ public class Mercenary extends Enemy {
 //        while node is not null:
 //           add current node to path
 //           set current node as parent
-
+        /*
         List<Position> path = new ArrayList<Position>();
         Position currentNode = grid.getPlayer().getPosition();
         while (currentNode != null) {
@@ -129,6 +123,7 @@ public class Mercenary extends Enemy {
         }
         Collections.reverse(path);
         return path;
+        */
     }
 
     @Override

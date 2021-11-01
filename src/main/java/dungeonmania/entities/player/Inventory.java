@@ -32,11 +32,6 @@ public class Inventory {
                 itr.remove();
             }
         }
-        // for (CollectableEntity ownedItem : items) {
-        //     if (item.getId() == ownedItem.getId()) {
-        //        items.remove(ownedItem);
-        //     }
-        // }
     }
 
     public List<CollectableEntity> getItems() {
@@ -45,7 +40,7 @@ public class Inventory {
 
     public CollectableEntity getItem(String type) {
         for (CollectableEntity item : this.items) {
-            if (item.getType() == type) {
+            if (item.getType().equals(type)) {
                 return item;
             }
         }
@@ -68,22 +63,16 @@ public class Inventory {
         while (itr.hasNext()) {
             CollectableEntity e = itr.next();
 
-            if (e.getType() == item) {
+            if (e.getType().equals(item)) {
                 itr.remove();
             }
         }
-        // for (CollectableEntity ownedItem : items) {
-        //     if (item == ownedItem.getType()) {
-        //         items.remove(ownedItem);
-        //         break;
-        //     }
-        // }
     }
 
     public int checkItem(String item) {
         int numberOfItem = 0;
         for (CollectableEntity ownedItem : items) {
-            if (item == ownedItem.getType()) {
+            if (item.equals(ownedItem.getType())) {
                 numberOfItem++;
             }
         }
@@ -92,15 +81,5 @@ public class Inventory {
 
     public List<Recipe> getRecipes() {
         return this.recipes;
-    }
-
-    public boolean checkRecipe(Recipe recipe) {
-        boolean recipeExist = false;
-        for (Recipe ownedRecipe : recipes) {
-            if (ownedRecipe.getIngredients() == ownedRecipe.getIngredients()) {
-                recipeExist = true;
-            }
-        }
-        return recipeExist;
     }
 }

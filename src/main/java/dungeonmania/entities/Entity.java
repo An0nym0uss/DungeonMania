@@ -1,7 +1,5 @@
 package dungeonmania.entities;
 
-import java.util.UUID;
-
 import org.json.JSONObject;
 
 import dungeonmania.GameToJSON;
@@ -47,6 +45,14 @@ public abstract class Entity implements ObserverEntity, GameToJSON {
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * Setter for entity type.
+     * @param type
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 
 

@@ -2,6 +2,7 @@ package dungeonmania.entities.player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import dungeonmania.Grid;
@@ -20,7 +21,6 @@ import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.BuildableEntity;
 import dungeonmania.entities.collectable.buildable.Shield;
-import dungeonmania.entities.collectable.rarecollectable.RareCollectableEntities;
 import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
 
 public class Player extends Entity implements Damage, Health, Moving{
@@ -38,17 +38,12 @@ public class Player extends Entity implements Damage, Health, Moving{
 
     public Player(Position position, Mode mode) {
         super("player", position, false);
-        this.damage = 10;
         this.maxHealth = mode.getMaxPlayerHealth();
         this.currentHealth = mode.getMaxPlayerHealth();
         this.inventory = new Inventory();
         this.statusEffect = new StatusEffect();
         this.isTeleported = false;
-    }
-
-    public Player(Position position, Mode mode, int damage) {
-        this(position, mode);
-        this.damage = damage;
+        this.damage = 10;
     }
 
     public Inventory getInventory() {
@@ -109,15 +104,6 @@ public class Player extends Entity implements Damage, Health, Moving{
     public boolean hasSword() {
         for (CollectableEntity collectable : this.inventory.getItems()) {
             if (collectable instanceof Sword) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean hasOneRing() {
-        for (CollectableEntity collectable : this.inventory.getItems()) {
-            if (collectable instanceof TheOneRing) {
                 return true;
             }
         }
@@ -196,10 +182,15 @@ public class Player extends Entity implements Damage, Health, Moving{
             } else if (other instanceof Door) {
                 // door not open
                 if (!((Door)other).getIsOpen()) {
-                    //////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    // unlock door
-                    // inventory.removeNonSpecificItem("key");
-                    //
+                    ((Door)other).setType("door_unlocked");
+                    ((Door)other).setIsOpen(true);
+                    Iterator<CollectableEntity> itr = inventory.getItems().iterator();
+                    while (itr.hasNext()) {
+                        CollectableEntity e = itr.next();
+                        if (e instanceof Key) {
+                            itr.remove();
+                        }
+                    }
                 }
             } else if (other instanceof Portal) {
                 if (this.isTeleported) {
@@ -232,18 +223,8 @@ public class Player extends Entity implements Damage, Health, Moving{
                     this.inventory.addItem((CollectableEntity)entity);
                     this.armour = (Armour) entity;
                     grid.dettach(entity);
-                } else if (entity instanceof Bow && !hasBow()) {
-                    this.inventory.addItem((CollectableEntity)entity);
-                    this.bow = (Bow) entity;
-                    grid.dettach(entity);
-                } else if (entity instanceof Shield && !hasShield()) {
-                    this.inventory.addItem((CollectableEntity)entity);
-                    this.shield = (Shield) entity;
-                    grid.dettach(entity);
                 } else if (!(entity instanceof Sword && hasSword() ||
-                    entity instanceof Shield && hasShield() ||
-                    entity instanceof Armour && hasArmour() ||
-                    entity instanceof Bow && hasBow())
+                    entity instanceof Armour && hasArmour())
                 ) {
                     this.inventory.addItem((CollectableEntity)entity);
                     grid.dettach(entity);
@@ -325,13 +306,19 @@ public class Player extends Entity implements Damage, Health, Moving{
     public boolean canMoveInto(Entity other) {
         if (other instanceof Wall)                      {return false;}
         else if (other instanceof ZombieToastSpawner)   {return false;}
-        // else if (other instanceof Door) {
-        //     /////////////////////////////////////////////////////////////////////////////////////
-        //     // if door is unlocked, return true
-        //     // if player has the key, return true
-        //     // if player doesnt have the key, return false;
-            
-        // }
+        else if (other instanceof Door) {
+            if (((Door)other).getIsOpen()) {
+                return true;
+            } else if (!((Door)other).getIsOpen()) {
+                int keyNumber = ((Door)other).getKey();
+                for (CollectableEntity e : this.inventory.getItems()) {
+                    if (e instanceof Key && ((Key)e).getKeyNumber() == keyNumber) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         else if (other instanceof Bomb && 
                 ((Bomb)other).hasPlaced())              {return false;}
         else                                            {return true;}
@@ -425,12 +412,8 @@ public class Player extends Entity implements Damage, Health, Moving{
     }
 
     private Recipe getAvailableRecipe(String buildable) {
-        BuildableEntity e = (BuildableEntity) this.inventory.getItem(buildable);
-        if (e == null) {
-            return null;
-        }
-        for (Recipe recipe : e.getRecipes()) {
-            if (recipe.isCraftable(this.inventory)) {
+        for (Recipe recipe : this.inventory.getRecipes()) {
+            if (recipe.getType().equals(buildable) && recipe.isCraftable(this.inventory)) {
                 return recipe;
             }
         }

@@ -1,6 +1,5 @@
 package dungeonmania.entities.collectable;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,10 +9,7 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.enemy.Enemy;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Boulder;
-import dungeonmania.entities.statics.Door;
-import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.FloorSwitch;
-import dungeonmania.entities.statics.Wall;
 import dungeonmania.util.Position;
 
 public class Bomb extends CollectableEntity{

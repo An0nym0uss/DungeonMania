@@ -1,14 +1,7 @@
 package dungeonmania;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Iterator;
 
 import com.google.gson.JsonObject;
@@ -21,19 +14,15 @@ import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.StandardEntityFactory;
-import dungeonmania.entities.player.Player;
-import dungeonmania.entities.statics.Exit;
-import dungeonmania.entities.statics.Wall;
 import dungeonmania.goals.*;
 import dungeonmania.modes.*;
-import dungeonmania.util.Position;
 
 /**
  * Responsible for making dungeon and grid.
  */
 public class StandardDungeonMaker implements DungeonMaker {
 
-    public static final String RESOURCE_PATH = "src/main/resources/dungeons/";
+    public static String RESOURCE_PATH = "src/main/resources/dungeons/";
 
     private EntityFactory entityFactory = null;
 
@@ -114,7 +103,7 @@ public class StandardDungeonMaker implements DungeonMaker {
             return new Hard();
         }
 
-        throw new IllegalAccessError("IllegalAccessError: game mode given doesn't exist");
+        throw new IllegalArgumentException("game mode given doesn't exist");
     }
 
     @Override
@@ -124,7 +113,8 @@ public class StandardDungeonMaker implements DungeonMaker {
         Iterator<JsonElement> gridDataIter = gridData.iterator();
 
         while(gridDataIter.hasNext()) {
-            grid.attach(createEntity(gridDataIter.next().getAsJsonObject()));
+            Entity e = createEntity(gridDataIter.next().getAsJsonObject());
+            grid.attach(e);
         }
         return grid;
     }

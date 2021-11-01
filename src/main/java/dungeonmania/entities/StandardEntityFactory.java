@@ -1,8 +1,6 @@
 package dungeonmania.entities;
 
-import java.util.Map;
-
-import java.util.HashMap;
+import javax.sound.sampled.SourceDataLine;
 
 import com.google.gson.JsonObject;
 
@@ -10,13 +8,7 @@ import dungeonmania.entities.statics.*;
 import dungeonmania.modes.Mode;
 import dungeonmania.util.Position;
 import dungeonmania.constants.Layer;
-import dungeonmania.entities.collectable.Armour;
-import dungeonmania.entities.collectable.Arrow;
-import dungeonmania.entities.collectable.Bomb;
-import dungeonmania.entities.collectable.Sword;
-import dungeonmania.entities.collectable.Treasure;
-import dungeonmania.entities.collectable.Wood;
-import dungeonmania.entities.collectable.buildable.Shield;
+import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.player.Player;
 
@@ -59,23 +51,35 @@ public class StandardEntityFactory implements EntityFactory {
             return new Boulder(new Position(x, y, Layer.ENEMY));
         // Portal
         } else if (entityType.equalsIgnoreCase("portal")) {
+            try {
+                String colour = entityData.get("colour").getAsString();
 
-            String colour = entityData.get("colour").getAsString();
-
-            return new Portal(new Position(x, y, Layer.STATIC), colour);
+                if (colour.equalsIgnoreCase("blue")) {
+                    return new Portal("portal_blue", new Position(x, y, Layer.STATIC), colour);
+                } else if (colour.equalsIgnoreCase("red")) {
+                    return new Portal("portal_red", new Position(x, y, Layer.STATIC), colour);
+                }
+            } catch (NullPointerException e) {
+                return new Portal("portal_blue", new Position(x, y, Layer.STATIC), null);
+            }
+            
         // Zombie toast spawner TODO
-        } else if (entityType.equalsIgnoreCase("zombietoastspawner")) {
-            return new ZombieToastSpawner(new Position(x, y, Layer.STATIC));
+        } else if (entityType.equalsIgnoreCase("zombie_toast_spawner")) {
+            if (mode == null) throw new InternalError("tried to create a player without selecting a mode.");
+
+            return new ZombieToastSpawner(new Position(x, y, Layer.STATIC), mode);
         // Door TODO
-        } else if (entityType.equalsIgnoreCase("door")) {
-            return new Door(new Position(x, y, Layer.ENEMY), null, false);
+        } else if (entityType.equalsIgnoreCase("door_locked_silver")) {
+            int keyNumber = entityData.get("key").getAsInt();
+            return new Door("door_locked_silver", new Position(x, y, Layer.STATIC), keyNumber, false);
         // Enemies TODO
         // Mercancy TODO
         } else if (entityType.equalsIgnoreCase("mercenary")) {
-        // Spider TODO
+            return new Mercenary(new Position(x, y, Layer.ENEMY), 1, 1, 1);
         } else if (entityType.equalsIgnoreCase("spider")) {
-        // zombie TODO
-        } else if (entityType.equalsIgnoreCase("zombie")) {
+            return new Spider(new Position(x, y, Layer.ENEMY), 1, 1, 1);
+        } else if (entityType.equalsIgnoreCase("zombie_toast")) {
+            return new Zombie(new Position(x, y, Layer.ENEMY), 1, 1, 1);
         // Collectables
         } else if (entityType.equalsIgnoreCase("bomb")) {
             return new Bomb(new Position(x, y, Layer.COLLECTABLE));
@@ -89,16 +93,29 @@ public class StandardEntityFactory implements EntityFactory {
             return new Sword(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("armour")) {
             return new Armour(new Position(x, y, Layer.COLLECTABLE));
-        } 
-
+        } else if (entityType.equalsIgnoreCase("key_silver")) {
+            int keyNumber = entityData.get("key").getAsInt();
+            return new Key("key_silver", new Position(x, y, Layer.COLLECTABLE), keyNumber);
+        } else if (entityType.equalsIgnoreCase("key_gold")) {
+            int keyNumber = entityData.get("key").getAsInt();
+            return new Key("key_gold", new Position(x, y, Layer.COLLECTABLE), keyNumber);
+        } else if (entityType.equalsIgnoreCase("invincibility_potion")) {
+            return new InvincibilityPotion(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("invisibility_potion")) {
+            return new InvisibilityPotion(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("health_potion")) {
+            return new HealthPotion(new Position(x, y, Layer.COLLECTABLE));
+        }
 
         else if (entityType.equalsIgnoreCase("player")) {
 
-            if (mode == null) throw new InternalError("tried to create a player without selecting a mode.");
+            if (mode == null) {throw new InternalError("tried to create a player without selecting a mode.");}
 
-            return new Player(new Position(x,y, Layer.PLAYER), mode, 10);
+            return new Player(new Position(x,y, Layer.PLAYER), mode);
         }
-
+        if (entityType != null) {
+            System.out.println(entityType);
+        }
         return null;
     }
     

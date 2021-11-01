@@ -1,6 +1,5 @@
 package dungeonmania.entities.collectable;
 
-import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Position;
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;

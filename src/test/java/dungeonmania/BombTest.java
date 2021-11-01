@@ -2,17 +2,19 @@ package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.DungeonManiaController;
 
 public class BombTest {
     @Test
     public void testBombBasic() {
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
 
         controller.newGame("bomb-1", "standard");
 
@@ -35,6 +37,7 @@ public class BombTest {
     @Test
     public void TestExit() {
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
 
         controller.newGame("bomb-1", "standard");
 
@@ -49,6 +52,7 @@ public class BombTest {
     @Test
     public void TestBombBasic2() {
         DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
 
         controller.newGame("bomb-1", "standard");
 
@@ -64,5 +68,37 @@ public class BombTest {
         response = controller.tick(null, Direction.DOWN);
 
         assertNotEquals("", response.getGoals());
+    }
+
+    @Test
+    public void TestBombBasic3() {
+        DungeonManiaController controller = new DungeonManiaController();
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
+
+        controller.newGame("bomb-2", "standard");
+
+        // get bomb
+        controller.tick(null, Direction.DOWN);
+
+        controller.tick(null, Direction.RIGHT);
+        DungeonResponse response = controller.tick(null, Direction.RIGHT);
+        // place bomb
+        String bombId = response.getInventory().get(0).getId();
+        response = controller.tick(bombId, null);
+
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
+        response = controller.tick(null, Direction.DOWN);
+
+        int prevNUM = response.getEntities().size();
+        // push boulder on switch, bomb explodes
+        response = controller.tick(null, Direction.RIGHT);
+        assertTrue(prevNUM > response.getEntities().size());
+
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        response = controller.tick(null, Direction.RIGHT);
+        assertEquals("", response.getGoals());
+
     }
 }

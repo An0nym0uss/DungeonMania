@@ -5,6 +5,7 @@ import java.util.List;
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.collectable.Bomb;
+import dungeonmania.entities.enemy.Enemy;
 /*
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.Arrow;
@@ -40,27 +41,27 @@ public class Boulder extends StaticEntity {
 
     @Override
     public void collidesWith(Entity other, Grid grid) {
-        if (other instanceof Player) {
-            Position playerPosition = other.getPosition();
-            Position boulderPosition = this.getPosition();
-            Position newPosition = reflectPosition(boulderPosition, playerPosition);
+        // if (other instanceof Player) {
+        //     Position playerPosition = other.getPosition();
+        //     Position boulderPosition = this.getPosition();
+        //     Position newPosition = reflectPosition(boulderPosition, playerPosition);
 
-            List<Entity> entitiesAtNewPosition = grid.getEntities(newPosition.getX(), newPosition.getY());
+        //     List<Entity> entitiesAtNewPosition = grid.getEntities(newPosition.getX(), newPosition.getY());
 
-            boolean canMove = true;
+        //     boolean canMove = true;
 
-            //check if theres anything in new position that won't allow our boulder
-            for (Entity entity : entitiesAtNewPosition) {
-                if (!this.canMoveInto(entity)) {
-                    canMove = false;
-                }
-            }
+        //     //check if theres anything in new position that won't allow our boulder
+        //     for (Entity entity : entitiesAtNewPosition) {
+        //         if (!this.canMoveInto(entity)) {
+        //             canMove = false;
+        //         }
+        //     }
 
-            if (canMove) {
-                this.setPosition(newPosition); //boulder moves to new position
-                other.setPosition(boulderPosition); //player moves to boulders old position
-            }
-        }
+        //     if (canMove) {
+        //         this.setPosition(newPosition); //boulder moves to new position
+        //         other.setPosition(boulderPosition); //player moves to boulders old position
+        //     }
+        // }
         //assume nothing else can move a boulder (since spiders are mean't to turn around, and the other moving entities are based off of it)
     }
 
@@ -72,52 +73,23 @@ public class Boulder extends StaticEntity {
      * @param toReflect The position we wish to reflect.
      * @return The reflection of our given position.
      */
-    private Position reflectPosition(Position origin, Position toReflect) {
-        int xOffset = origin.getX() - toReflect.getX();
-        int yOffset = origin.getY() - toReflect.getY();
-        return new Position(origin.getX() + xOffset, origin.getY() + yOffset);
-    }
+    // private Position reflectPosition(Position origin, Position toReflect) {
+    //     int xOffset = origin.getX() - toReflect.getX();
+    //     int yOffset = origin.getY() - toReflect.getY();
+    //     return new Position(origin.getX() + xOffset, origin.getY() + yOffset);
+    // }
     
     @Override
     public boolean canMoveInto(Entity other) {
-        if (!super.canMoveInto(other))                   { return false; }
-        //player
-        else if (other instanceof Player)               { return false; }   //required
-
-        //static entities
-        else if (other instanceof Wall)                 { return false; }   //required
-        else if (other instanceof Exit)                 { return true; }    //assumption
-        else if (other instanceof Boulder)              { return false; }   //required
-        else if (other instanceof FloorSwitch)          { return true; }    //required
+        if (other instanceof Wall)                      { return false; }
+        else if (other instanceof ZombieToastSpawner)   { return false; }
+        else if (other instanceof Boulder)              { return false; }
+        else if (other instanceof Bomb && 
+                ((Bomb)other).hasPlaced())              { return false; }
+        if (other instanceof Enemy)                     { return false; }
         else if (other instanceof Door)                 { 
             if (((Door)other).getIsOpen())              { return true; }    //assumption
             else                                        { return false; } } //required
-        else if (other instanceof Portal)               { return true; }    //assumption
-        else if (other instanceof ZombieToastSpawner)   { return false; }   //assumption
-        else if (other instanceof Bomb) {
-            if (((Bomb)other).hasPlaced())              {return false; }
-        }
-        /* can uncomment when these extend Entity
-        //moving entities
-        else if (other instanceof Spider)               { return false; }   //required
-        else if (other instanceof Zombie)               { return false; }   //required
-        else if (other instanceof Mercenary)            { return false; }   //required
-
-        //collectable entities
-        else if (other instanceof Treasure)             { return true; }   //assumption
-        else if (other instanceof Key)                  { return true; }   //assumption
-        else if (other instanceof HealthPotion)         { return true; }   //assumption
-        else if (other instanceof InvincibilityPotion)  { return true; }   //assumption
-        else if (other instanceof InvisibilityPotion)   { return true; }   //assumption
-        else if (other instanceof Wood)                 { return true; }   //assumption
-        else if (other instanceof Arrow)                { return true; }   //assumption
-        else if (other instanceof Bomb)                 { 
-            if (((Bomb)other).getIsPlaced())            { return false; }  //assumption
-            else                                        { return true; } } //assumption
-        }   //required
-        else if (other instanceof Sword)                { return true; }   //assumption
-        else if (other instanceof Armour)               { return true; }   //assumption
-        */
 
         return true;
     }

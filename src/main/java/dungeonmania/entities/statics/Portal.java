@@ -1,12 +1,12 @@
 package dungeonmania.entities.statics;
 
-import java.util.List;
+/*import java.util.List;
 
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.enemy.Enemy;
 import dungeonmania.entities.enemy.Zombie;
-import dungeonmania.entities.player.Player;
+import dungeonmania.entities.player.Player;*/
 import dungeonmania.util.Position;
 
 /**
@@ -22,8 +22,8 @@ public class Portal extends StaticEntity {
      * Creates a new Portal entity with a corresponding portal to transport entities to.
      * @param correspondingPortal The corresponding portal to set.
      */
-    public Portal(Position position, String colour) {
-        super("portal", position, false);
+    public Portal(String type, Position position, String colour) {
+        super(type, position, false);
         this.correspondingPortal = null;
         this.colour = colour;
     }
@@ -51,6 +51,7 @@ public class Portal extends StaticEntity {
         return colour;
     }
 
+    /*
     @Override
     public void collidesWith(Entity other, Grid grid) {
         //every enemy entity and player can pass through except zombie
@@ -92,6 +93,5 @@ public class Portal extends StaticEntity {
         }  
 
         return false;
-    }
-
+    }*/
 }

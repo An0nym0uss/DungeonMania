@@ -1,27 +1,21 @@
 package dungeonmania.entities.enemy;
 
 import dungeonmania.Grid;
-import dungeonmania.entities.Damage;
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.Health;
-import dungeonmania.entities.Moving;
-import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
-import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class Zombie extends Enemy {
 
-    public Zombie(int speed, int health, int damage) {
-        super(speed, health, damage);
+    public Zombie(Position position, int speed, int health, int damage) {
+        super("zombie_toast", position, false, speed, health, damage);
     }
 
     @Override
@@ -44,7 +38,7 @@ public class Zombie extends Enemy {
         // for(int i = 0; i < speed; i++) // requirement cannot backtrack
         for (Position position : adjacentSquares) {
             if (this.canMoveToPosition(grid, position)) {
-                this.setPosition(position.getX(), position.getY());
+                this.setPosition(position);
             }
         }
     }
@@ -68,6 +62,7 @@ public class Zombie extends Enemy {
      */
     @Override
     public boolean movingConstraints(Entity e) {
+        
         if (e instanceof Wall) {
             return true;
         }

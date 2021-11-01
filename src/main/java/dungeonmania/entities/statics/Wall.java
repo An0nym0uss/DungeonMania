@@ -1,11 +1,7 @@
 package dungeonmania.entities.statics;
 
-import java.util.List;
-
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.enemy.Spider;
-import dungeonmania.entities.player.Player;
 import dungeonmania.util.Position;
 
 /**

@@ -7,7 +7,6 @@ import dungeonmania.Dungeon;
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.collectable.CollectableEntity;
-import dungeonmania.entities.enemy.Enemy;
 import dungeonmania.entities.player.Inventory;
 import dungeonmania.util.Position;
 
@@ -29,14 +28,14 @@ public class StandardResponseFactory implements ResponseFactory {
         String dungeonName = dungeon.getDungeonName();
         List<EntityResponse> entities = createEntityResponseList(dungeon.getGrid());
         List<ItemResponse> inventory = createItemResponseList(dungeon.getGrid().getPlayer().getInventory()); // Bad code right here.
-        List<String> buildables = new ArrayList<>();// TODO
+        List<String> buildables = dungeon.getGrid().getPlayer().getBuildables();// TODO
         String goals = "";
         if (dungeon.getGoal() != null) {
             goals = dungeon.getGoal().toString();
         }
         List<AnimationQueue> animations = new ArrayList<>();
 
-        return new DungeonResponse(dungeonId, dungeonName, entities, inventory, buildables, goals);
+        return new DungeonResponse(dungeonId, dungeonName, entities, inventory, buildables, goals, animations);
     }
 
     /**
@@ -88,7 +87,7 @@ public class StandardResponseFactory implements ResponseFactory {
 
     @Override
     public ItemResponse createItemResponse(CollectableEntity item) {
-        // TODO Auto-generated method stub
+
         return new ItemResponse(item.getId(), item.getType());
     }
     

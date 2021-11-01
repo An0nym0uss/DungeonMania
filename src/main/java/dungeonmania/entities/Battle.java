@@ -30,17 +30,14 @@ public class Battle {
 
             if (!player.isDead()){
                 int playerDamageDealt = player.damageDealt();
-                ////////////////////////////////////////////////////////////////////////////////////////////////
+                //////////////////////////////////////////////////////////////////////////////////////////////
                 // if (enemy.hasArmour) {
-                    // playerDamageDealt = playerDamageDealt / 2;
+                //     playerDamageDealt = playerDamageDealt / 2;
                 // }
-                // enemy.setHealth(enemy.getHealth() - playerDamageDealt);
+                enemy.setHealth(enemy.getHealth() - playerDamageDealt);
 
-                // enemy is dead
                 if (enemy.isDead()) {
                     ////////////////////////////////////////////////////////////////////////////////////////////////
-                    // if enemy has armour
-                    // take the armour if player does not have one
                     grid.dettach(enemy);
                     RareCollectableEntities ring = new TheOneRing(new Position(0, 0));
                     ring.spawnnRareCollectableEntities(player.getInventory());
@@ -51,6 +48,7 @@ public class Battle {
                 if (player.getInventory().checkItem("the_one_ring") > 0) {
                     player.setCurrentHealth(player.getMaxHealth());
                     player.getInventory().removeNonSpecificItem("the_one_ring");
+                    grid.dettach(enemy);
                 } else {
                     // player dies   
                     grid.dettach(player);
