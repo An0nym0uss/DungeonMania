@@ -214,8 +214,20 @@ public class Player extends Entity implements Damage, Health, Moving{
         List<Entity> entities = grid.getEntities(this.getPosition().getX(), this.getPosition().getY());
         for (Entity entity : entities) {
             if (entity instanceof CollectableEntity) {
+                if (entity instanceof Key) {
+                    boolean hasKey = false;
+                    for (CollectableEntity inventoryItem : this.inventory.getItems()) {
+                        if (inventoryItem instanceof Key) {
+                            hasKey = true;
+                        }
+                    }
+                    if (!hasKey) {
+                        this.inventory.addItem((CollectableEntity)entity);
+                        grid.dettach(entity);
+                    }
+                }
                 // player can only have one sword, armour, key and buildables
-                if (entity instanceof Sword && !hasSword()) {
+                else if (entity instanceof Sword && !hasSword()) {
                     this.inventory.addItem((CollectableEntity)entity);
                     this.sword = (Sword) entity;
                     grid.dettach(entity);
