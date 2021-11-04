@@ -76,7 +76,7 @@ public class Dungeon {
     }
 
     public void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
-
+        grid.getPlayer().interact(entityId, grid);
     }
 
     public void build(String buildable) throws IllegalArgumentException, InvalidActionException {
