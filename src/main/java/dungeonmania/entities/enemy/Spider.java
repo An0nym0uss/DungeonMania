@@ -1,8 +1,10 @@
 package dungeonmania.entities.enemy;
 
 import dungeonmania.Grid;
+import dungeonmania.constants.Layer;
 import dungeonmania.entities.Battle;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.util.Direction;
@@ -26,7 +28,7 @@ public class Spider extends Enemy {
     private int spawnRate = 30; //assumption
     private int spawnCounter = 0;
 
-    public Spider(Position position,int speed, int health, int damage){
+    public Spider(Position position, int speed, int health, int damage){
         super("spider", position, false, speed, health, damage);
         this.movementArray.addAll(Arrays.asList(Direction.UP, Direction.RIGHT,
                 Direction.DOWN, Direction.DOWN,
@@ -45,7 +47,12 @@ public class Spider extends Enemy {
             if (spawnCounter == spawnRate) {
                 spawnCounter = 0;
             }
-            Position spawnPosition = getRandomValidSpotOnGrid(grid);
+            Position spawnPosition = getRandomValidSpotOnGrid(grid, 0);
+
+            if (spawnPosition != null) {
+                Spider newSpider = new Spider(spawnPosition, 1, 1, 1);
+                spawn(newSpider, grid);
+            }
 
         }
         move(grid, movementArray.get(directionCount));
@@ -54,15 +61,39 @@ public class Spider extends Enemy {
     /**
      * 
      * @param grid
-     * @return
+     * @param seed
+     * @return Potentially null if there is no valid spots to spawn on.
      * @post returned position is within the grid bounds with a 1 space buffer, and nothing at the position constrains a spider
      */
-    private Position getRandomValidSpotOnGrid(Grid grid) {
-        Position randomPosition = new Position(1, 1);
-        Random random = new Random();
+    private Position getRandomValidSpotOnGrid(Grid grid, int seed) {
+        Random random = new Random(seed);
 
-        //todo
+        // the amount of padding to use when selecting a position. 
+        // a padding of 1 allows the spider to always stay inside the grid while moving, however is not possible when the grid is too small
+        int widthBorderPadding = grid.getWidth() >= 3 ? 1 : 0;
+        int heightBorderPadding = grid.getHeight() >= 3 ? 1 : 0;
 
+        boolean redo = true;
+        Position randomPosition = null;
+
+        while (redo) {
+            redo = false;
+            int newX = random.nextInt(grid.getWidth() - (1 + widthBorderPadding));
+            int newY = random.nextInt(grid.getHeight() - (1 + heightBorderPadding));
+
+            randomPosition = new Position(widthBorderPadding + newX, heightBorderPadding + newY, Layer.SPIDER);
+
+            List<Entity> positionEntities = grid.getEntities(randomPosition.getX(), randomPosition.getY());
+            for (Entity positionEntity : positionEntities) {
+                if (positionEntity instanceof Player) { // return null as if player defeated spider instantly
+                    randomPosition = null;
+                }
+                else if (movingConstraints(positionEntity)) { // while it probably shouldn't spawn on a player, it allows there to always be a guaranteed spot the spider can spawn
+                    redo = true;
+                } 
+            }
+        }
+        
         return randomPosition;
     }
 
@@ -175,6 +206,9 @@ public class Spider extends Enemy {
     @Override
     public boolean movingConstraints(Entity e) {
         if (e instanceof Boulder) {
+            return true;
+        }
+        else if (e instanceof CollectableEntity) {
             return true;
         }
         return false;
