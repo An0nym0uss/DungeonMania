@@ -7,6 +7,7 @@ import java.util.List;
 
 import dungeonmania.Grid;
 import dungeonmania.entities.Battle;
+import dungeonmania.entities.Interaction;
 import dungeonmania.entities.Damage;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Health;
@@ -16,6 +17,8 @@ import dungeonmania.util.Position;
 import dungeonmania.entities.statics.*;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.modes.Mode;
+import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.Bow;
@@ -104,6 +107,15 @@ public class Player extends Entity implements Damage, Health, Moving{
     public boolean hasSword() {
         for (CollectableEntity collectable : this.inventory.getItems()) {
             if (collectable instanceof Sword) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasTreasure() {
+        for (CollectableEntity collectable : this.inventory.getItems()) {
+            if (collectable instanceof Treasure) {
                 return true;
             }
         }
@@ -464,6 +476,26 @@ public class Player extends Entity implements Damage, Health, Moving{
         statusEffect.tickDown();
     }
 
+    public void interact(String EntityId, Grid grid) {
+        Entity entity = null;
+        for (int i = 0; i < grid.getWidth(); i++) {
+            for (int j = 0; j < grid.getHeight(); j++) {
+                for (int k = 0; k < grid.getEntities(i, j).size(); k++) {
+                    if (grid.getEntities(i, j).get(k).getId() == EntityId && 
+                       (grid.getEntities(i, j).get(k).getType() == "zombie_toast_spawner" || 
+                        grid.getEntities(i, j).get(k).getType() == "mecenary")) {
+                            entity = grid.getEntities(i, j).get(k);
+                    }
+                }
+            }
+        }
+        if (entity instanceof Mercenary) {
+            Interaction.interactMerc((Mercenary)entity, grid, this);
+        } else if (entity instanceof ZombieToastSpawner) {
+            Interaction.interactSpawner((ZombieToastSpawner)entity, grid, this);
+        }
+        throw new IllegalArgumentException("entityId is not a valid entity ID");
+    }
 
     @Override
     public boolean movingConstraints(Entity e) {

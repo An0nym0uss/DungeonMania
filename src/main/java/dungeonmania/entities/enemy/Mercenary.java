@@ -16,9 +16,12 @@ import java.util.List;
 import java.util.*;
 
 public class Mercenary extends Enemy {
+
+    private boolean bribed;
     
     public Mercenary(Position position, int speed, int health, int damage) {
         super("mercenary", position, false, speed, health, damage);
+        this.bribed = false;
     }
 
     @Override
@@ -124,6 +127,14 @@ public class Mercenary extends Enemy {
         Collections.reverse(path);
         return path;
         */
+    }
+
+    public boolean isBribed() {
+        return this.bribed;
+    }
+
+    public void setBribed(boolean bribed) {
+        this.bribed = bribed;
     }
 
     @Override
