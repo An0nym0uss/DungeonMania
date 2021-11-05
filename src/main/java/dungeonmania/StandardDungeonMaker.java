@@ -50,17 +50,45 @@ public class StandardDungeonMaker implements DungeonMaker {
             throw new IllegalArgumentException("dungeon name {" + dungeonName +"} given doesn't exist");
         } catch (JsonParseException e) {
             System.err.println(e.getMessage());
-            throw new IllegalArgumentException("dungeon name {" + dungeonName + "} given doesn't exist");
+            throw new IllegalArgumentException("filename {" + dungeonName +"} isn't formatted correctly");
+        
+        }
+        // Create mode
+
+        dungeonData.addProperty("mode", gameMode);
+        dungeonData.addProperty("name", dungeonName);
+        return generateDungeon(dungeonData);
+    }
+
+    @Override
+    public Dungeon loadDungeon(String dungeonName) {
+        
+        JsonObject dungeonData;
+
+        // Try to open resource file and read in dungeon type json file.
+        try {
+            dungeonData = JsonParser.parseString( FileLoader.loadResourceFile("/saves/" + dungeonName + ".json")).getAsJsonObject();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            throw new IllegalArgumentException("filename {" + dungeonName +"} given doesn't exist");
+        } catch (JsonParseException e) {
+            System.err.println(e.getMessage());
+            throw new IllegalArgumentException("filename {" + dungeonName +"} isn't formatted correctly");
         
         }
 
-        // Create mode
-        Mode mode = createGameMode(gameMode);
+        return generateDungeon(dungeonData);
+    }
+
+    private Dungeon generateDungeon(JsonObject dungeonData) {
+        
+        Mode mode = createGameMode(dungeonData.get("mode").getAsString());
+
 
         this.entityFactory = new StandardEntityFactory(mode);
         
         // Create dungeon.
-        Dungeon dungeon = new Dungeon(dungeonName, mode);
+        Dungeon dungeon = new Dungeon(dungeonData.get("name").getAsString(), mode);
 
         // Getting Dimensions for creating grid.
         int height;
@@ -167,4 +195,5 @@ public class StandardDungeonMaker implements DungeonMaker {
 
         return null;
     }
+
 }
