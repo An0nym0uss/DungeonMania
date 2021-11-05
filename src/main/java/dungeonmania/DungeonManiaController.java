@@ -64,6 +64,10 @@ public class DungeonManiaController {
         JSONObject gameData = currentGame.getJSON();
 
         try {
+            File saves = new File(FileLoader.class.getResource("/").getPath() + "saves");
+            if (!saves.exists()) {
+                saves.mkdirs();
+            }
             File file = new File(FileLoader.class.getResource("/saves").getPath() + "/" + name + ".json");
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(gameData.toString());
