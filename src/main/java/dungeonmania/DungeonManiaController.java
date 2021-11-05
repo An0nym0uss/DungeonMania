@@ -7,10 +7,17 @@ import dungeonmania.response.models.StandardResponseFactory;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.json.JSONObject;
 
 public class DungeonManiaController {
 
@@ -53,15 +60,40 @@ public class DungeonManiaController {
     }
     
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
-        return null;
+
+        JSONObject gameData = currentGame.getJSON();
+
+        try {
+            File file = new File(FileLoader.class.getResource("/saves").getPath() + "/" + name + ".json");
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(gameData.toString());
+            fileWriter.close();
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+            throw new IllegalArgumentException();
+        }
+
+        return createDungeonResponse();
     }
 
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        return null;
+        
+        currentGame = dungeonMaker.loadDungeon(name);
+
+        return createDungeonResponse();
     }
 
     public List<String> allGames() {
-        return new ArrayList<>();
+        
+        try {
+            return FileLoader.listFileNamesInResourceDirectory("saves");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<String>();
+        }
     }
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {

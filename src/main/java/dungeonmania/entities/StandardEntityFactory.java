@@ -58,7 +58,12 @@ public class StandardEntityFactory implements EntityFactory {
                     return new Portal("portal_blue", new Position(x, y, Layer.STATIC), colour);
                 } else if (colour.equalsIgnoreCase("red")) {
                     return new Portal("portal_red", new Position(x, y, Layer.STATIC), colour);
+                } else if (colour.equalsIgnoreCase("orange")) {
+                    return new Portal("portal_orange", new Position(x, y, Layer.STATIC), colour);
+                } else if (colour.equalsIgnoreCase("gray")) {
+                    return new Portal("portal_gray", new Position(x, y, Layer.STATIC), colour);
                 }
+            // Set to blue if no colour specified.
             } catch (NullPointerException e) {
                 return new Portal("portal_blue", new Position(x, y, Layer.STATIC), null);
             }
@@ -68,10 +73,13 @@ public class StandardEntityFactory implements EntityFactory {
             if (mode == null) throw new InternalError("tried to create a player without selecting a mode.");
 
             return new ZombieToastSpawner(new Position(x, y, Layer.STATIC), mode);
-        // Door TODO
+        // Door
         } else if (entityType.equalsIgnoreCase("door_locked_silver")) {
             int keyNumber = entityData.get("key").getAsInt();
             return new Door("door_locked_silver", new Position(x, y, Layer.STATIC), keyNumber, false);
+        } else if (entityType.equalsIgnoreCase("door_unlocked")) {
+            int keyNumber = entityData.get("key").getAsInt();
+            return new Door("door_unlocked", new Position(x, y, Layer.STATIC), keyNumber, true);
         // Enemies TODO
         // Mercancy TODO
         } else if (entityType.equalsIgnoreCase("mercenary")) {

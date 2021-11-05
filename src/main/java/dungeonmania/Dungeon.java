@@ -9,7 +9,7 @@ import dungeonmania.goals.ComponentGoal;
 import dungeonmania.modes.Mode;
 import dungeonmania.util.Direction;
 
-public class Dungeon {
+public class Dungeon implements GameToJSON {
     
     private String dungeonId; // Dungeon game file.
     private String dungeonName; // Type of dungeon
@@ -18,7 +18,7 @@ public class Dungeon {
     private Grid grid = null;
 
     public Dungeon(String name, Mode mode) {
-        this.dungeonId = name + LocalDateTime.now().toString();
+        this.dungeonId = name + " (" + LocalDateTime.now().toString() + ")";
         this.dungeonName = name;
         this.gameMode = mode;
 
@@ -81,5 +81,28 @@ public class Dungeon {
 
     public void build(String buildable) throws IllegalArgumentException, InvalidActionException {
 
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject dungeon = new JSONObject();
+
+        dungeon.put("name", dungeonName);
+
+        if (grid != null) {
+            dungeon.put("width", grid.getWidth());
+            dungeon.put("height", grid.getHeight());
+            dungeon.put("entities", grid.getJSON().getJSONArray("entities"));
+        }
+
+        if (goal != null) {
+            dungeon.put("goal-condition", goal.getJSON());
+        }
+
+        if (gameMode != null) {
+            dungeon.put("mode", gameMode.getJSON().getString("mode"));
+        }
+
+        return dungeon;
     }   
 }
