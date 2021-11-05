@@ -2,6 +2,7 @@ package dungeonmania;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Iterator;
 
 import com.google.gson.JsonObject;
@@ -16,6 +17,7 @@ import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.StandardEntityFactory;
 import dungeonmania.goals.*;
 import dungeonmania.modes.*;
+import dungeonmania.util.FileLoader;
 
 /**
  * Responsible for making dungeon and grid.
@@ -31,6 +33,7 @@ public class StandardDungeonMaker implements DungeonMaker {
      * 
      * @param dungeonName
      * @param gameMode
+     * @param FileLoader 
      * @return
      * @throws IllegalArgumentException
      */
@@ -41,8 +44,8 @@ public class StandardDungeonMaker implements DungeonMaker {
 
         // Try to open resource file and read in dungeon type json file.
         try {
-            dungeonData = JsonParser.parseReader(new FileReader(RESOURCE_PATH + dungeonName + ".json")).getAsJsonObject();
-        } catch (FileNotFoundException e) {
+            dungeonData = JsonParser.parseString( FileLoader.loadResourceFile("/dungeons/" + dungeonName + ".json")).getAsJsonObject();
+        } catch (IOException e) {
             System.err.println(e.getMessage());
             throw new IllegalArgumentException("dungeon name {" + dungeonName +"} given doesn't exist");
         } catch (JsonParseException e) {
