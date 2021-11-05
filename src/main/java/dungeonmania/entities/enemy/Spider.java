@@ -11,12 +11,20 @@ import dungeonmania.util.Position;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
+/**
+ * 
+ * 
+ * @author Lachlan Kerr, William Wong
+ */
 public class Spider extends Enemy {
     private List<Direction> movementArray = new ArrayList<Direction>();
     private int directionCount;
     private boolean isReverse;
-    private int maxSpiders = 4;
+    private int maxSpiders = 4; //assumption
+    private int spawnRate = 30; //assumption
+    private int spawnCounter = 0;
 
     public Spider(Position position,int speed, int health, int damage){
         super("spider", position, false, speed, health, damage);
@@ -31,7 +39,51 @@ public class Spider extends Enemy {
 
     @Override
     public void update(Grid grid) {
+        if (getNumSpidersOnGrid(grid) < maxSpiders)
+        {
+            spawnCounter++;
+            if (spawnCounter == spawnRate) {
+                spawnCounter = 0;
+            }
+            Position spawnPosition = getRandomValidSpotOnGrid(grid);
+
+        }
         move(grid, movementArray.get(directionCount));
+    }
+
+    /**
+     * 
+     * @param grid
+     * @return
+     * @post returned position is within the grid bounds with a 1 space buffer, and nothing at the position constrains a spider
+     */
+    private Position getRandomValidSpotOnGrid(Grid grid) {
+        Position randomPosition = new Position(1, 1);
+        Random random = new Random();
+
+        //todo
+
+        return randomPosition;
+    }
+
+    /**
+     * Gets the number of spiders on the supplied Grid object.
+     * @param grid The grid to check for spiders.
+     * @return The number of spiders that were found.
+     */
+    private int getNumSpidersOnGrid(Grid grid) {
+        int num = 0;
+        Entity[][][] map = grid.getMap();
+        for (int x = 0; x < grid.getWidth(); x++) {
+            for (int y = 0; y < grid.getHeight(); y++) {
+                for (int z = 0; z < grid.getLayerSize(); z++) {
+                    if (map[x][y][z] instanceof Spider) {
+                        num++;
+                    }
+                }
+            }
+        }
+        return num;
     }
 
     @Override
@@ -79,7 +131,9 @@ public class Spider extends Enemy {
             newPosition = reversePosition();
         }
         // move to new positiond
+        grid.dettach(this);
         setPosition(newPosition);
+        grid.attach(this);
 
         nextDirection();
     }

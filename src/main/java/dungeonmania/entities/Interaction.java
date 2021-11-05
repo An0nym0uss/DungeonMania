@@ -6,7 +6,6 @@ import java.util.List;
 import dungeonmania.Grid;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.entities.enemy.*;
-import dungeonmania.entities.statics.Spawner;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.entities.player.Player;
 import dungeonmania.util.Position;

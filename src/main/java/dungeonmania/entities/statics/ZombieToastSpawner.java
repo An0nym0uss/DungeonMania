@@ -5,6 +5,7 @@ import java.util.List;
 import dungeonmania.Grid;
 import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Spawner;
 import dungeonmania.entities.enemy.Zombie;
 import dungeonmania.modes.Mode;
 import dungeonmania.util.Position;

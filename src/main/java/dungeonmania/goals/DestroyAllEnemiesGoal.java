@@ -4,8 +4,8 @@ import org.json.JSONObject;
 
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Spawner;
 import dungeonmania.entities.enemy.Enemy;
-import dungeonmania.entities.statics.Spawner;
 
 /**
  * A goal for destroying all enemies and spawners in a dungeon.

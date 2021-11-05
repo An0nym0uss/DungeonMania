@@ -1,7 +1,6 @@
-package dungeonmania.entities.statics;
+package dungeonmania.entities;
 
 import dungeonmania.Grid;
-import dungeonmania.entities.Entity;
 
 /**
  * An interface for anything that requires the ability to spawn.
