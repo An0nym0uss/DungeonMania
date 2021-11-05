@@ -24,9 +24,11 @@ public class Spider extends Enemy {
     private List<Direction> movementArray = new ArrayList<Direction>();
     private int directionCount;
     private boolean isReverse;
-    private int maxSpiders = 4; //assumption
-    private int spawnRate = 30; //assumption
-    private int spawnCounter = 0;
+
+    private static final int maxSpiders = 4; //assumption
+    private static final int spawnRate = 30; //assumption
+    private static int spawnCounter = 0;
+    private static Random random = new Random(0);
 
     public Spider(Position position, int speed, int health, int damage){
         super("spider", position, false, speed, health, damage);
@@ -39,22 +41,24 @@ public class Spider extends Enemy {
         this.isReverse = false;
     }
 
-    @Override
-    public void update(Grid grid) {
+    public static void checkForNextSpawn(Grid grid) {
         if (getNumSpidersOnGrid(grid) < maxSpiders)
         {
             spawnCounter++;
             if (spawnCounter == spawnRate) {
                 spawnCounter = 0;
-            }
-            Position spawnPosition = getRandomValidSpotOnGrid(grid, 0);
+                Position spawnPosition = getRandomValidSpotOnGrid(grid);
 
-            if (spawnPosition != null) {
-                Spider newSpider = new Spider(spawnPosition, 1, 1, 1);
-                spawn(newSpider, grid);
+                if (spawnPosition != null) {
+                    Spider newSpider = new Spider(spawnPosition, 1, 1, 1);
+                    grid.attach(newSpider);
+                }
             }
-
         }
+    }
+
+    @Override
+    public void update(Grid grid) {
         move(grid, movementArray.get(directionCount));
     }
 
@@ -65,8 +69,8 @@ public class Spider extends Enemy {
      * @return Potentially null if there is no valid spots to spawn on.
      * @post returned position is within the grid bounds with a 1 space buffer, and nothing at the position constrains a spider
      */
-    private Position getRandomValidSpotOnGrid(Grid grid, int seed) {
-        Random random = new Random(seed);
+    private static Position getRandomValidSpotOnGrid(Grid grid) {
+        //Random random = new Random(seed);
 
         // the amount of padding to use when selecting a position. 
         // a padding of 1 allows the spider to always stay inside the grid while moving, however is not possible when the grid is too small
@@ -88,7 +92,7 @@ public class Spider extends Enemy {
                 if (positionEntity instanceof Player) { // return null as if player defeated spider instantly
                     randomPosition = null;
                 }
-                else if (movingConstraints(positionEntity)) { // while it probably shouldn't spawn on a player, it allows there to always be a guaranteed spot the spider can spawn
+                else if (positionEntity instanceof Boulder || positionEntity instanceof CollectableEntity) { // we can't use movingConstraints() because we're in a static function
                     redo = true;
                 } 
             }
@@ -102,7 +106,7 @@ public class Spider extends Enemy {
      * @param grid The grid to check for spiders.
      * @return The number of spiders that were found.
      */
-    private int getNumSpidersOnGrid(Grid grid) {
+    private static int getNumSpidersOnGrid(Grid grid) {
         int num = 0;
         Entity[][][] map = grid.getMap();
         for (int x = 0; x < grid.getWidth(); x++) {
@@ -209,6 +213,8 @@ public class Spider extends Enemy {
             return true;
         }
         else if (e instanceof CollectableEntity) {
+            return true;
+        } else if (e instanceof Enemy) {
             return true;
         }
         return false;

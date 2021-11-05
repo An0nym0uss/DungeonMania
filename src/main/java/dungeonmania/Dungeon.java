@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.enemy.Spider;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.ComponentGoal;
 import dungeonmania.modes.Mode;
@@ -73,6 +74,7 @@ public class Dungeon {
         }
 
         grid.notifyObserverEntities();
+        Spider.checkForNextSpawn(grid);
     }
 
     public void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
