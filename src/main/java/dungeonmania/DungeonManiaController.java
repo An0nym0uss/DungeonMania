@@ -64,6 +64,7 @@ public class DungeonManiaController {
         JSONObject gameData = currentGame.getJSON();
 
         try {
+            // If you get an error, you need ot make a saves folder in resources
             File file = new File(FileLoader.class.getResource("/saves").getPath() + "/" + name + ".json");
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(gameData.toString());

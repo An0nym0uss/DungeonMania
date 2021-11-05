@@ -49,6 +49,10 @@ public class Player extends Entity implements Damage, Health, Moving{
         this.damage = 10;
     }
 
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
     public Inventory getInventory() {
         return inventory;
     }
