@@ -23,6 +23,8 @@ import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.BuildableEntity;
+import dungeonmania.entities.collectable.buildable.MidnightArmour;
+import dungeonmania.entities.collectable.buildable.Sceptre;
 import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
 
@@ -396,11 +398,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                 throw new InvalidActionException("You do not have sufficient items to craft bow.");
             }
             if (!hasBow()) {
-                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
-                    for (int i = 0; i < ingredient.getValue(); i++) {
-                        this.inventory.removeNonSpecificItem(ingredient.getKey());
-                    }
-                }
+                useIngredient(buildable, recipe);
                 Bow bow = new Bow(buildable, new Position(0, 0), false);
                 this.bow = bow;
                 this.inventory.addItem(bow);
@@ -411,17 +409,40 @@ public class Player extends Entity implements Damage, Health, Moving{
                 throw new InvalidActionException("You do not have sufficient items to craft shield.");
             }
             if (!hasShield()) {
-                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
-                    for (int i = 0; i < ingredient.getValue(); i++) {
-                        this.inventory.removeNonSpecificItem(ingredient.getKey());
-                    }
-                }
+                useIngredient(buildable, recipe);
                 Shield shield = new Shield(buildable, new Position(0, 0), false);
                 this.shield = shield;
                 this.inventory.addItem(shield);
             }
-        } else {
-            throw new IllegalArgumentException("Only bow and shield is buildable.");
+        } else if (buildable.equals("sceptre")) {
+            Recipe recipe = getAvailableRecipe(buildable);
+            if (recipe == null) {
+                throw new InvalidActionException("You do not have sufficient items to craft sceptre.");
+            }
+            useIngredient(buildable, recipe);
+            Sceptre sceptre = new Sceptre(new Position(0, 0));
+            this.inventory.addItem(sceptre);
+        } else if (buildable.equals("midnight_armour")) {
+            Recipe recipe = getAvailableRecipe(buildable);
+            if (recipe == null) {
+                throw new InvalidActionException("You do not have sufficient items to craft midnight armour.");
+            }
+            useIngredient(buildable, recipe);
+            MidnightArmour midnightArmour = new MidnightArmour(new Position(0, 0));
+            this.inventory.addItem(midnightArmour);
+        }
+        else {
+            throw new IllegalArgumentException(buildable + " not buildable.");
+        }
+    }
+
+    private void useIngredient(String buildable, Recipe recipe) {
+        for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
+            if (!ingredient.getKey().equalsIgnoreCase("sun_stone")) {
+                for (int i = 0; i < ingredient.getValue(); i++) {
+                    this.inventory.removeNonSpecificItem(ingredient.getKey());
+                }
+            }
         }
     }
 

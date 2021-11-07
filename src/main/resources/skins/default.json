@@ -40,6 +40,9 @@
         "portal_blue": "images/tileset/entities/portal_00.png",
         "portal_red": "images/tileset/entities/portal_04.png",
         "portal_orange": "images/tileset/entities/portal_08.png",
-        "portal_gray": "images/tileset/entities/portal_08.png"
+        "portal_gray": "images/tileset/entities/portal_08.png",
+        "sceptre": "images/tileset/entities/sceptre.png",
+        "midnight_armour": "images/tileset/entities/midnight_armour.png",
+        "sun_stone": "images/tileset/entities/sun_stone.png"
     }
 }
