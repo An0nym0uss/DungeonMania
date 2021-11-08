@@ -20,7 +20,7 @@ public class TheOneRing extends RareCollectableEntities{
             }
         }
         if (!hasRareCollectable) {
-            if (random.nextInt(100) < 5) {
+            if (random.nextInt(100) < this.getDropRate()) {
                 inventory.addItem(this);
             }
         }
