@@ -124,6 +124,15 @@ public class Player extends Entity implements Damage, Health, Moving{
         return false;
     }
 
+    public boolean hasSunStone() {
+        for (CollectableEntity collectable : this.inventory.getItems()) {
+            if (collectable instanceof SunStone) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public int getShieldDefense() {
         if (this.hasShield()) {
             return this.shield.getDefense();
@@ -198,11 +207,14 @@ public class Player extends Entity implements Damage, Health, Moving{
                 if (!((Door)other).getIsOpen()) {
                     ((Door)other).setType("door_unlocked");
                     ((Door)other).setIsOpen(true);
-                    Iterator<CollectableEntity> itr = inventory.getItems().iterator();
-                    while (itr.hasNext()) {
-                        CollectableEntity e = itr.next();
-                        if (e instanceof Key) {
-                            itr.remove();
+                    // remove key
+                    if (!hasSunStone()) {
+                        Iterator<CollectableEntity> itr = inventory.getItems().iterator();
+                        while (itr.hasNext()) {
+                            CollectableEntity e = itr.next();
+                            if (e instanceof Key) {
+                                itr.remove();
+                            }
                         }
                     }
                 }
@@ -336,14 +348,20 @@ public class Player extends Entity implements Damage, Health, Moving{
             if (((Door)other).getIsOpen()) {
                 return true;
             } else if (!((Door)other).getIsOpen()) {
-                int keyNumber = ((Door)other).getKey();
-                for (CollectableEntity e : this.inventory.getItems()) {
-                    if (e instanceof Key && ((Key)e).getKeyNumber() == keyNumber) {
-                        return true;
+                if (!hasSunStone()) {
+                    int keyNumber = ((Door)other).getKey();
+                    for (CollectableEntity e : this.inventory.getItems()) {
+                        if (e instanceof Key && ((Key)e).getKeyNumber() == keyNumber) {
+                            return true;
+                        }
                     }
+                    return false;
+                } else {
+                    return true;
                 }
+            } else {
+                return false;
             }
-            return false;
         }
         else if (other instanceof Bomb && 
                 ((Bomb)other).hasPlaced())              {return false;}
@@ -438,10 +456,8 @@ public class Player extends Entity implements Damage, Health, Moving{
 
     private void useIngredient(String buildable, Recipe recipe) {
         for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
-            if (!ingredient.getKey().equalsIgnoreCase("sun_stone")) {
-                for (int i = 0; i < ingredient.getValue(); i++) {
-                    this.inventory.removeNonSpecificItem(ingredient.getKey());
-                }
+            for (int i = 0; i < ingredient.getValue(); i++) {
+                this.inventory.removeNonSpecificItem(ingredient.getKey());
             }
         }
     }
@@ -506,6 +522,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                        (grid.getEntities(i, j).get(k).getType() == "zombie_toast_spawner" || 
                         grid.getEntities(i, j).get(k).getType() == "mecenary")) {
                             entity = grid.getEntities(i, j).get(k);
+                            break;
                     }
                 }
             }
