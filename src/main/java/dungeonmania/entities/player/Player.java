@@ -23,6 +23,8 @@ import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.BuildableEntity;
+import dungeonmania.entities.collectable.buildable.MidnightArmour;
+import dungeonmania.entities.collectable.buildable.Sceptre;
 import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
 
@@ -122,6 +124,15 @@ public class Player extends Entity implements Damage, Health, Moving{
         return false;
     }
 
+    public boolean hasSunStone() {
+        for (CollectableEntity collectable : this.inventory.getItems()) {
+            if (collectable instanceof SunStone) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public int getShieldDefense() {
         if (this.hasShield()) {
             return this.shield.getDefense();
@@ -196,11 +207,14 @@ public class Player extends Entity implements Damage, Health, Moving{
                 if (!((Door)other).getIsOpen()) {
                     ((Door)other).setType("door_unlocked");
                     ((Door)other).setIsOpen(true);
-                    Iterator<CollectableEntity> itr = inventory.getItems().iterator();
-                    while (itr.hasNext()) {
-                        CollectableEntity e = itr.next();
-                        if (e instanceof Key) {
-                            itr.remove();
+                    // remove key
+                    if (!hasSunStone()) {
+                        Iterator<CollectableEntity> itr = inventory.getItems().iterator();
+                        while (itr.hasNext()) {
+                            CollectableEntity e = itr.next();
+                            if (e instanceof Key) {
+                                itr.remove();
+                            }
                         }
                     }
                 }
@@ -334,14 +348,20 @@ public class Player extends Entity implements Damage, Health, Moving{
             if (((Door)other).getIsOpen()) {
                 return true;
             } else if (!((Door)other).getIsOpen()) {
-                int keyNumber = ((Door)other).getKey();
-                for (CollectableEntity e : this.inventory.getItems()) {
-                    if (e instanceof Key && ((Key)e).getKeyNumber() == keyNumber) {
-                        return true;
+                if (!hasSunStone()) {
+                    int keyNumber = ((Door)other).getKey();
+                    for (CollectableEntity e : this.inventory.getItems()) {
+                        if (e instanceof Key && ((Key)e).getKeyNumber() == keyNumber) {
+                            return true;
+                        }
                     }
+                    return false;
+                } else {
+                    return true;
                 }
+            } else {
+                return false;
             }
-            return false;
         }
         else if (other instanceof Bomb && 
                 ((Bomb)other).hasPlaced())              {return false;}
@@ -396,11 +416,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                 throw new InvalidActionException("You do not have sufficient items to craft bow.");
             }
             if (!hasBow()) {
-                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
-                    for (int i = 0; i < ingredient.getValue(); i++) {
-                        this.inventory.removeNonSpecificItem(ingredient.getKey());
-                    }
-                }
+                useIngredient(buildable, recipe);
                 Bow bow = new Bow(buildable, new Position(0, 0), false);
                 this.bow = bow;
                 this.inventory.addItem(bow);
@@ -411,17 +427,38 @@ public class Player extends Entity implements Damage, Health, Moving{
                 throw new InvalidActionException("You do not have sufficient items to craft shield.");
             }
             if (!hasShield()) {
-                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
-                    for (int i = 0; i < ingredient.getValue(); i++) {
-                        this.inventory.removeNonSpecificItem(ingredient.getKey());
-                    }
-                }
+                useIngredient(buildable, recipe);
                 Shield shield = new Shield(buildable, new Position(0, 0), false);
                 this.shield = shield;
                 this.inventory.addItem(shield);
             }
-        } else {
-            throw new IllegalArgumentException("Only bow and shield is buildable.");
+        } else if (buildable.equals("sceptre")) {
+            Recipe recipe = getAvailableRecipe(buildable);
+            if (recipe == null) {
+                throw new InvalidActionException("You do not have sufficient items to craft sceptre.");
+            }
+            useIngredient(buildable, recipe);
+            Sceptre sceptre = new Sceptre(new Position(0, 0));
+            this.inventory.addItem(sceptre);
+        } else if (buildable.equals("midnight_armour")) {
+            Recipe recipe = getAvailableRecipe(buildable);
+            if (recipe == null) {
+                throw new InvalidActionException("You do not have sufficient items to craft midnight armour.");
+            }
+            useIngredient(buildable, recipe);
+            MidnightArmour midnightArmour = new MidnightArmour(new Position(0, 0));
+            this.inventory.addItem(midnightArmour);
+        }
+        else {
+            throw new IllegalArgumentException(buildable + " not buildable.");
+        }
+    }
+
+    private void useIngredient(String buildable, Recipe recipe) {
+        for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
+            for (int i = 0; i < ingredient.getValue(); i++) {
+                this.inventory.removeNonSpecificItem(ingredient.getKey());
+            }
         }
     }
 
@@ -485,6 +522,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                        (grid.getEntities(i, j).get(k).getType() == "zombie_toast_spawner" || 
                         grid.getEntities(i, j).get(k).getType() == "mecenary")) {
                             entity = grid.getEntities(i, j).get(k);
+                            break;
                     }
                 }
             }
