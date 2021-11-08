@@ -493,8 +493,9 @@ public class Player extends Entity implements Damage, Health, Moving{
             Interaction.interactMerc((Mercenary)entity, grid, this);
         } else if (entity instanceof ZombieToastSpawner) {
             Interaction.interactSpawner((ZombieToastSpawner)entity, grid, this);
+        } else {
+            throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
-        throw new IllegalArgumentException("entityId is not a valid entity ID");
     }
 
     @Override
