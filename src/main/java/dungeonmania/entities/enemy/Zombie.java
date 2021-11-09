@@ -1,6 +1,7 @@
 package dungeonmania.entities.enemy;
 
 import dungeonmania.Grid;
+import dungeonmania.constants.Layer;
 import dungeonmania.entities.Battle;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.player.Player;
@@ -23,7 +24,6 @@ public class Zombie extends Enemy {
 
     @Override
     public void update(Grid grid) {
-
         move(grid, Direction.NONE);
     }
 
@@ -69,7 +69,7 @@ public class Zombie extends Enemy {
 
         if (newPosition != null) {
             grid.dettach(this);
-            setPosition(newPosition);
+            setPosition(new Position(newPosition.getX(), newPosition.getY(), Layer.ENEMY));
             grid.attach(this);
         }
 
