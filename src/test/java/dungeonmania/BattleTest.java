@@ -117,7 +117,7 @@ public class BattleTest {
 
         // build a bow
         int prevDamage = player.damageDealt();
-        player.craftItem(player.getBuildables().get(0));
+        player.craftItem(player.getBuildables().get(0), grid);
         assertTrue(player.damageDealt() == prevDamage*2);
         prevDamage = player.damageDealt();
 
@@ -167,7 +167,7 @@ public class BattleTest {
         player.move(grid, Direction.RIGHT);
         player.move(grid, Direction.RIGHT);
         assertTrue(player.getBuildables().size() > 0);
-        player.craftItem(player.getBuildables().get(0));
+        player.craftItem(player.getBuildables().get(0), grid);
 
         // kill the third enemy and compare damage
         player.move(grid, Direction.DOWN);

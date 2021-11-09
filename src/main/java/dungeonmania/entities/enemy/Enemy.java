@@ -58,6 +58,9 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage, Sp
 
     // Checks if the position is free to move into (considering the movementConstraints)
     public boolean canMoveToPosition(Grid grid, Position position) {
+        if (position.getX() >= grid.getWidth() || position.getY() >= grid.getHeight()) {
+            return false;
+        }
         List<Entity> positionEntities = grid.getEntities(position.getX(), position.getY());
         for (Entity positionEntity : positionEntities) {
             if (this.movingConstraints(positionEntity)) {

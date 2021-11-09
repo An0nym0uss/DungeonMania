@@ -409,7 +409,7 @@ public class Player extends Entity implements Damage, Health, Moving{
         }
     }
 
-    public void craftItem(String buildable) {
+    public void craftItem(String buildable, Grid grid) {
         if (buildable.equals("bow")) {
             Recipe recipe = getAvailableRecipe(buildable);
             if (recipe == null) {
@@ -441,6 +441,9 @@ public class Player extends Entity implements Damage, Health, Moving{
             Sceptre sceptre = new Sceptre(new Position(0, 0));
             this.inventory.addItem(sceptre);
         } else if (buildable.equals("midnight_armour")) {
+            if (hasZombie(grid)) {
+                throw new InvalidActionException("You cannot craft midnight armour when zombie is in game.");
+            }
             Recipe recipe = getAvailableRecipe(buildable);
             if (recipe == null) {
                 throw new InvalidActionException("You do not have sufficient items to craft midnight armour.");
@@ -460,6 +463,19 @@ public class Player extends Entity implements Damage, Health, Moving{
                 this.inventory.removeNonSpecificItem(ingredient.getKey());
             }
         }
+    }
+
+    private boolean hasZombie(Grid grid) {
+        for (int x = 0; x < grid.getWidth(); x++) {
+            for (int y = 0; y < grid.getHeight(); y++) {
+                for (Entity e : grid.getEntities(x, y)) {
+                    if (e instanceof Zombie) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public List<String> getBuildables() {
