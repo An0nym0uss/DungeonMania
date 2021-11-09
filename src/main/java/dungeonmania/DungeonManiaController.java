@@ -121,6 +121,8 @@ public class DungeonManiaController {
 
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
 
+        currentGame = dungeonMaker.generateRandomDungeon(xStart, yStart, xEnd, yEnd, gameMode);
+
         return createDungeonResponse();
     }
 

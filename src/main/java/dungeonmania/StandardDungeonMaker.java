@@ -196,4 +196,38 @@ public class StandardDungeonMaker implements DungeonMaker {
         return null;
     }
 
+    @Override
+    public Dungeon generateRandomDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode)
+            throws IllegalArgumentException {
+        
+        if (xStart < 0 || xStart >= 50) {
+            throw new IllegalAccessError("xStart is out of bounds");
+        } else if (yStart < 0 || yStart >= 50) {
+            throw new IllegalAccessError("yStart is out of bounds");
+        } else if (xEnd < 0 || xEnd >= 50) {
+            throw new IllegalAccessError("xEnd is out of bounds");
+        } else if (yEnd < 0 || yEnd >= 50) {
+            throw new IllegalAccessError("yEnd is out of bounds");
+        }
+
+        xStart = (xStart-1)/2;
+        xEnd = (xEnd)/2;
+        yStart = (yStart-1)/2;
+        yEnd = (yEnd-1)/2;
+        
+
+        Mode mode = createGameMode(gameMode);
+
+        // Setting dungeon's components
+        Dungeon dungeon = new Dungeon("generated", mode);
+        dungeon.setGrid((new MazeGenerator(yStart*25+xStart, yEnd*25+xEnd, mode)).toGrid());
+        
+        JsonObject goal = new JsonObject();
+
+        goal.addProperty("goal", "exit");
+        dungeon.setGoal(createGoal(goal));
+
+        return dungeon;
+    }
+
 }

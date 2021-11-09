@@ -9,6 +9,7 @@ import dungeonmania.util.Direction;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -122,12 +123,19 @@ public class App {
             return callUsingSessionAndArgument(request, (dmc) -> dmc.interact(request.queryParams("entityId")));
         }, gson::toJson);
 
+        Random rand = new Random();
+
+        int xStart = rand.nextInt(25)*2 + 1;
+        int yStart = rand.nextInt(25)*2 + 1;
+        int xEnd = rand.nextInt(25)*2 + 1;
+        int yEnd = rand.nextInt(25)*2 + 1;
+
         Spark.post("/api/game/new/generate/", "application/json", (request, response) -> {
             /*
             return callUsingSessionAndArgument(request, (dmc) -> dmc.generateDungeon(Integer.parseInt(request.queryParams("xStart")), 
                 Integer.parseInt(request.queryParams("yStart")), Integer.parseInt(request.queryParams("xEnd")), Integer.parseInt(request.queryParams("yEnd")), request.queryParams("gameMode")));
             */
-            return callUsingSessionAndArgument(request, (dmc) -> dmc.generateDungeon(1, 1, 49, 49, request.queryParams("gameMode")));
+            return callUsingSessionAndArgument(request, (dmc) -> dmc.generateDungeon(xStart, yStart, xEnd, yEnd, request.queryParams("gameMode")));
 
             }, gson::toJson);
 
