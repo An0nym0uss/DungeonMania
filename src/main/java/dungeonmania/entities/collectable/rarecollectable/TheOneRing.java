@@ -6,8 +6,9 @@ import dungeonmania.entities.collectable.CollectableEntity;
 
 public class TheOneRing extends RareCollectableEntities{
     
-    public TheOneRing() {
-        super("the_one_ring", new Position(0,0), false, 5);
+    public TheOneRing(Position position) {
+        super("one_ring", position, false);
+        setDropRate(1);
     }
 
     @Override

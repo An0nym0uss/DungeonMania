@@ -1,5 +1,7 @@
 package dungeonmania.entities.collectable;
 
+import org.json.JSONObject;
+
 import dungeonmania.util.Position;
 
 public class Sword extends CollectableEntity implements Durable{
@@ -36,5 +38,14 @@ public class Sword extends CollectableEntity implements Durable{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject sword = super.getJSON();
+
+        sword.put("durability", durability);
+
+        return sword;
     }
 }
