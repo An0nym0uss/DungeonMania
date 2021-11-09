@@ -122,11 +122,6 @@ public class Spider extends Enemy {
     }
 
     @Override
-    public void spawn(Entity entity, Grid grid) {
-        grid.attach(entity);
-    }
-
-    @Override
     public int damageDealt() {
         return super.getDamage();
     }

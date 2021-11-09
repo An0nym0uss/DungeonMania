@@ -77,6 +77,7 @@ public class Zombie extends Enemy {
             Battle.battle((Player)doBattle, (Enemy)this, grid);
         }
     }
+    
     /**
      * Determines if the specified entity constrains the movement of this class
      */
@@ -95,10 +96,5 @@ public class Zombie extends Enemy {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void spawn(Entity entity, Grid grid) {
-        grid.attach(entity);
     }
 }
