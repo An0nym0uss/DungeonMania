@@ -119,6 +119,11 @@ public class DungeonManiaController {
         return createDungeonResponse();
     }
 
+    public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
+
+        return createDungeonResponse();
+    }
+
     private DungeonResponse createDungeonResponse() {
 
         return dungeonResponseFactory.createDungeonResponse(currentGame);
