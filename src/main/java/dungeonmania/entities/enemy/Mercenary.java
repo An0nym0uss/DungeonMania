@@ -26,6 +26,7 @@ public class Mercenary extends Enemy {
 
     @Override
     public void update(Grid grid) {
+//        return;
         /* TODO:
         * find out which direction it should move by doing something with player's and mercenary's x and y position
         * try move in that direction
@@ -34,32 +35,23 @@ public class Mercenary extends Enemy {
         // get player
         // breadth first search
         // A* search
-        /*
+        
         //List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
-        grid.getPlayer().getPosition().getAdjacentCardinalPositions();
+        // grid.getPlayer().getPosition().getAdjacentCardinalPositions();
 
-        List<Position> shortestPath = this.breadthFirstSearch(grid);
-        //                Path - (1,1) (2,1) (2,2)
+         List<Position> shortestPath = this.breadthFirstSearch(grid);
+        // System.out.println(shortestPath);
 
         // Perform movement
-        Position nextStep = shortestPath.get(1);
-        this.setPosition(nextStep);
+         Position nextStep = shortestPath.get(1);
+        // System.out.println(nextStep);
+         this.setPosition(nextStep);
         // TODO: Bribing
-        boolean bribed = this.isBribed();
-
-//        visited = {
-//                "position": "parent"
-//                "(1,1): Null"
-//                "(1,2): (1,1)"
-//                "(2,1): (1,1)"
-//                "(2,2) - Goal": ("2,1")
-//
-//                Path - (1,1) (2,1) (2,2)
-//        }
+        // boolean bribed = this.isBribed();
     }
 
     public boolean isBribed() {
-        if (isHasBeenBribed()) {
+        if (this.getBribed()) {
             // Mercenary follows player
             return true;
         }
@@ -69,13 +61,13 @@ public class Mercenary extends Enemy {
         }
     }
 
-    public boolean isHasBeenBribed() {
-        return hasBeenBribed;
-    }
+    // public boolean isHasBeenBribed() {
+    //     return hasBeenBribed;
+    // }
 
-    public void setHasBeenBribed(boolean hasBeenBribed) {
-        this.hasBeenBribed = hasBeenBribed;
-    }
+    // public void setHasBeenBribed(boolean hasBeenBribed) {
+    //     this.hasBeenBribed = hasBeenBribed;
+    // }
 
     // Returns the shortest path between the start (mercenary) and the goal (player)
     public List<Position> breadthFirstSearch(Grid grid) {
@@ -91,21 +83,37 @@ public class Mercenary extends Enemy {
 //        for (Position value : visited.values()) {
 //
 //        }
-    /*
-        while (queue.size() != 0) {
+
+        boolean hasReachedGoal = false;
+        while (queue.size() != 0 && !hasReachedGoal) {
             Position v = queue.remove(0);
-//            if (v == grid.getPlayer().getPosition()) {
-//                return v;
-//            }
-            for (Position w : v.getAdjacentCardinalPositions()) {
-                // Checks if square is visited AND is possible to move into (via moving constraints)
-                if (!visited.containsKey(w) && this.canMoveToPosition(grid, w)) {
-                    visited.containsKey(w);
-                    queue.add(w);
+
+            // Check goal condition (adjacent square of player)
+            List<Position> playerAdjacentPositions = grid.getPlayer().getPosition().getAdjacentCardinalPositions();
+            // Check v is in playerAdjacentPositions
+            for (Position playerAdjacentPosition: playerAdjacentPositions) {
+                if (playerAdjacentPosition.getX() == v.getX() && playerAdjacentPosition.getY() == v.getY()) {
+                    visited.put(grid.getPlayer().getPosition(), v);
+                    hasReachedGoal = true;
+                    break;
                 }
             }
+
+
+            for (Position w : v.getAdjacentCardinalPositions()) {
+                if (w.getX() >= 0 && w.getX() < grid.getWidth() && w.getY() >= 0 && w.getY() < grid.getHeight()) {
+                    // Checks if square is visited AND is possible to move into (via moving constraints)
+                    if (!visited.containsKey(w) && this.canMoveToPosition(grid, w)) {
+//                        if (!visited.containsKey(w)) {
+                        // visited.containsKey(w);
+                        visited.put(w, v);
+                        queue.add(w);
+                    }
+                }
+
+            }
         }
-        */
+        
 
 
         // visited
@@ -117,7 +125,7 @@ public class Mercenary extends Enemy {
 //        while node is not null:
 //           add current node to path
 //           set current node as parent
-        /*
+        
         List<Position> path = new ArrayList<Position>();
         Position currentNode = grid.getPlayer().getPosition();
         while (currentNode != null) {
@@ -126,10 +134,10 @@ public class Mercenary extends Enemy {
         }
         Collections.reverse(path);
         return path;
-        */
+        
     }
 
-    public boolean isBribed() {
+    public boolean getBribed() {
         return this.bribed;
     }
 

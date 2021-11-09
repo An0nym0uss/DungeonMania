@@ -157,6 +157,8 @@ public class StandardEntityFactory implements EntityFactory {
             return new InvisibilityPotion(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("health_potion")) {
             return new HealthPotion(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("sun_stone")) {
+            return new SunStone(new Position(x, y, Layer.COLLECTABLE));
         }
 
         else if (entityType.equalsIgnoreCase("player")) {

@@ -9,10 +9,14 @@ public class RecipeAll {
     public RecipeAll() {
         String bowRecipeFile = "/dungeonmania/entities/collectable/buildable/recipes/bowRecipe.json";
         String shieldRecipeFile = "/dungeonmania/entities/collectable/buildable/recipes/shieldRecipe.json";
+        String sceptreRecipeFile = "/dungeonmania/entities/collectable/buildable/recipes/sceptreRecipe.json";
+        String midnightArmourRecipeFile = "/dungeonmania/entities/collectable/buildable/recipes/midnightArmourRecipe.json";
 
         List<String> files = new ArrayList<>();
         files.add(bowRecipeFile);
         files.add(shieldRecipeFile);
+        files.add(sceptreRecipeFile);
+        files.add(midnightArmourRecipeFile);
 
         ReadRecipe read = new ReadRecipe();
         for (String file : files) {
