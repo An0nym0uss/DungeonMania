@@ -8,11 +8,8 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -64,6 +61,11 @@ public class DungeonManiaController {
         JSONObject gameData = currentGame.getJSON();
 
         try {
+            // If you get an error, you need ot make a saves folder in resources
+            File saves = new File(FileLoader.class.getResource("/").getPath() + "saves");
+            if (!saves.exists()) {
+                saves.mkdirs();
+            }
             File file = new File(FileLoader.class.getResource("/saves").getPath() + "/" + name + ".json");
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(gameData.toString());
@@ -112,7 +114,12 @@ public class DungeonManiaController {
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
         
-        currentGame.getGrid().getPlayer().craftItem(buildable);
+        currentGame.build(buildable);
+
+        return createDungeonResponse();
+    }
+
+    public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
 
         return createDungeonResponse();
     }

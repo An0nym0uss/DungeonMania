@@ -1,17 +1,18 @@
 package dungeonmania.entities.collectable;
 
+import org.json.JSONObject;
+
 import dungeonmania.util.Position;
 
 public class Armour extends CollectableEntity implements Durable{
     private int durability;
 
     public Armour(Position position) {
-        super("armour", position, false);
-        this.durability = 10;
+        this(position, 10);
     }
 
     public Armour(Position position, int durability) {
-        this(position);
+        super("armour", position, false);
         this.durability = durability;
     }
 
@@ -31,5 +32,14 @@ public class Armour extends CollectableEntity implements Durable{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject armour = super.getJSON();
+
+        armour.put("durability", durability);
+
+        return armour;
     }
 }

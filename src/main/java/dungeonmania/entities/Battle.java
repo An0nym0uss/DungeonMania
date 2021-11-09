@@ -1,6 +1,7 @@
 package dungeonmania.entities;
 
 import dungeonmania.Grid;
+import dungeonmania.entities.collectable.rarecollectable.Anduril;
 import dungeonmania.entities.collectable.rarecollectable.RareCollectableEntities;
 import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
 import dungeonmania.entities.enemy.Enemy;
@@ -39,8 +40,11 @@ public class Battle {
                 if (enemy.isDead()) {
                     ////////////////////////////////////////////////////////////////////////////////////////////////
                     grid.dettach(enemy);
-                    RareCollectableEntities ring = new TheOneRing(new Position(0, 0));
-                    ring.spawnnRareCollectableEntities(player.getInventory());
+                    RareCollectableEntities.spawnnRareCollectableEntities(player.getInventory());
+                    // RareCollectableEntities ring = new TheOneRing();
+                    // ring.spawnnOneRing(player.getInventory());
+                    // RareCollectableEntities anduril = new Anduril();
+                    // anduril.spawnnAnduril(player.getInventory());
                 }
             } else {
                 // player is dead

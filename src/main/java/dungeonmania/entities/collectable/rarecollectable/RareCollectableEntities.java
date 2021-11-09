@@ -6,35 +6,30 @@ import dungeonmania.util.Position;
 
 import java.util.Random;
 
-
-public abstract class RareCollectableEntities extends CollectableEntity {
-
-    public RareCollectableEntities(String type, Position position, boolean isInteractable) {
-        super(type, position, isInteractable);
-    }
+public class RareCollectableEntities extends CollectableEntity {
 
     private double dropRate;
-    
+    protected Random random;
 
     public RareCollectableEntities(String type, Position position, boolean isInteractable, double dropRate) {
         super(type, position, isInteractable);
         this.dropRate = dropRate;
+        this.random = new Random();
     }
 
-    public void spawnnRareCollectableEntities(Inventory inventory) {
-        boolean hasRareCollectable = false;
-        for (CollectableEntity entity : inventory.getItems()) {
-            if (entity instanceof RareCollectableEntities) {
-                hasRareCollectable = true;
-            }
-        }
-        if (!hasRareCollectable) {
-            Random random = new Random();
-            int draw = random.nextInt(100);
-            if (draw + 1 <= this.dropRate) {
-                inventory.addItem(this);
-            }
-        }
+    public static void spawnnRareCollectableEntities(Inventory inventory) {
+        RareCollectableEntities anduril = new Anduril();
+        anduril.spawnnAnduril(inventory);
+        RareCollectableEntities oneRing = new TheOneRing();
+        oneRing.spawnnOneRing(inventory);
+    }
+
+    public void spawnnAnduril(Inventory inventory) {
+
+    }
+
+    public void spawnnOneRing(Inventory inventory) {
+        
     }
 
     public double getDropRate() {
@@ -43,5 +38,10 @@ public abstract class RareCollectableEntities extends CollectableEntity {
 
     public void setDropRate(double dropRate) {
         this.dropRate = dropRate;
+    }
+
+    // seeding random not working, reason currently not found
+    public void setRandom(long seed) {
+        this.random.setSeed(seed);
     }
 }

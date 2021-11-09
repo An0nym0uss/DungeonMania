@@ -82,7 +82,7 @@ public class Dungeon implements GameToJSON {
     }
 
     public void build(String buildable) throws IllegalArgumentException, InvalidActionException {
-
+        grid.getPlayer().craftItem(buildable, grid);
     }
 
     @Override

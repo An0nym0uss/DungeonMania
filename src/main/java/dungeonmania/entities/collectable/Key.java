@@ -1,5 +1,7 @@
 package dungeonmania.entities.collectable;
 
+import org.json.JSONObject;
+
 import dungeonmania.util.Position;
 
 public class Key extends CollectableEntity{
@@ -12,6 +14,15 @@ public class Key extends CollectableEntity{
 
     public int getKeyNumber() {
         return this.keyNumber;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject key = super.getJSON();
+
+        key.put("key", keyNumber);
+
+        return key;
     }
 }
 

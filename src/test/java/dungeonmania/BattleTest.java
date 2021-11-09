@@ -80,9 +80,9 @@ public class BattleTest {
         grid.attach(shelob);
 
         // spawn a one ring
-        RareCollectableEntities ring = new TheOneRing(new Position(0, 0));
+        RareCollectableEntities ring = new TheOneRing();
         ring.setDropRate(100);
-        ring.spawnnRareCollectableEntities(player.getInventory());
+        ring.spawnnOneRing(player.getInventory());
         assertTrue(player.getInventory().getItems().size() > 0);
 
         // shelob dead, player at max health
@@ -117,7 +117,7 @@ public class BattleTest {
 
         // build a bow
         int prevDamage = player.damageDealt();
-        player.craftItem(player.getBuildables().get(0));
+        player.craftItem(player.getBuildables().get(0), grid);
         assertTrue(player.damageDealt() == prevDamage*2);
         prevDamage = player.damageDealt();
 
@@ -167,7 +167,7 @@ public class BattleTest {
         player.move(grid, Direction.RIGHT);
         player.move(grid, Direction.RIGHT);
         assertTrue(player.getBuildables().size() > 0);
-        player.craftItem(player.getBuildables().get(0));
+        player.craftItem(player.getBuildables().get(0), grid);
 
         // kill the third enemy and compare damage
         player.move(grid, Direction.DOWN);

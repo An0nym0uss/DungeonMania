@@ -45,6 +45,8 @@
         "portal_gray": "images/tileset/entities/portal_08.png",
         "sceptre": "images/tileset/entities/sceptre.png",
         "midnight_armour": "images/tileset/entities/midnight_armour.png",
-        "sun_stone": "images/tileset/entities/sun_stone.png"
+        "sun_stone": "images/tileset/entities/sun_stone.png",
+        "zombie_toast": "images/tileset/entities/zombie_00.png",
+        "zombie_toast_spawner": "images/tileset/entities/zombie_spawner.png"
     }
 }

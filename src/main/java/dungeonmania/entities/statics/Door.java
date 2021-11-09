@@ -1,18 +1,11 @@
 package dungeonmania.entities.statics;
 
-import java.util.List;
-
 import org.json.JSONObject;
-
-import dungeonmania.Grid;
-import dungeonmania.entities.Entity;
 /*
 import dungeonmania.entities.enemy.Mercenary;
 import dungeonmania.entities.enemy.Spider;
 import dungeonmania.entities.enemy.Zombie;
 */
-import dungeonmania.entities.collectable.Key;
-import dungeonmania.entities.player.Player;
 import dungeonmania.util.Position;
 
 /**

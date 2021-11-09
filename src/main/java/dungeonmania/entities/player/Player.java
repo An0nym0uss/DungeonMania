@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import dungeonmania.Grid;
 import dungeonmania.entities.Battle;
 import dungeonmania.entities.Interaction;
@@ -17,16 +19,9 @@ import dungeonmania.util.Position;
 import dungeonmania.entities.statics.*;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.modes.Mode;
-import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.response.models.EntityResponse;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
-import dungeonmania.entities.collectable.buildable.Bow;
-import dungeonmania.entities.collectable.buildable.BuildableEntity;
-import dungeonmania.entities.collectable.buildable.MidnightArmour;
-import dungeonmania.entities.collectable.buildable.Sceptre;
-import dungeonmania.entities.collectable.buildable.Shield;
-import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
+import dungeonmania.entities.collectable.buildable.*;
 
 public class Player extends Entity implements Damage, Health, Moving{
     private int damage;
@@ -49,6 +44,10 @@ public class Player extends Entity implements Damage, Health, Moving{
         this.statusEffect = new StatusEffect();
         this.isTeleported = false;
         this.damage = 10;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     public Inventory getInventory() {
@@ -409,15 +408,20 @@ public class Player extends Entity implements Damage, Health, Moving{
         }
     }
 
-    public void craftItem(String buildable) {
+    public void craftItem(String buildable, Grid grid) {
         if (buildable.equals("bow")) {
             Recipe recipe = getAvailableRecipe(buildable);
             if (recipe == null) {
                 throw new InvalidActionException("You do not have sufficient items to craft bow.");
             }
             if (!hasBow()) {
+                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
+                    for (int i = 0; i < ingredient.getValue(); i++) {
+                        this.inventory.removeNonSpecificItem(ingredient.getKey());
+                    }
+                }
+                Bow bow = new Bow(new Position(0, 0));
                 useIngredient(buildable, recipe);
-                Bow bow = new Bow(buildable, new Position(0, 0), false);
                 this.bow = bow;
                 this.inventory.addItem(bow);
             }
@@ -427,8 +431,13 @@ public class Player extends Entity implements Damage, Health, Moving{
                 throw new InvalidActionException("You do not have sufficient items to craft shield.");
             }
             if (!hasShield()) {
+                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
+                    for (int i = 0; i < ingredient.getValue(); i++) {
+                        this.inventory.removeNonSpecificItem(ingredient.getKey());
+                    }
+                }
+                Shield shield = new Shield(new Position(0, 0));
                 useIngredient(buildable, recipe);
-                Shield shield = new Shield(buildable, new Position(0, 0), false);
                 this.shield = shield;
                 this.inventory.addItem(shield);
             }
@@ -441,6 +450,9 @@ public class Player extends Entity implements Damage, Health, Moving{
             Sceptre sceptre = new Sceptre(new Position(0, 0));
             this.inventory.addItem(sceptre);
         } else if (buildable.equals("midnight_armour")) {
+            if (hasZombie(grid)) {
+                throw new InvalidActionException("You cannot craft midnight armour when zombie is in game.");
+            }
             Recipe recipe = getAvailableRecipe(buildable);
             if (recipe == null) {
                 throw new InvalidActionException("You do not have sufficient items to craft midnight armour.");
@@ -460,6 +472,19 @@ public class Player extends Entity implements Damage, Health, Moving{
                 this.inventory.removeNonSpecificItem(ingredient.getKey());
             }
         }
+    }
+
+    private boolean hasZombie(Grid grid) {
+        for (int x = 0; x < grid.getWidth(); x++) {
+            for (int y = 0; y < grid.getHeight(); y++) {
+                for (Entity e : grid.getEntities(x, y)) {
+                    if (e instanceof Zombie) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public List<String> getBuildables() {
@@ -531,8 +556,9 @@ public class Player extends Entity implements Damage, Health, Moving{
             Interaction.interactMerc((Mercenary)entity, grid, this);
         } else if (entity instanceof ZombieToastSpawner) {
             Interaction.interactSpawner((ZombieToastSpawner)entity, grid, this);
+        } else {
+            throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
-        throw new IllegalArgumentException("entityId is not a valid entity ID");
     }
 
     @Override
@@ -547,5 +573,15 @@ public class Player extends Entity implements Damage, Health, Moving{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+
+        JSONObject player = super.getJSON();
+
+        player.put("inventory", inventory.getJSON().get("items"));
+
+        return player;
     }
 };
