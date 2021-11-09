@@ -140,6 +140,7 @@ public class Spider extends Enemy {
     public void move(Grid grid, Direction d) {
         // tries to move to next position
         Position newPosition = this.getPosition().translateBy(isReverse ? Direction.getOppositeDirection(d) : d);
+        Entity doBattle = null;
         
         int x = newPosition.getX();
         int y = newPosition.getY();
@@ -149,7 +150,7 @@ public class Spider extends Enemy {
             List<Entity> positionEntities = grid.getEntities(newPosition.getX(), newPosition.getY());
             for (Entity positionEntity : positionEntities) {
                 if (positionEntity instanceof Player) { // do a battle with player
-                    Battle.battle((Player)positionEntity, (Enemy)this, grid);
+                    doBattle = positionEntity;
                 }
                 else if (movingConstraints(positionEntity)) { // if can't move there, reverse direction
                     if (directionCount == 0) { // boulder in first position, do nothing till removed
@@ -169,6 +170,10 @@ public class Spider extends Enemy {
         grid.dettach(this);
         setPosition(newPosition);
         grid.attach(this);
+
+        if (doBattle != null) {
+            Battle.battle((Player)doBattle, (Enemy)this, grid);
+        }
 
         nextDirection();
     }

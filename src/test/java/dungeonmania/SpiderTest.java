@@ -43,7 +43,7 @@ public class SpiderTest {
         }
 
         // only 1 spider left
-        assertEquals(spiderCount, 1);
+        assertEquals(1, spiderCount);
 
         // wall impassable
         //assertTrue(firstTick.getEntities().get(playerId).getType().equals("player") && firstTick.getEntities().get(playerId).getPosition().getX() == 0);
@@ -68,13 +68,14 @@ public class SpiderTest {
         assertTrue(secondTick.getEntities().get(spiderId).getType().equals("spider") && secondTick.getEntities().get(spiderId).getPosition().getX() == 3 && secondTick.getEntities().get(spiderId).getPosition().getY() == 0);
 
         controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.UP);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.UP);
-        DungeonResponse sixthTick = controller.tick(null, Direction.RIGHT);
+        DungeonResponse seventhTick = controller.tick(null, Direction.RIGHT);
 
         // get playerId and spider
-        for( int i = 0; i < sixthTick.getEntities().size(); i++) {
-            EntityResponse entResponse = sixthTick.getEntities().get(i);
+        for( int i = 0; i < seventhTick.getEntities().size(); i++) {
+            EntityResponse entResponse = seventhTick.getEntities().get(i);
             if (entResponse.getType().equals("player")) {
                 playerId = i;
             } else if (entResponse.getType().equals("spider")) {
@@ -83,10 +84,9 @@ public class SpiderTest {
         }
 
         // wall impassable
-        assertTrue(sixthTick.getEntities().get(playerId).getType().equals("player") && sixthTick.getEntities().get(playerId).getPosition().getX() == 3 && sixthTick.getEntities().get(playerId).getPosition().getY() == 0);
+        assertTrue(seventhTick.getEntities().get(playerId).getType().equals("player") && seventhTick.getEntities().get(playerId).getPosition().getX() == 3 && seventhTick.getEntities().get(playerId).getPosition().getY() == 0);
 
-        controller.tick(null, Direction.DOWN);
-        DungeonResponse eighthTick = controller.tick(null, Direction.LEFT);
+        DungeonResponse eighthTick = controller.tick(null, Direction.DOWN);
 
         // get playerId and spider
         for( int i = 0; i < eighthTick.getEntities().size(); i++) {
@@ -101,6 +101,7 @@ public class SpiderTest {
         // spider reversed direction again
         assertTrue(eighthTick.getEntities().get(spiderId).getType().equals("spider") && eighthTick.getEntities().get(spiderId).getPosition().getX() == 5 && eighthTick.getEntities().get(spiderId).getPosition().getY() == 2);
 
+        controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.LEFT);
 
         // finish game
