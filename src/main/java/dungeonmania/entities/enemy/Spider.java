@@ -168,7 +168,7 @@ public class Spider extends Enemy {
         }
         // move to new positiond
         grid.dettach(this);
-        setPosition(newPosition);
+        setPosition(new Position(newPosition.getX(), newPosition.getY(), Layer.SPIDER));
         grid.attach(this);
 
         if (doBattle != null) {
