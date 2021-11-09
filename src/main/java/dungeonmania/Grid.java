@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.ObserverEntity;
@@ -21,7 +24,7 @@ import dungeonmania.util.Position;
  * 
  * @invariant 
  */
-public class Grid implements GridSubject {
+public class Grid implements GridSubject, GameToJSON {
 
     private final int HEIGHT;
     private final int WIDTH;
@@ -196,6 +199,25 @@ public class Grid implements GridSubject {
 
     public void movePlayer(Direction d) {
         player.move(this, d);
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject grid = new JSONObject();
+
+        JSONArray entities = new JSONArray();
+
+        for (int x = 0; x < getWidth(); x++) {
+            for (int y = 0; y < getHeight(); y++) {
+                for (int z = 0; z < getLayerSize(); z++) {
+                    if (map[x][y][z] != null) entities.put(map[x][y][z].getJSON());
+                }
+            }
+        }
+
+        grid.put("entities", entities);
+
+        return grid;
     }
 
 }

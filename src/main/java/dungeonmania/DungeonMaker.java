@@ -11,6 +11,8 @@ public interface DungeonMaker {
     
     public Dungeon createNewDungeon(String dungeonName, String gameMode) throws IllegalArgumentException;
 
+    public Dungeon loadDungeon(String dungeonName);
+
     public Mode createGameMode(String gameMode) throws IllegalArgumentException;
     
     public Grid createGrid(JsonArray gridData, int height, int width);

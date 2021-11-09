@@ -2,6 +2,8 @@ package dungeonmania.entities.statics;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 /*
@@ -117,4 +119,13 @@ public class Door extends StaticEntity {
 
         return false;
     }*/
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject door = super.getJSON();
+
+        door.put("key", keyNumber);
+
+        return door;
+    }
 }

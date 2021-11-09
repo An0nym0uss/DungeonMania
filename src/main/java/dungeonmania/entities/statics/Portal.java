@@ -1,5 +1,7 @@
 package dungeonmania.entities.statics;
 
+import org.json.JSONObject;
+
 /*import java.util.List;
 
 import dungeonmania.Grid;
@@ -94,4 +96,15 @@ public class Portal extends StaticEntity {
 
         return false;
     }*/
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject portal = super.getJSON();
+
+        // Reseting type since define as portal_colour
+        portal.put("type", "portal");
+        portal.put("colour", colour);
+
+        return portal;
+    }
 }
