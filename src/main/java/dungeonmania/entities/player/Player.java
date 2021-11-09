@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import dungeonmania.Grid;
 import dungeonmania.entities.Battle;
 import dungeonmania.entities.Interaction;
@@ -17,14 +19,10 @@ import dungeonmania.util.Position;
 import dungeonmania.entities.statics.*;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.modes.Mode;
-import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.response.models.EntityResponse;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.Bow;
-import dungeonmania.entities.collectable.buildable.BuildableEntity;
 import dungeonmania.entities.collectable.buildable.Shield;
-import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
 
 public class Player extends Entity implements Damage, Health, Moving{
     private int damage;
@@ -405,7 +403,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                         this.inventory.removeNonSpecificItem(ingredient.getKey());
                     }
                 }
-                Bow bow = new Bow(buildable, new Position(0, 0), false);
+                Bow bow = new Bow(new Position(0, 0));
                 this.bow = bow;
                 this.inventory.addItem(bow);
             }
@@ -420,7 +418,7 @@ public class Player extends Entity implements Damage, Health, Moving{
                         this.inventory.removeNonSpecificItem(ingredient.getKey());
                     }
                 }
-                Shield shield = new Shield(buildable, new Position(0, 0), false);
+                Shield shield = new Shield(new Position(0, 0));
                 this.shield = shield;
                 this.inventory.addItem(shield);
             }
@@ -513,5 +511,15 @@ public class Player extends Entity implements Damage, Health, Moving{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+
+        JSONObject player = super.getJSON();
+
+        player.put("inventory", inventory.getJSON().get("items"));
+
+        return player;
     }
 };

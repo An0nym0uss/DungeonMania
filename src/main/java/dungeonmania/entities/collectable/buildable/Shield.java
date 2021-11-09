@@ -1,6 +1,8 @@
 package dungeonmania.entities.collectable.buildable;
 
 
+import org.json.JSONObject;
+
 import dungeonmania.entities.collectable.Durable;
 import dungeonmania.entities.player.ReadRecipe;
 import dungeonmania.util.Position;
@@ -11,17 +13,16 @@ public class Shield extends BuildableEntity implements Durable{
 
     private final String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/shieldRecipe.json";
 
-    public Shield(String type, Position position, boolean isInteractable) {
-        super(type, position, isInteractable);
-        this.durability = 10;
-        this.defense = 10;
+    public Shield(Position position) {
+        this(position, 10, 10);
+    }
+
+    public Shield( Position position, int durability, int defense) {
+        super("shield", position, false);
 
         ReadRecipe read = new ReadRecipe();
         this.recipes = read.readRecipes(recipeFile);
-    }
 
-    public Shield(String type, Position position, boolean isInteractable, int durability, int defense) {
-        this(type, position, isInteractable);
         this.durability = durability;
         this.defense = defense;
     }
@@ -47,5 +48,14 @@ public class Shield extends BuildableEntity implements Durable{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject shield = super.getJSON();
+
+        shield.put("durability", durability);
+
+        return shield;
     }
 }

@@ -1,6 +1,8 @@
 package dungeonmania.entities.collectable.buildable;
 
 
+import org.json.JSONObject;
+
 import dungeonmania.entities.collectable.Durable;
 import dungeonmania.entities.player.ReadRecipe;
 import dungeonmania.util.Position;
@@ -10,16 +12,14 @@ public class Bow extends BuildableEntity implements Durable{
 
     private String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/bowRecipe.json";
 
-    public Bow(String type, Position position, boolean isInteractable) {
-        super(type, position, isInteractable);
-        this.durability = 10;
-
-        ReadRecipe read = new ReadRecipe();
-        this.recipes = read.readRecipes(recipeFile);
+    public Bow(Position position) {
+        this(position, 10);
     }
 
-    public Bow(String type, Position position, boolean isInteractable, int durability) {
-        this(type, position, isInteractable);
+    public Bow(Position position, int durability) {
+        super("bow", position, false);
+        ReadRecipe read = new ReadRecipe();
+        this.recipes = read.readRecipes(recipeFile);
         this.durability = durability;
     }
 
@@ -39,5 +39,14 @@ public class Bow extends BuildableEntity implements Durable{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject bow = super.getJSON();
+
+        bow.put("durability", durability);
+
+        return bow;
     }
 }

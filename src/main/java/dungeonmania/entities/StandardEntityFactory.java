@@ -1,7 +1,9 @@
 package dungeonmania.entities;
 
-import javax.sound.sampled.SourceDataLine;
+import java.util.Iterator;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import dungeonmania.entities.statics.*;
@@ -9,7 +11,11 @@ import dungeonmania.modes.Mode;
 import dungeonmania.util.Position;
 import dungeonmania.constants.Layer;
 import dungeonmania.entities.collectable.*;
+import dungeonmania.entities.collectable.buildable.Bow;
+import dungeonmania.entities.collectable.buildable.Shield;
+import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
 import dungeonmania.entities.enemy.*;
+import dungeonmania.entities.player.Inventory;
 import dungeonmania.entities.player.Player;
 
 /**
@@ -65,6 +71,7 @@ public class StandardEntityFactory implements EntityFactory {
                 }
             // Set to blue if no colour specified.
             } catch (NullPointerException e) {
+                e.printStackTrace();
                 return new Portal("portal_blue", new Position(x, y, Layer.STATIC), null);
             }
             
@@ -97,10 +104,47 @@ public class StandardEntityFactory implements EntityFactory {
             return new Wood(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("arrow")) {
             return new Arrow(new Position(x, y, Layer.COLLECTABLE));
+        // Sword
         } else if (entityType.equalsIgnoreCase("sword")) {
-            return new Sword(new Position(x, y, Layer.COLLECTABLE));
+
+            Sword sword = new Sword(new Position(x, y, Layer.COLLECTABLE));
+
+            try {
+                int durability = entityData.get("durability").getAsInt();
+
+                sword.setDurability(durability);
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
+            return sword;
+
+        // Armour
         } else if (entityType.equalsIgnoreCase("armour")) {
-            return new Armour(new Position(x, y, Layer.COLLECTABLE));
+            Armour armour = new Armour(new Position(x, y, Layer.COLLECTABLE));
+
+            
+            try {
+                int durability = entityData.get("durability").getAsInt();
+
+                armour.setDurability(durability);
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
+            return armour;
+
+        // Bow
+        } else if (entityType.equalsIgnoreCase("bow")) {
+            // Since buildable can assume always has a durability.
+            return new Bow(new Position(x, y, Layer.COLLECTABLE), entityData.get("durability").getAsInt());
+        } else if (entityType.equalsIgnoreCase("shield")) {
+            // Since buildable can assume always has a durability.
+            return new Shield(new Position(x, y, Layer.COLLECTABLE), entityData.get("durability").getAsInt(), 10);
+        } else if (entityType.equalsIgnoreCase("one_ring")) {
+            return new TheOneRing(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("key_silver")) {
             int keyNumber = entityData.get("key").getAsInt();
             return new Key("key_silver", new Position(x, y, Layer.COLLECTABLE), keyNumber);
@@ -119,7 +163,30 @@ public class StandardEntityFactory implements EntityFactory {
 
             if (mode == null) {throw new InternalError("tried to create a player without selecting a mode.");}
 
-            return new Player(new Position(x,y, Layer.PLAYER), mode);
+            Inventory inventory = new Inventory();
+
+            // Try get inventory from json file
+            try {
+                JsonArray JsonInvent = entityData.get("inventory").getAsJsonArray();
+
+                Iterator<JsonElement> itemIter = JsonInvent.iterator();
+
+                while(itemIter.hasNext()) {
+                    // Should only return item entity.
+                    CollectableEntity e = (CollectableEntity) createEntity(itemIter.next().getAsJsonObject());
+
+                    inventory.addItem(e);
+                }
+            } catch (NullPointerException e) {
+                // No inventory saved.
+            }
+
+            Player player = new Player(new Position(x,y, Layer.PLAYER), mode);
+
+            player.setInventory(inventory);
+
+            return player;
+
         }
         if (entityType != null) {
             System.out.println(entityType);

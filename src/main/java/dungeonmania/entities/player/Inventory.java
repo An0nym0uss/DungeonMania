@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import dungeonmania.GameToJSON;
 import dungeonmania.entities.collectable.CollectableEntity;
 
-public class Inventory {
+public class Inventory implements GameToJSON {
 
     private List<CollectableEntity> items;
     private List<Recipe> recipes;
@@ -81,5 +85,19 @@ public class Inventory {
 
     public List<Recipe> getRecipes() {
         return this.recipes;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject inventory = new JSONObject();
+        JSONArray items = new JSONArray();
+
+        for (CollectableEntity item : this.items) {
+            items.put(item.getJSON());
+        }
+
+        inventory.put("items", items);
+
+        return inventory;
     }
 }
