@@ -114,7 +114,7 @@ public class DungeonManiaController {
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
         
-        currentGame.getGrid().getPlayer().craftItem(buildable);
+        currentGame.build(buildable);
 
         return createDungeonResponse();
     }

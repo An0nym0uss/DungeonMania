@@ -4,19 +4,25 @@ import dungeonmania.util.Position;
 import dungeonmania.entities.player.Inventory;
 import dungeonmania.entities.collectable.CollectableEntity;
 
-public class TheOneRing extends RareCollectableEntities{
-    
-    public TheOneRing(Position position) {
-        super("one_ring", position, false);
-        setDropRate(1);
+public class Anduril extends RareCollectableEntities {
+
+    private int attack;
+
+    public Anduril() {
+        this(20);
+    }
+
+    public Anduril(int attack) {
+        super("anduril", new Position(0, 0), false, 10);
+        this.attack = attack;
     }
 
     @Override
-    public void spawnnOneRing(Inventory inventory) {
+    public void spawnnAnduril(Inventory inventory) {
         boolean hasRareCollectable = false;
-        // can only have one one ring
+        // can only have one andruil
         for (CollectableEntity entity : inventory.getItems()) {
-            if (entity instanceof TheOneRing) {
+            if (entity instanceof Anduril) {
                 hasRareCollectable = true;
             }
         }
@@ -25,5 +31,9 @@ public class TheOneRing extends RareCollectableEntities{
                 inventory.addItem(this);
             }
         }
+    }
+
+    public int getAttack() {
+        return this.attack;
     }
 }
