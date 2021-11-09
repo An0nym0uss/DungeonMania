@@ -80,9 +80,9 @@ public class BattleTest {
         grid.attach(shelob);
 
         // spawn a one ring
-        RareCollectableEntities ring = new TheOneRing(new Position(0, 0));
+        RareCollectableEntities ring = new TheOneRing();
         ring.setDropRate(100);
-        ring.spawnnRareCollectableEntities(player.getInventory());
+        ring.spawnnOneRing(player.getInventory());
         assertTrue(player.getInventory().getItems().size() > 0);
 
         // shelob dead, player at max health
