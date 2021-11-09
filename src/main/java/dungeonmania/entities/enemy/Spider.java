@@ -82,8 +82,8 @@ public class Spider extends Enemy {
 
         while (redo) {
             redo = false;
-            int newX = random.nextInt(grid.getWidth() - (1 + widthBorderPadding));
-            int newY = random.nextInt(grid.getHeight() - (1 + heightBorderPadding));
+            int newX = random.nextInt(grid.getWidth() - (widthBorderPadding != 0 ? 1 + widthBorderPadding : 0));
+            int newY = random.nextInt(grid.getHeight() - (heightBorderPadding != 0 ? 1 + heightBorderPadding : 0));
 
             randomPosition = new Position(widthBorderPadding + newX, heightBorderPadding + newY, Layer.SPIDER);
 
@@ -156,7 +156,7 @@ public class Spider extends Enemy {
                     if (directionCount == 0) { // boulder in first position, do nothing till removed
                         return;
                     }
-                    newPosition = reversePosition();
+                    newPosition = reversePosition(); //TODO: need to check for player and constraints again, maybe convert to a while loop with flag for reverse?
                 }
             }
         } 
@@ -164,7 +164,7 @@ public class Spider extends Enemy {
             if (directionCount == 0) { // spider at top of boundary, do nothing
                 return;
             }
-            newPosition = reversePosition();
+            newPosition = reversePosition(); //TODO: need to check for player and constraints again, maybe convert to a while loop with flag for reverse?
         }
         // move to new positiond
         grid.dettach(this);
