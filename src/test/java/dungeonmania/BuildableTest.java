@@ -130,6 +130,8 @@ public class BuildableTest {
 
         assertThrows(InvalidActionException.class,() -> controller.build("bow"));
         assertThrows(InvalidActionException.class,() -> controller.build("shield"));
+        assertThrows(InvalidActionException.class,() -> controller.build("sceptre"));
+        assertThrows(InvalidActionException.class,() -> controller.build("midnight_armour"));   
     }
 
     @Test
@@ -139,5 +141,126 @@ public class BuildableTest {
         controller.newGame("items", "peaceful");
 
         assertThrows(IllegalArgumentException.class, () -> controller.build("treasure"));
+    }
+
+    @Test
+    public void testBuildMidnightArmour() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("buildables", "peaceful");
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.RIGHT);
+        DungeonResponse response = controller.build("midnight_armour");
+        assertEquals(1, response.getInventory().size());
+        assertTrue(response.getInventory().get(0).getType().equals("midnight_armour"));
+    }
+
+    @Test
+    public void testBuildMidnightArmourWithZombie() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("buildables", "standard");
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.RIGHT);
+        for (int i = 0; i < 11; i++) {
+            controller.tick(null, Direction.RIGHT);
+            controller.tick(null, Direction.LEFT);
+        }
+        assertThrows(InvalidActionException.class, () -> {
+            controller.build("midnight_armour");
+        });
+
+    }
+
+    @Test
+    public void testBuildSceptre1() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("buildables", "peaceful");
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        DungeonResponse response = controller.build("sceptre");
+        assertEquals(1, response.getInventory().size());
+        assertTrue(response.getInventory().get(0).getType().equals("sceptre"));
+    }
+
+    @Test
+    public void testBuildSceptre2() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("buildables", "peaceful");
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        DungeonResponse response = controller.build("sceptre");
+        assertEquals(1, response.getInventory().size());
+        assertTrue(response.getInventory().get(0).getType().equals("sceptre"));
+    }
+
+    @Test
+    public void testBuildSceptre3() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("buildables", "peaceful");
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        DungeonResponse response = controller.build("sceptre");
+        assertEquals(1, response.getInventory().size());
+        assertTrue(response.getInventory().get(0).getType().equals("sceptre"));
+    }
+
+    @Test
+    public void testBuildSceptre4() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("buildables", "peaceful");
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        DungeonResponse response = controller.build("sceptre");
+        assertEquals(1, response.getInventory().size());
+        assertTrue(response.getInventory().get(0).getType().equals("sceptre"));
+    }
+
+    @Test
+    public void testBuildSceptre5() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("buildables", "peaceful");
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        DungeonResponse response = controller.build("sceptre");
+        assertEquals(1, response.getInventory().size());
+        assertTrue(response.getInventory().get(0).getType().equals("sceptre"));
+    }
+
+    @Test
+    public void testBuildSceptre6() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("buildables", "peaceful");
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        DungeonResponse response = controller.build("sceptre");
+        assertEquals(1, response.getInventory().size());
+        assertTrue(response.getInventory().get(0).getType().equals("sceptre"));
     }
 }
