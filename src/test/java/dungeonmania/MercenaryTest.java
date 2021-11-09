@@ -39,9 +39,31 @@ public class MercenaryTest {
      W . .
      */
     DungeonManiaController controller = new DungeonManiaController();
-
+    
     @Test
     public void testMercenaryFollowsPlayer() {
+        
+    Mercenary mercenary = new Mercenary(new Position(1, 1), 1, 1, 1);
+    Player player = new Player(new Position(0, 0), new Standard());
+
+        /**
+         * [P] [] []
+         * [] [M] []
+         * [] [] []
+         */
+    Entity[][][] map = new Entity[3][3][Layer.LAYER_SIZE];
+    map[player.getPosition().getX()][player.getPosition().getY()][player.getPosition().getLayer()] = player;
+    map[mercenary.getPosition().getX()][mercenary.getPosition().getY()][mercenary.getPosition().getLayer()] = mercenary;
+
+    Grid grid = new Grid(3, 3, map, player);
+    mercenary.update(grid);
+
+    assertEquals(1, mercenary.getPosition().getX());
+    assertEquals(0, mercenary.getPosition().getY());
+    }
+    
+    @Test
+    public void testMercenaryFollowsPlayerWithObstacles() {
         Mercenary mercenary = new Mercenary(new Position(0, 1), 1, 1, 1);
         Player player = new Player(new Position(2, 1), new Standard());
         Wall wall = new Wall(new Position(1, 1));
@@ -62,27 +84,4 @@ public class MercenaryTest {
         assertEquals(0, mercenary.getPosition().getX());
         assertEquals(0, mercenary.getPosition().getY());
     }
-    
-    @Test
-    public void testMercenaryFollowsPlayerWithObstacles() {
-        
-    Mercenary mercenary = new Mercenary(new Position(1, 1), 1, 1, 1);
-    Player player = new Player(new Position(0, 0), new Standard());
-
-        /**
-         * [Player] [] []
-         * [] [Mercenary] []
-         * [] [] []
-         */
-    Entity[][][] map = new Entity[3][3][Layer.LAYER_SIZE];
-    map[player.getPosition().getX()][player.getPosition().getY()][player.getPosition().getLayer()] = player;
-    map[mercenary.getPosition().getX()][mercenary.getPosition().getY()][mercenary.getPosition().getLayer()] = mercenary;
-
-    Grid grid = new Grid(3, 3, map, player);
-    mercenary.update(grid);
-
-    assertEquals(1, mercenary.getPosition().getX());
-    assertEquals(0, mercenary.getPosition().getY());
-    }
-    
 }
