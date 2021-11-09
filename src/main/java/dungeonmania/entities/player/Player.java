@@ -415,17 +415,13 @@ public class Player extends Entity implements Damage, Health, Moving{
                 throw new InvalidActionException("You do not have sufficient items to craft bow.");
             }
             if (!hasBow()) {
-<<<<<<< HEAD
                 for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
                     for (int i = 0; i < ingredient.getValue(); i++) {
                         this.inventory.removeNonSpecificItem(ingredient.getKey());
                     }
                 }
                 Bow bow = new Bow(new Position(0, 0));
-=======
                 useIngredient(buildable, recipe);
-                Bow bow = new Bow(buildable, new Position(0, 0), false);
->>>>>>> master
                 this.bow = bow;
                 this.inventory.addItem(bow);
             }
@@ -435,17 +431,13 @@ public class Player extends Entity implements Damage, Health, Moving{
                 throw new InvalidActionException("You do not have sufficient items to craft shield.");
             }
             if (!hasShield()) {
-<<<<<<< HEAD
                 for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
                     for (int i = 0; i < ingredient.getValue(); i++) {
                         this.inventory.removeNonSpecificItem(ingredient.getKey());
                     }
                 }
                 Shield shield = new Shield(new Position(0, 0));
-=======
                 useIngredient(buildable, recipe);
-                Shield shield = new Shield(buildable, new Position(0, 0), false);
->>>>>>> master
                 this.shield = shield;
                 this.inventory.addItem(shield);
             }

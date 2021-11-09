@@ -12,6 +12,8 @@ import dungeonmania.util.Position;
 import dungeonmania.constants.Layer;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.Bow;
+import dungeonmania.entities.collectable.buildable.MidnightArmour;
+import dungeonmania.entities.collectable.buildable.Sceptre;
 import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
 import dungeonmania.entities.enemy.*;
@@ -143,6 +145,10 @@ public class StandardEntityFactory implements EntityFactory {
         } else if (entityType.equalsIgnoreCase("shield")) {
             // Since buildable can assume always has a durability.
             return new Shield(new Position(x, y, Layer.COLLECTABLE), entityData.get("durability").getAsInt(), 10);
+        } else if (entityType.equalsIgnoreCase("midnight_armour")) {
+            return new MidnightArmour(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("sceptre")) {
+            return new Sceptre(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("one_ring")) {
             return new TheOneRing(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("key_silver")) {
