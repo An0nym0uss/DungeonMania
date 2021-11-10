@@ -1,23 +1,22 @@
 package dungeonmania.entities.enemy;
 
 import dungeonmania.Grid;
-import dungeonmania.entities.Entity;
-import dungeonmania.entities.statics.Boulder;
-import dungeonmania.entities.statics.Door;
-import dungeonmania.entities.statics.Wall;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-public class Hydra extends Enemy {
+/**
+ * 
+ * @auther Lachlan Kerr
+ */
+public class Hydra extends RandomMovingEnemy {
 
     public Hydra(Position position, int speed, int health, int damage) {
         super("hydra", position, false, speed, health, damage);
     }
 
     @Override
-    public void move(Grid grid, Direction d) {
-        // TODO Auto-generated method stub
-        
+    public void update(Grid grid) {
+        move(grid, Direction.NONE);
     }
 
     @Override
@@ -28,22 +27,5 @@ public class Hydra extends Enemy {
     @Override
     public boolean isDead() {
         return super.isdead();
-    }
-
-    @Override
-    public boolean movingConstraints(Entity e) {
-        if (e instanceof Wall) {
-            return true;
-        }
-        if (e instanceof Door && ((Door) e).getIsOpen() == false) {
-            return true;
-        }
-        if (e instanceof Boulder) {
-            return true;
-        }
-        if (e instanceof Enemy) {
-            return true;
-        }
-        return false;
     }
 }
