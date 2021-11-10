@@ -127,7 +127,7 @@ public class Spider extends Enemy {
 
     @Override
     public boolean isDead() {
-        return super.isdead();
+        return super.isDead();
     }
 
     @Override

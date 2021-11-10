@@ -73,7 +73,7 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage {
     }
 
     // TODO temporary code for testing battle
-    public boolean isdead() {
+    public boolean isDead() {
         if (this.health <= 0) {
             return true;
         }
@@ -83,5 +83,10 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage {
     // TODO temporary code for testing battle
     public int damageDealt() {
         return this.getDamage();
+    }
+
+    @Override
+    public void receiveDamage(int damage) {
+        setHealth(getHealth() - damage);
     }
 }

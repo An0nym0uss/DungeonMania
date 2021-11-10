@@ -23,7 +23,7 @@ import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.*;
 
-public class Player extends Entity implements Damage, Health, Moving{
+public class Player extends Entity implements Damage, Health, Moving {
     private int damage;
     private int maxHealth;
     private int currentHealth;
@@ -583,5 +583,10 @@ public class Player extends Entity implements Damage, Health, Moving{
         player.put("inventory", inventory.getJSON().get("items"));
 
         return player;
+    }
+
+    @Override
+    public void receiveDamage(int damage) {
+        setCurrentHealth(getCurrentHealth() - damage);
     }
 };

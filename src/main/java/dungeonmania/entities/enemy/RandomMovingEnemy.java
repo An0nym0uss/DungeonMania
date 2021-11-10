@@ -19,7 +19,7 @@ import dungeonmania.util.Position;
  */
 public abstract class RandomMovingEnemy extends Enemy {
     
-    private static Random random = new Random(0);
+    protected static Random random = new Random(0);
 
     public RandomMovingEnemy(String type, Position position, Boolean isInteractable, int speed, int health, int damage) {
         super(type, position, isInteractable, speed, health, damage);

@@ -27,7 +27,7 @@ public class Battle {
                 enemyDamageDealt = enemyDamageDealt / 2;
                 player.useArmour();
             }
-            player.setCurrentHealth(player.getCurrentHealth() - enemyDamageDealt);
+            player.receiveDamage(enemyDamageDealt);
 
             if (!player.isDead()){
                 int playerDamageDealt = player.damageDealt();
@@ -35,7 +35,7 @@ public class Battle {
                 // if (enemy.hasArmour) {
                 //     playerDamageDealt = playerDamageDealt / 2;
                 // }
-                enemy.setHealth(enemy.getHealth() - playerDamageDealt);
+                enemy.receiveDamage(playerDamageDealt);
 
                 if (enemy.isDead()) {
                     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,9 +49,9 @@ public class Battle {
             } else {
                 // player is dead
                 // if player has the One Ring, regenerate to full health
-                if (player.getInventory().checkItem("the_one_ring") > 0) {
+                if (player.getInventory().checkItem("one_ring") > 0) {
                     player.setCurrentHealth(player.getMaxHealth());
-                    player.getInventory().removeNonSpecificItem("the_one_ring");
+                    player.getInventory().removeNonSpecificItem("one_ring");
                     grid.dettach(enemy);
                 } else {
                     // player dies   
