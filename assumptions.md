@@ -44,3 +44,6 @@
 
 ## `Bomb`
 * Bomb is in the same layer as enemies, so it can be placed on exit, switch, portal, and open door.
+
+## `Spider`
+* The spawn rate for spiders is every 30 ticks, until they reach a maximum of 4 spiders on the grid.

@@ -91,10 +91,20 @@ public class Grid implements GridSubject, GameToJSON {
      */
     @Override
     public void notifyObserverEntities() {
+        //otherwise we run into issues if any Entity.update() modifies the map[][][]
+        Entity[][][] clonedMap = new Entity[getWidth()][getHeight()][getLayerSize()]; 
         for (int x = 0; x < getWidth(); x++) {
             for (int y = 0; y < getHeight(); y++) {
                 for (int z = 0; z < getLayerSize(); z++) {
-                    if (map[x][y][z] != null) map[x][y][z].update(this);
+                    clonedMap[x][y][z] = map[x][y][z];
+                }
+            }
+        }
+
+        for (int x = 0; x < getWidth(); x++) {
+            for (int y = 0; y < getHeight(); y++) {
+                for (int z = 0; z < getLayerSize(); z++) {
+                    if (clonedMap[x][y][z] != null) clonedMap[x][y][z].update(this);
                 }
             }
         }
