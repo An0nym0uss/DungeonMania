@@ -5,7 +5,6 @@ import dungeonmania.entities.Damage;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Health;
 import dungeonmania.entities.Moving;
-import dungeonmania.entities.Spawner;
 import dungeonmania.util.Position;
 
 import java.util.List;
