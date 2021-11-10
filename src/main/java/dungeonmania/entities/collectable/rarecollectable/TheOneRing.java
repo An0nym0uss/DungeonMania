@@ -7,7 +7,7 @@ import dungeonmania.entities.collectable.CollectableEntity;
 public class TheOneRing extends RareCollectableEntities{
     
     public TheOneRing(Position position) {
-        super("one_ring", position, false, 1);
+        super("one_ring", position, false, 5);
     }
 
     public TheOneRing() {
