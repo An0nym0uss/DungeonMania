@@ -12,6 +12,7 @@ public class Standard implements Mode {
     private int zombieSpawnRate;
     private int maxPlayerHealth;
     private boolean invincibilityEffect;
+    private boolean canHydra;
 
     public Standard()
     {
@@ -19,6 +20,7 @@ public class Standard implements Mode {
         zombieSpawnRate = 20;
         maxPlayerHealth = 100;
         invincibilityEffect = true;
+        canHydra = false;
     }
 
     @Override
@@ -39,6 +41,11 @@ public class Standard implements Mode {
     @Override
     public boolean canHaveInvincibilityEffect() {
         return invincibilityEffect;
+    }
+
+    @Override
+    public boolean canSpawnHydra() {
+        return canHydra;
     }
 
     @Override

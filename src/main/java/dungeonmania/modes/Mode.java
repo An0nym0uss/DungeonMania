@@ -31,4 +31,10 @@ public interface Mode extends GameToJSON {
      * @return False if hard, otherwise true.
      */
     public boolean canHaveInvincibilityEffect();
+
+    /**
+     * Can a hydra spawn after 50 ticks.
+     * @return True if hard, otherwise false.
+     */
+    public boolean canSpawnHydra();
 }
