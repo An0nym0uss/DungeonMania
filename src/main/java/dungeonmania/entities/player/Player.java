@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import dungeonmania.entities.enemy.boss.Assassin;
 import org.json.JSONObject;
 
 import dungeonmania.Grid;
@@ -401,6 +402,22 @@ public class Player extends Entity implements Damage, Health, Moving{
         ) {
             collectable.useItemWithEffect(this.statusEffect);
             this.inventory.removeItem(collectable);
+        } else if (collectable instanceof Treasure) {
+            // Bribe mercenary
+            List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
+            adjacentSquares.add(this.getPosition());
+            for (Position square : adjacentSquares) {
+                // Check if a mercenary is on that square
+                List<Entity> squareEntities = grid.getEntities(square.getX(), square.getY());
+                for (Entity squareEntity : squareEntities) {
+                    if (squareEntity instanceof Mercenary) {
+                        ((Mercenary)squareEntity).setBribed(true);
+                        this.inventory.removeItem(collectable);
+                        return;
+                    }
+                }
+            }
+
         } else if (collectable == null) {
             throw new InvalidActionException("Item is not in inventory.");
         } else {
