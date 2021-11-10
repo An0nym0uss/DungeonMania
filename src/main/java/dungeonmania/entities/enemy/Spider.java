@@ -82,8 +82,8 @@ public class Spider extends Enemy {
 
         while (redo) {
             redo = false;
-            int newX = random.nextInt(grid.getWidth() - (1 + widthBorderPadding));
-            int newY = random.nextInt(grid.getHeight() - (1 + heightBorderPadding));
+            int newX = random.nextInt(grid.getWidth() - (widthBorderPadding != 0 ? 1 + widthBorderPadding : 0));
+            int newY = random.nextInt(grid.getHeight() - (heightBorderPadding != 0 ? 1 + heightBorderPadding : 0));
 
             randomPosition = new Position(widthBorderPadding + newX, heightBorderPadding + newY, Layer.SPIDER);
 
@@ -134,37 +134,49 @@ public class Spider extends Enemy {
     @Override
     public void move(Grid grid, Direction d) {
         // tries to move to next position
-        Position newPosition = this.getPosition().translateBy(isReverse ? Direction.getOppositeDirection(d) : d);
+        Position newPosition = null; 
         Entity doBattle = null;
+        int reverseCount = 0; // how many times we have reversed
         
-        int x = newPosition.getX();
-        int y = newPosition.getY();
-        if (x >= 0 && x < grid.getWidth() &&
-            y >= 0 && y < grid.getHeight()
-        ) { // check grid boundary
-            List<Entity> positionEntities = grid.getEntities(newPosition.getX(), newPosition.getY());
-            for (Entity positionEntity : positionEntities) {
-                if (positionEntity instanceof Player) { // do a battle with player
-                    doBattle = positionEntity;
-                }
-                else if (movingConstraints(positionEntity)) { // if can't move there, reverse direction
-                    if (directionCount == 0) { // boulder in first position, do nothing till removed
-                        return;
+        while (newPosition == null && reverseCount < 2) {
+            d = movementArray.get(directionCount);
+            newPosition = this.getPosition().translateBy(isReverse ? Direction.getOppositeDirection(d) : d);
+
+            int x = newPosition.getX();
+            int y = newPosition.getY();
+            if (x >= 0 && x < grid.getWidth() &&
+                y >= 0 && y < grid.getHeight()
+            ) { // check grid boundary
+                List<Entity> positionEntities = grid.getEntities(newPosition.getX(), newPosition.getY());
+                for (Entity positionEntity : positionEntities) {
+                    if (positionEntity instanceof Player) { // do a battle with player
+                        doBattle = positionEntity;
                     }
-                    newPosition = reversePosition();
+                    else if (movingConstraints(positionEntity)) { // if can't move there, reverse direction
+                        if (directionCount == 0) { // boulder in first position, do nothing till removed
+                            return;
+                        }
+                        reversePosition();
+                        reverseCount++;
+                        newPosition = null;
+                    }
                 }
+            } 
+            else { // if can't move there, reverse direction
+                if (directionCount == 0) { // spider at top of boundary, do nothing
+                    return;
+                }
+                reversePosition();
+                reverseCount++;
+                newPosition = null;
             }
-        } 
-        else { // if can't move there, reverse direction
-            if (directionCount == 0) { // spider at top of boundary, do nothing
-                return;
-            }
-            newPosition = reversePosition();
         }
-        // move to new positiond
-        grid.dettach(this);
-        setPosition(new Position(newPosition.getX(), newPosition.getY(), Layer.SPIDER));
-        grid.attach(this);
+        
+        if (newPosition != null) {
+            grid.dettach(this);
+            setPosition(new Position(newPosition.getX(), newPosition.getY(), Layer.SPIDER));
+            grid.attach(this);
+        }
 
         if (doBattle != null) {
             Battle.battle((Player)doBattle, (Enemy)this, grid);
@@ -174,7 +186,7 @@ public class Spider extends Enemy {
     }
 
     /**
-     * Increments or decremenets the direction counter.
+     * Increments or decremenets the direction counter, depending on reverse status.
      */
     private void nextDirection() {
         if (!isReverse) {
@@ -198,13 +210,10 @@ public class Spider extends Enemy {
     /**
      * Reverses the spiders position.
      * Call if we hit a boulder or grid boundary.
-     * @return The new position to move to.
      */
-    private Position reversePosition() {
+    private void reversePosition() {
         isReverse = !isReverse;
         nextDirection();
-        Direction d = movementArray.get(directionCount);
-        return getPosition().translateBy(isReverse ? Direction.getOppositeDirection(d) : d);
     }
 
     @Override
