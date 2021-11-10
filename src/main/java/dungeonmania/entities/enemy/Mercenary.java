@@ -179,9 +179,4 @@ public class Mercenary extends Enemy {
         }
         return false;
     }
-
-    @Override
-    public void spawn(Entity entity, Grid grid) {
-        grid.attach(entity);
-    }
 }

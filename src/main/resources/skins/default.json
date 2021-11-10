@@ -27,6 +27,8 @@
         "wall": "images/tileset/walls/wooden/wood_bottom.png",
         "spider": "images/tileset/entities/spider_00.png",
         "mercenary": "images/tileset/entities/ranger.png",
+        "zombie_toast": "images/tileset/entities/zombie_00.png",
+        "zombie_toast_spawner" : "images/tileset/entities/zombie_spawner.png",
         "switch": "images/tileset/floor_switch.png",
         "sword": "images/tileset/items/sword_silver.png",
         "armour": "images/tileset/items/armour.png",

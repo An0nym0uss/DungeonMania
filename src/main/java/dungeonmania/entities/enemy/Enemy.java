@@ -5,13 +5,13 @@ import dungeonmania.entities.Damage;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Health;
 import dungeonmania.entities.Moving;
-import dungeonmania.entities.statics.Spawner;
+import dungeonmania.entities.Spawner;
 import dungeonmania.util.Position;
 
 import java.util.List;
 
 
-public abstract class Enemy extends Entity implements Moving, Health, Damage, Spawner {
+public abstract class Enemy extends Entity implements Moving, Health, Damage {
     private int speed;
     private int health;
     

@@ -190,7 +190,7 @@ public class BattleTest {
         assertTrue(m.movingConstraints(new Boulder(p)));
         assertTrue(m.movingConstraints(m));
         assertTrue(m.movingConstraints(new Player(new Position(1, 1, Layer.PLAYER), new Standard())));
-        m.spawn(new Wall(p), grid);
+        //m.spawn(new Wall(p), grid);
     }
     
 }
