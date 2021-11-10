@@ -5,33 +5,68 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ZombieTest {
     @Test
-
+    /**
+     * Tests zombies not moving where they shouldn't, and also that they can be killed by the player
+     */
     public void testZombieBasic() {
         DungeonManiaController controller = new DungeonManiaController();
-        int totalZombies = 0;
+        // Changing where the files are loaded from.
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
+
         // start game
-        DungeonResponse response = controller.newGame("zombie", "peaceful");
+        controller.newGame("zombie", "standard");
 
-        // attempt to walk into wall
-        DungeonResponse firstTick = controller.tick(null, Direction.RIGHT);
+        // see if zombies stay put
+        DungeonResponse firstTick = controller.tick(null, Direction.NONE);
 
-        // zombie can't move onto wall
-        
-        assertTrue(firstTick.getEntities().get(2).getType().equals("zombie_toast") && firstTick.getEntities().get(2).getPosition().getX() == 1 && firstTick.getEntities().get(2).getPosition().getY() == 0);
+        /*for( int i = 0; i < firstTick.getEntities().size(); i++) {
+            EntityResponse entResponse = firstTick.getEntities().get(i);
+            if (entResponse.getType().equals("zombie_toast")) {
+                assertEquals(1, entResponse.getPosition().getX());
+                assertTrue(entResponse.getPosition().getY() >= 1);
+                assertTrue(entResponse.getPosition().getY() <= 2);
+            }
+        }*/
 
-        // count any zombies in dungeon
-        for (EntityResponse entity : response.getEntities()) {
-            if (entity.getType() == "zombie_toast") {
-                totalZombies++;
+        // move boulder
+        DungeonResponse secondTick = controller.tick(null, Direction.RIGHT);
+
+        int zombieCount = 0;
+
+        for( int i = 0; i < secondTick.getEntities().size(); i++) {
+            EntityResponse entResponse = secondTick.getEntities().get(i);
+            if (entResponse.getType().equals("zombie_toast")) {
+                zombieCount++;
             }
         }
 
-        // no Zombies after 15 on standard
-        assertTrue(totalZombies == 0);
+        // zombie walked into player after boulder move
+        assertTrue(zombieCount == 2);
+
+        controller.tick(null, Direction.DOWN);
+
+        // move to exit
+        DungeonResponse fourthTick = controller.tick(null, Direction.DOWN);
+
+        zombieCount = 0;
+
+        for( int i = 0; i < fourthTick.getEntities().size(); i++) {
+            EntityResponse entResponse = fourthTick.getEntities().get(i);
+            if (entResponse.getType().equals("zombie_toast")) {
+                zombieCount++;
+            }
+        }
+
+        // player killed another zombie on the walk to exit
+        assertTrue(zombieCount == 1);
+
+        // finished game
+        assertEquals("", fourthTick.getGoals());
     }
 
 //    @Test

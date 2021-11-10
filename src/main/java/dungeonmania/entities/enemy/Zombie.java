@@ -1,6 +1,8 @@
 package dungeonmania.entities.enemy;
 
 import dungeonmania.Grid;
+import dungeonmania.constants.Layer;
+import dungeonmania.entities.Battle;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Boulder;
@@ -9,10 +11,12 @@ import dungeonmania.entities.statics.Wall;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Zombie extends Enemy {
+
+    private static Random random = new Random(0);
 
     public Zombie(Position position, int speed, int health, int damage) {
         super("zombie_toast", position, false, speed, health, damage);
@@ -20,49 +24,65 @@ public class Zombie extends Enemy {
 
     @Override
     public void update(Grid grid) {
-        // TODO: Incorporate speed?
-        // TODO: Random Movement -> Shuffling 'adjacentSquares'
-        // TODO: Filter out the "diagonal" positions
-        // Update the movement (with every tick)
-        // if space is not constriant, then move entity to that space
-        // Check moving constraints (eg, can it go through walls/portals, etc)
-        //
-        // Gets the adjacent squares of the zombie
-        // NW N NE E SE S SW W
-        List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
-        // free = not collectable?
-
-        // Randomly shuffles not sure if pseudo random or purely random.
-        Collections.shuffle(adjacentSquares);
-
-        // for(int i = 0; i < speed; i++) // requirement cannot backtrack
-        for (Position position : adjacentSquares) {
-            if (this.canMoveToPosition(grid, position)) {
-                this.setPosition(position);
-            }
-        }
+        move(grid, Direction.NONE);
     }
 
     @Override
     public int damageDealt() {
-        return 0;
+        return super.getDamage();
     }
 
     @Override
     public boolean isDead() {
-        return false;
+        return super.isdead();
     }
 
     @Override
     public void move(Grid grid, Direction d) {
-        
+        List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
+        Position newPosition = null;
+        Entity doBattle = null;
+
+        while (newPosition == null && adjacentSquares.size() > 0) { // pick random directions until none are left
+            int nextMove = random.nextInt(adjacentSquares.size());
+            newPosition = adjacentSquares.remove(nextMove);
+
+            int x = newPosition.getX();
+            int y = newPosition.getY();
+            if (x >= 0 && x < grid.getWidth() &&
+                y >= 0 && y < grid.getHeight()
+            ) { // check grid boundary
+                List<Entity> positionEntities = grid.getEntities(newPosition.getX(), newPosition.getY());
+                for (Entity positionEntity : positionEntities) {
+                    if (positionEntity instanceof Player) { // do a battle with player
+                        doBattle = positionEntity;
+                    }
+                    else if (movingConstraints(positionEntity)) { // can't move here
+                        newPosition = null;
+                    }
+                }
+            }
+            else {
+                newPosition = null;
+            }
+        }
+
+        if (newPosition != null) {
+            grid.dettach(this);
+            setPosition(new Position(newPosition.getX(), newPosition.getY(), Layer.ENEMY));
+            grid.attach(this);
+        }
+
+        if (doBattle != null) {
+            Battle.battle((Player)doBattle, (Enemy)this, grid);
+        }
     }
+    
     /**
      * Determines if the specified entity constrains the movement of this class
      */
     @Override
     public boolean movingConstraints(Entity e) {
-        
         if (e instanceof Wall) {
             return true;
         }
@@ -75,14 +95,6 @@ public class Zombie extends Enemy {
         if (e instanceof Enemy) {
             return true;
         }
-        if (e instanceof Player) {
-            return true;
-        }
         return false;
-    }
-
-    @Override
-    public void spawn(Entity entity, Grid grid) {
-        grid.attach(entity);
     }
 }
