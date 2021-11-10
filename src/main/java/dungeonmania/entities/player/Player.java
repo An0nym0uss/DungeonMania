@@ -22,6 +22,7 @@ import dungeonmania.modes.Mode;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.*;
+import dungeonmania.entities.collectable.rarecollectable.*;
 
 public class Player extends Entity implements Damage, Health, Moving {
     private int damage;
@@ -33,8 +34,10 @@ public class Player extends Entity implements Damage, Health, Moving {
     private Armour armour;
     private Bow bow;
     private Shield shield;
+    private Anduril anduril;
     private Direction movement;
     private boolean isTeleported;
+    private Mercenary mercenary;
 
     public Player(Position position, Mode mode) {
         super("player", position, false);
@@ -43,7 +46,7 @@ public class Player extends Entity implements Damage, Health, Moving {
         this.inventory = new Inventory();
         this.statusEffect = new StatusEffect();
         this.isTeleported = false;
-        this.damage = 10;
+        this.damage = 1;
     }
 
     public void setInventory(Inventory inventory) {
@@ -132,6 +135,22 @@ public class Player extends Entity implements Damage, Health, Moving {
         return false;
     }
 
+    public boolean hasAnduril() {
+        for (CollectableEntity collectable : this.inventory.getItems()) {
+            if (collectable instanceof Anduril) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasMercAlly() {
+        if (mercenary != null) {
+            return true;
+        }
+        return false;
+    }
+
     public int getShieldDefense() {
         if (this.hasShield()) {
             return this.shield.getDefense();
@@ -186,6 +205,13 @@ public class Player extends Entity implements Damage, Health, Moving {
                 this.shield = null;
             }
         }
+    }
+
+    public int useAnduril() {
+        if (hasAnduril()) {
+            return anduril.getAttack();
+        }
+        return 0;
     }
 
     @Override
@@ -369,25 +395,26 @@ public class Player extends Entity implements Damage, Health, Moving {
 
     @Override
     public int damageDealt() {
-        int totalDamageDealt = attack();
-        // bow allows player to attack twice
-        if (hasBow()) {
-            useBow();
-            return totalDamageDealt * 2;
-        }
-        return totalDamageDealt;
+        // int totalDamageDealt = attack();
+        // // bow allows player to attack twice
+        // if (hasBow()) {
+        //     useBow();
+        //     return totalDamageDealt * 2;
+        // }
+        // return totalDamageDealt;
+        return 0;
     }
 
     /**
      * damage dealt by player when he attacks
      */
-    private int attack() {
-        if (hasSword()) {
-            return (this.currentHealth * (this.damage + useSword())) / 5;
-        } else {
-            return (this.currentHealth * this.damage) / 5;
-        }
-    }
+    // private int attack() {
+    //     if (hasSword()) {
+    //         return (this.currentHealth * (this.damage + useSword())) / 5;
+    //     } else {
+    //         return (this.currentHealth * this.damage) / 5;
+    //     }
+    // }
 
     public void useItem(String itemId, Grid grid) {
         CollectableEntity collectable = this.inventory.getItemfromId(itemId);
@@ -485,6 +512,18 @@ public class Player extends Entity implements Damage, Health, Moving {
             }
         }
         return false;
+    }
+
+    public void setMerc(Mercenary mercenary) {
+        this.mercenary = mercenary;
+    }
+
+    public Mercenary getMerc() {
+        return this.mercenary;
+    }
+
+    public void setAnduril(Anduril anduril) {
+        this.anduril = anduril;
     }
 
     public List<String> getBuildables() {
