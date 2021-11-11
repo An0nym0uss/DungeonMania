@@ -125,7 +125,7 @@ public class Spider extends Enemy implements Spawner {
         }
 
         if (doBattle != null) {
-            Battle.battle((Player)doBattle, (Enemy)this, grid);
+            this.commenceBattle(grid);
         }
 
         nextDirection();
