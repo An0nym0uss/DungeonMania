@@ -49,9 +49,9 @@ public class Battle {
             } else {
                 // player is dead
                 // if player has the One Ring, regenerate to full health
-                if (player.getInventory().checkItem("the_one_ring") > 0) {
+                if (player.getInventory().checkItem("one_ring") > 0) {
                     player.setCurrentHealth(player.getMaxHealth());
-                    player.getInventory().removeNonSpecificItem("the_one_ring");
+                    player.getInventory().removeNonSpecificItem("one_ring");
                     grid.dettach(enemy);
                 } else {
                     // player dies   

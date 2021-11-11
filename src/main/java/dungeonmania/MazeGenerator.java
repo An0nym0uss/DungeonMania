@@ -14,8 +14,10 @@ import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.entities.enemy.Enemy;
 import dungeonmania.entities.enemy.Spider;
 import dungeonmania.entities.player.Player;
+import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
+import dungeonmania.entities.statics.FloorSwitch;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
 import dungeonmania.entities.statics.ZombieToastSpawner;
@@ -240,6 +242,14 @@ public class MazeGenerator {
             grid.attach(new ZombieToastSpawner(new Position(xSpawner, ySpawner, Layer.STATIC), mode));
         }
 
+        // Spawn boulders on switches 2-4
+        for (int i = 0, max = rand.nextInt(3) + 2; i < max; i++) {
+            int xPortal1 = rand.nextInt(24)*2 + 2;
+            int yPortal1 = rand.nextInt(24)*2 + 2;
+            grid.attach(new FloorSwitch(new Position(xPortal1, yPortal1, Layer.STATIC)));
+            grid.attach(new Boulder(new Position(xPortal1, yPortal1, Layer.ENEMY)));
+        }
+
         // Add 2-4 portals
 
         String[] colours = {"blue", "red", "orange", "gray"};
@@ -280,8 +290,8 @@ public class MazeGenerator {
 
                         grid.attach(enemy);
                     }
-                    // 3% chance to spawn item
-                    else if (prob < 0.045) {
+                    // 3.5% chance to spawn item
+                    else if (prob < 0.05) {
                         Entity item = itemFactory.createEntity(null);
 
                         item.setPosition(new Position(j, i, Layer.COLLECTABLE));

@@ -12,48 +12,52 @@ public class RandomCollectableFactory implements EntityFactory {
 
     @Override
     /**
-     * 13% Sword
-     * 21% Treasure
-     * 18% Arrow
-     * 19% Wood
+     * 10% Sword
+     * 20% Treasure
+     * 19% Arrow
+     * 18% Wood
      * 1% Sun Stone
      * 8% Silver Key
-     * 10% HealthPotion
-     * 6% Invis
-     * 4% Invinc
+     * 8% HealthPotion
+     * 3% Invis
+     * 1% Invinc
+     * 12% Bomb
      * 
      */
     public Entity createEntity(JsonObject entityData) {
         
         double prob = rand.nextDouble();
 
-        if (prob < 0.13) {
+        if (prob < 0.10) {
 
             return new Sword(null);
-        } else if (prob < 0.34) {
+        } else if (prob < 0.30) {
 
             return new Treasure(null);
-        } else if (prob < 0.52) {
+        } else if (prob < 0.49) {
             
             return new Arrow(null);
-        } else if (prob < 0.71) {
+        } else if (prob < 0.67) {
 
             return new Wood(null);
-        } else if (prob < 0.72) {
+        } else if (prob < 0.68) {
 
             return new SunStone(null);
-        } else if (prob < 0.80) {
+        } else if (prob < 0.76) {
 
             return new Key("key_silver", null, 1);
-        } else if (prob < 0.90) {
+        } else if (prob < 0.84) {
 
             return new HealthPotion(null);
-        } else if (prob < 0.96) {
+        } else if (prob < 0.87) {
 
             return new InvisibilityPotion(null);
-        } else {
+        } else if (prob < 0.88) {
 
             return new InvincibilityPotion(null);
+        } else {
+
+            return new Bomb(null);
         }
     }
     
