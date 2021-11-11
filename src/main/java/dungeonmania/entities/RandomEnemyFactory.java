@@ -22,13 +22,13 @@ public class RandomEnemyFactory implements EntityFactory {
         
         double prob = rand.nextDouble();
 
-        if (true) {
+        if (prob < 0.60) {
 
             return new Spider(null, 1, 1, 1);
-        } //else if (prob < 0.95) {
+        } else if (prob < 0.95) {
 
-           // return new Zombie(null, 1, 1, 1);
-        else {
+            return new Zombie(null, 1, 1, 1);
+        } else {
 
             return new Mercenary(null, 1, 1, 1);
         }

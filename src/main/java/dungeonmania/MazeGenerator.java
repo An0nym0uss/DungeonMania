@@ -4,9 +4,12 @@ import java.util.Random;
 
 import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.RandomCollectableFactory;
 import dungeonmania.entities.RandomEnemyFactory;
 import dungeonmania.entities.collectable.Key;
 import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.collectable.Treasure;
+import dungeonmania.entities.collectable.Wood;
 import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.entities.enemy.Enemy;
 import dungeonmania.entities.enemy.Spider;
@@ -15,6 +18,7 @@ import dungeonmania.entities.statics.Door;
 import dungeonmania.entities.statics.Exit;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.Wall;
+import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.modes.Mode;
 import dungeonmania.util.Position;
 
@@ -206,17 +210,7 @@ public class MazeGenerator {
         Grid grid = new Grid(51, 51, new Entity[51][51][Layer.LAYER_SIZE], null);
 
         RandomEnemyFactory enemyFactory = new RandomEnemyFactory();
-
-        // Adding random sword 1-3 and shields;
-        for (int i = 0, max = rand.nextInt(3) + 1; i < max; i++) {
-            int xSword = rand.nextInt(25)*2 + 1;
-            int ySword = rand.nextInt(25)*2 + 1;
-            int xShield = rand.nextInt(25)*2 + 1;
-            int yShield = rand.nextInt(25)*2 + 1;
-
-            grid.attach(new Sword(new Position(xSword, ySword, Layer.COLLECTABLE)));
-            grid.attach(new Shield(new Position(xShield, yShield, Layer.COLLECTABLE)));
-        }
+        RandomCollectableFactory itemFactory = new RandomCollectableFactory();
 
         // Attach wall every where
         for (int i = 0; i < HEIGHT*2 + 1; i++) {
@@ -228,17 +222,22 @@ public class MazeGenerator {
             }
         }
 
+        // Spawn doors
         for (int i = 0, max = rand.nextInt(4) + 3; i < max; i++) {
-            int xPortal1 = rand.nextInt(24)*2 + 2;
-            int yPortal1 = rand.nextInt(24)*2 + 2;
-            int x1 = rand.nextInt(25)*2 + 1;
-            int y1 = rand.nextInt(25)*2 + 1;
-            int x2 = rand.nextInt(25)*2 + 1;
-            int y2 = rand.nextInt(25)*2 + 1;
+            //int xPortal1 = rand.nextInt(24)*2 + 2;
+            //int yPortal1 = rand.nextInt(24)*2 + 2;
+            int xPortal1 = rand.nextInt(50) + 1;
+            int yPortal1 = rand.nextInt(50) + 1;
 
             grid.attach(new Door("door_locked_silver", new Position(xPortal1, yPortal1, Layer.STATIC), 1, false));
-            grid.attach(new Key("key_silver", new Position(x1, y1, Layer.COLLECTABLE), 1));
-            grid.attach(new Key("key_silver", new Position(x2, y2, Layer.COLLECTABLE), 1));
+        }
+
+        // only on hard
+        if (mode.getZombieSpawnRate() < 20) {
+            int xSpawner = rand.nextInt(24)*2 + 2;
+            int ySpawner = rand.nextInt(24)*2 + 2;
+
+            grid.attach(new ZombieToastSpawner(new Position(xSpawner, ySpawner, Layer.STATIC), mode));
         }
 
         // Add 2-4 portals
@@ -267,10 +266,10 @@ public class MazeGenerator {
 
                     int col = (j-1)/2;
 
-                    double enemy_prob = rand.nextDouble();
+                    double prob = rand.nextDouble();
 
-                    // 2% chance to spawn in enemy
-                    if (enemy_prob < 0.02) {
+                    // 1.5% chance to spawn in enemy
+                    if (prob < 0.015) {
                         Enemy enemy = (Enemy) enemyFactory.createEntity(null);
 
                         if (enemy instanceof Spider) {
@@ -281,12 +280,20 @@ public class MazeGenerator {
 
                         grid.attach(enemy);
                     }
+                    // 3% chance to spawn item
+                    else if (prob < 0.045) {
+                        Entity item = itemFactory.createEntity(null);
 
-                    // If start location add player
+                        item.setPosition(new Position(j, i, Layer.COLLECTABLE));
+                        grid.attach(item);
+                    // 0.5% for wood
+                    }
+
+                    // If start location add player and starts with a key
                     if (startLocation/ WIDTH == row && startLocation % WIDTH == col) {
 
                         grid.attach(new Player(new Position(j, i, Layer.PLAYER), mode));
-
+                        grid.attach(new Key("key_silver", new Position(j, i, Layer.COLLECTABLE), 1));
                     }
 
                     // If end location add exit
