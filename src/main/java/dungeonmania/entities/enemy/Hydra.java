@@ -5,11 +5,10 @@ import java.util.List;
 
 import dungeonmania.Grid;
 import dungeonmania.constants.Layer;
+import dungeonmania.entities.Battle;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Spawner;
-import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.player.Player;
-import dungeonmania.entities.statics.Boulder;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -55,7 +54,6 @@ public class Hydra extends RandomMovingEnemy implements Spawner {
         setHealth(getHealth() - damage);
     }
 
-<<<<<<< HEAD
     @Override
     public void spawn(Entity entity, Grid grid) {
         grid.attach(entity);
@@ -114,13 +112,13 @@ public class Hydra extends RandomMovingEnemy implements Spawner {
         return randomPosition;
     }
 
-    public boolean shouldCommenceBattle(Grid grid) {
+    /*public boolean shouldCommenceBattle(Grid grid) {
         // Checks if enemy is on the same square as the player. If so, commence battle (see Battle class)
         return grid.getPlayer().getPosition() == this.getPosition();
     }
 
     public void commenceBattle(Grid grid) {
         Battle.battle(grid.getPlayer(), this, grid);
-    }
+    }*/
 }
 
