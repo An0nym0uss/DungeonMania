@@ -148,9 +148,12 @@ public class Spider extends Enemy {
             ) { // check grid boundary
                 List<Entity> positionEntities = grid.getEntities(newPosition.getX(), newPosition.getY());
                 for (Entity positionEntity : positionEntities) {
-                    if (positionEntity instanceof Player) { // do a battle with player
-                        doBattle = positionEntity;
+                    if (this.shouldCommenceBattle(grid)) {
+                        this.commenceBattle(grid);
                     }
+//                    if (positionEntity instanceof Player) { // do a battle with player
+//                        doBattle = positionEntity;
+//                    }
                     else if (movingConstraints(positionEntity)) { // if can't move there, reverse direction
                         if (directionCount == 0) { // boulder in first position, do nothing till removed
                             return;
@@ -177,9 +180,9 @@ public class Spider extends Enemy {
             grid.attach(this);
         }
 
-        if (doBattle != null) {
-            Battle.battle((Player)doBattle, (Enemy)this, grid);
-        }
+//        if (doBattle != null) {
+//            Battle.battle((Player)doBattle, (Enemy)this, grid);
+//        }
 
         nextDirection();
     }

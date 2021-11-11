@@ -205,6 +205,11 @@ public class BattleTest {
         assertTrue(m.movingConstraints(new Player(new Position(1, 1, Layer.PLAYER), new Standard())));
         //m.spawn(new Wall(p), grid);
     }
+
+//    @Test
+//    public void testDamageNotInvincible() {
+//
+//    }
     
 }
 
