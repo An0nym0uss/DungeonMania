@@ -1,4 +1,4 @@
-package dungeonmania.entities.enemy.boss;
+package dungeonmania.entities.enemy;
 
 import dungeonmania.entities.collectable.CollectableEntity;
 import org.json.JSONObject;
@@ -16,12 +16,21 @@ import dungeonmania.util.Position;
 import java.util.List;
 import java.util.*;
 
-public class Assassin extends Bosses {
+public class Assassin extends Enemy {
 
     public Assassin(String type, Position position, Boolean isInteractable, int speed, int health, int damage) {
         super("assassin", position, false, speed, health, damage);
     }
 
+    @Override
+    public void move(Grid grid, Direction d) {
+        // TODO Auto-generated method stub
+        
+    }
 
-
+    @Override
+    public boolean movingConstraints(Entity e) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

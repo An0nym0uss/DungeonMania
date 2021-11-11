@@ -1,8 +1,11 @@
 package dungeonmania.entities.enemy;
 
 import dungeonmania.Grid;
-import dungeonmania.entities.*;
-import dungeonmania.entities.player.Player;
+import dungeonmania.entities.Battle;
+import dungeonmania.entities.Damage;
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.Health;
+import dungeonmania.entities.Moving;
 import dungeonmania.util.Position;
 
 import java.util.List;
@@ -85,16 +88,22 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage {
         setHealth(getHealth() - damage);
     }
 
-    public void receiveAndruilDamage(int damage) {
-        setHealth(getHealth() - damage);
-    }
 
+    /**
+     * Checks if enemy is on the same square as the player. If so, commence battle (see Battle class)
+     * @param grid
+     * @return
+     */
     public boolean shouldCommenceBattle(Grid grid) {
-        // Checks if enemy is on the same square as the player. If so, commence battle (see Battle class)
-        return grid.getPlayer().getPosition() == this.getPosition();
+        return grid.getPlayer().getPosition().getX() == this.getPosition().getX() && 
+               grid.getPlayer().getPosition().getY() == this.getPosition().getY();
     }
 
     public void commenceBattle(Grid grid) {
         Battle.battle(grid.getPlayer(), this, grid);
+    }
+
+    public void receiveAndruilDamage(int damage) {
+        setHealth(getHealth() - damage);
     }
 }
