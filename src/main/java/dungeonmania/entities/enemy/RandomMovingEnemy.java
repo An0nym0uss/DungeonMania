@@ -62,7 +62,7 @@ public abstract class RandomMovingEnemy extends Enemy {
         }
 
         if (doBattle != null) {
-            Battle.battle((Player)doBattle, (Enemy)this, grid);
+            commenceBattle(grid);
         }
     }
 

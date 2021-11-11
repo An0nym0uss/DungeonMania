@@ -31,8 +31,8 @@ public class RareCollectableTest {
         int swordSpawned = 0;
         for (int j = 0; j < 1003; j++) {
             player.move(grid, Direction.RIGHT);
-            if (player.getInventory().getItem("the_one_ring") != null) {
-                player.getInventory().removeNonSpecificItem("the_one_ring");
+            if (player.getInventory().getItem("one_ring") != null) {
+                player.getInventory().removeNonSpecificItem("one_ring");
                 ringSpawned++;
             }
             else if (player.getInventory().getItem("anduril") != null) {

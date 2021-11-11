@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.enemy.Hydra;
 import dungeonmania.entities.enemy.Spider;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.ComponentGoal;
@@ -74,7 +75,10 @@ public class Dungeon implements GameToJSON {
         }
 
         grid.notifyObserverEntities();
-        Spider.checkForNextSpawn(grid);
+        new Spider().checkForNextSpawn(grid, new Spider().getClass());
+        if (gameMode.canSpawnHydra()) {
+            new Hydra().checkForNextSpawn(grid, new Hydra().getClass());
+        }
     }
 
     public void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
