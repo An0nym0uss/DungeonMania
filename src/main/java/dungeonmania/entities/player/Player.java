@@ -647,8 +647,7 @@ public class Player extends Entity implements Damage, Health, Moving{
         return player;
     }
 
-    @Override
-    public Player clone() {
-        return new Player(this);
+    public OlderSelf duplicate() {
+        return new OlderSelf(this);
     }
 }

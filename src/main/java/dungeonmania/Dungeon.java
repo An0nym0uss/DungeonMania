@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.enemy.Spider;
+import dungeonmania.entities.player.OlderSelf;
 import dungeonmania.entities.player.Player;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.ComponentGoal;
@@ -70,7 +71,7 @@ public class Dungeon implements GameToJSON {
 
     public void tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         grid.getPlayer().getPrevTicks().add(new Tick(itemUsed, movementDirection));
-        addPrevGrid(grid);
+        prevGrids.add(grid.clone());
         
         if (movementDirection != null) {
             grid.movePlayer(movementDirection);
@@ -84,37 +85,27 @@ public class Dungeon implements GameToJSON {
         }
 
         // older selves move or use item
-        Iterator<Player> itr = grid.getOlderSelves().iterator();
+        Iterator<OlderSelf> itr = grid.getOlderSelves().iterator();
         while (itr.hasNext()) {
-            Player olderSelf = itr.next();
+            OlderSelf olderSelf = itr.next();
             // older self does not have movement, rewind has stopped
-            System.out.println(olderSelf);
             if (olderSelf.getPrevTicks().isEmpty()) {
                 grid.dettach(olderSelf);
                 itr.remove();
             } else {
-                // Tick tick = olderSelf.getPrevTicks().remove(0);
-                // if (tick.getMovementDirection() != null) {
-                //     olderSelf.move(grid, tick.getMovementDirection());
-                // }
-                // if (tick.getItemUsed() != null) {
-                //     olderSelf.useItem(tick.getItemUsed(), grid);
-                // }
+                Tick tick = olderSelf.getPrevTicks().remove(0);
+                if (tick.getMovementDirection() != null) {
+                    olderSelf.move(grid, tick.getMovementDirection());
+                }
+                if (tick.getItemUsed() != null) {
+                    olderSelf.useItem(tick.getItemUsed(), grid);
+                }
             }
         }
 
         grid.notifyObserverEntities();
         Spider.checkForNextSpawn(grid);
 
-    }
-
-    /**
-     * make current grid a copy and add the copy to the prevGrids list
-     * @param grid
-     */
-    private void addPrevGrid(Grid grid) {
-        Grid copy = grid.clone();
-        prevGrids.add(copy);
     }
 
     public void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
@@ -145,16 +136,21 @@ public class Dungeon implements GameToJSON {
         for (int i = start; i < grid.getPlayer().getPrevTicks().size(); i++) {
             prevTicks.add(grid.getPlayer().getPrevTicks().get(i));
         }
-        prevGrid.getPrevPlayer().setPrevTicks(prevTicks);
+        OlderSelf prev = prevGrid.getPrevPlayer();
+        prev.setPrevTicks(prevTicks);
 
         // add player at that time into the list of older selves
-        prevGrid.getOlderSelves().add(prevGrid.getPrevPlayer());
+        prevGrid.getOlderSelves().add(prev);
+        prevGrid.attach(prev);
 
         // set current player to previous grid
-        prevGrid.setPrevPlayer(this.grid.getPlayer().clone());
-        prevGrid.setPlayer(this.grid.getPlayer());
-        prevGrid.attach(this.grid.getPlayer());
-        this.grid = prevGrid;
+        prevGrid.setPrevPlayer(grid.getPlayer().duplicate());
+
+        Player currentPlayer = grid.getPlayer();
+        prevGrid.setPlayer(currentPlayer);
+        prevGrid.attach(currentPlayer);
+        grid = prevGrid;
+        grid.setPlayer(currentPlayer);
 
         // delete grids after current (rewinded) tick
         int size = prevGrids.size() - 1;

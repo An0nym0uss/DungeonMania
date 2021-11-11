@@ -33,6 +33,6 @@ public abstract class CollectableEntity extends Entity{
 
     @Override
     public CollectableEntity clone() {
-        return null;
+        return this;
     }
 }

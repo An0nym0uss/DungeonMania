@@ -47,12 +47,19 @@ public class StandardResponseFactory implements ResponseFactory {
     public List<EntityResponse> createEntityResponseList(Grid grid) {
 
         List<EntityResponse> entities = new ArrayList<>();
-
+        System.out.println("//////////////////////////////");
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
-                for (Entity entity : grid.getEntities(x, y)) {
-                    entities.add(createEntityResponse(entity));
+                //for (Entity entity : grid.getEntities(x, y)) {
+                for (int z = 0; z < grid.getLayerSize(); z++) {
+                    Entity entity = grid.getMap()[x][y][z];
+                    if (entity != null) {
+
+                        System.out.println(x + ", " + y + ", " + z + " : " + entity);
+                        entities.add(createEntityResponse(entity));
+                    }
                 }
+                //}
             }
         }
         

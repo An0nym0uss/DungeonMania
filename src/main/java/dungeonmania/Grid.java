@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.ObserverEntity;
+import dungeonmania.entities.player.OlderSelf;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.util.Direction;
@@ -33,8 +34,8 @@ public class Grid implements GridSubject, GameToJSON {
     private Entity[][][] map;
     private Player player;
     private Map<String, Position> portalMapping = new HashMap<>();
-    private List<Player> olderSelves = new ArrayList<>();
-    private Player prevPlayer;
+    private List<OlderSelf> olderSelves = new ArrayList<>();
+    private OlderSelf prevPlayer;
 
     /**
      * Getter for height.
@@ -80,16 +81,16 @@ public class Grid implements GridSubject, GameToJSON {
         return this.player;
     }
 
-    public List<Player> getOlderSelves() {
+    public List<OlderSelf> getOlderSelves() {
         return this.olderSelves;
     }
 
-    public Player getPrevPlayer() {
+    public OlderSelf getPrevPlayer() {
         return this.prevPlayer;
     }
 
-    public void setPrevPlayer(Player p) {
-        this.prevPlayer = p;
+    public void setPrevPlayer(OlderSelf prevPlayer) {
+        this.prevPlayer = prevPlayer;
     }
 
     public Grid(int height, int width, Entity[][][] map, Player player) {
@@ -103,19 +104,27 @@ public class Grid implements GridSubject, GameToJSON {
         this.HEIGHT = that.getHeight();
         this.WIDTH = that.getWidth();
         this.map = new Entity[WIDTH][HEIGHT][LAYER_SIZE];
-        this.player = null;
+        this.player = that.getPlayer(); /////////////////////////////////
         this.olderSelves = new ArrayList<>();
         for (int i = 0; i < that.getOlderSelves().size(); i++) {
-            this.olderSelves.add(that.getOlderSelves().get(i).clone());
+            OlderSelf older = that.getOlderSelves().get(i).duplicate();
+            this.olderSelves.add(older);
+            this.attach(older);
         }
 
         for (int x = 0; x < this.getWidth(); x++) {
             for (int y = 0; y < this.getHeight(); y++) {
                 for (int z = 0; z < this.getLayerSize(); z++) {
-                    if (that.getMap()[x][y][z] != null) {
-                        this.map[x][y][z] = that.getMap()[x][y][z].clone();
-                        if (that.getMap()[x][y][z].getType().equals("player")) {
-                            this.prevPlayer = ((Player)map[x][y][z]);
+                    Entity entity = that.getMap()[x][y][z];
+                    if (entity != null) {
+                        if (entity.getType().equalsIgnoreCase("player")) {
+                            Player p = (Player)entity;
+                            prevPlayer = p.duplicate();
+                            //map[x][y][z] = prevPlayer;
+                        } else if (entity.getType().equalsIgnoreCase("older_self")) {
+                            // do nothing
+                        } else {
+                            map[x][y][z] = entity.clone();
                         }
                     }
                 }
