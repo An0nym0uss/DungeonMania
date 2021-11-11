@@ -11,8 +11,8 @@ public class MidnightArmour extends BuildableEntity{
 
     public MidnightArmour(Position position) {
         super("midnight_armour", position, false);
-        this.attack = 1;
-        this.defense = 1;
+        this.attack = 10;
+        this.defense = 10;
 
         ReadRecipe read = new ReadRecipe();
         this.recipes = read.readRecipes(recipeFile);

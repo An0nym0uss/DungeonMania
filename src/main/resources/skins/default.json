@@ -27,8 +27,6 @@
         "wall": "images/tileset/walls/wooden/wood_bottom.png",
         "spider": "images/tileset/entities/spider_00.png",
         "mercenary": "images/tileset/entities/ranger.png",
-        "zombie_toast": "images/tileset/entities/zombie_00.png",
-        "zombie_toast_spawner" : "images/tileset/entities/zombie_spawner.png",
         "switch": "images/tileset/floor_switch.png",
         "sword": "images/tileset/items/sword_silver.png",
         "armour": "images/tileset/items/armour.png",
@@ -46,6 +44,8 @@
         "sceptre": "images/tileset/entities/sceptre.png",
         "midnight_armour": "images/tileset/entities/midnight_armour.png",
         "sun_stone": "images/tileset/entities/sun_stone.png",
-        "hydra": "images/tileset/entities/hydra.png"
+        "hydra": "images/tileset/entities/hydra.png",
+        "anduril": "images/tileset/entities/anduril.png",
+        "one_ring": "images/tileset/items/ring_0_special.png"
     }
 }
