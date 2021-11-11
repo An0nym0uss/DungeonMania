@@ -1,6 +1,7 @@
 package dungeonmania.entities.enemy;
 
 import dungeonmania.Grid;
+import dungeonmania.entities.Battle;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
