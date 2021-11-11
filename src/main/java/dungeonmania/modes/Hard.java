@@ -6,6 +6,7 @@ import org.json.JSONObject;
  * Zombies spawn every 15 ticks.
  * The player has less health points to begin with (75).
  * Invincibility potions have no effect.
+ * Hydras can spawn.
  * @author Lachlan Kerr (z5118613)
  */
 public class Hard implements Mode {
@@ -14,6 +15,7 @@ public class Hard implements Mode {
     private int zombieSpawnRate;
     private int maxPlayerHealth;
     private boolean invincibilityEffect;
+    private boolean canHydra;
 
     public Hard()
     {
@@ -21,6 +23,7 @@ public class Hard implements Mode {
         zombieSpawnRate = 15;
         maxPlayerHealth = 75;
         invincibilityEffect = false;
+        canHydra = true;
     }
 
     @Override
@@ -41,6 +44,11 @@ public class Hard implements Mode {
     @Override
     public boolean canHaveInvincibilityEffect() {
         return invincibilityEffect;
+    }
+
+    @Override
+    public boolean canSpawnHydra() {
+        return canHydra;
     }
 
     @Override
