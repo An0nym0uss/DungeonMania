@@ -39,9 +39,31 @@ public class MercenaryTest {
      W . .
      */
     DungeonManiaController controller = new DungeonManiaController();
-
+    
     @Test
     public void testMercenaryFollowsPlayer() {
+        
+    Mercenary mercenary = new Mercenary(new Position(1, 1), 1, 1, 1);
+    Player player = new Player(new Position(0, 0), new Standard());
+
+        /**
+         * [P] [] []
+         * [] [M] []
+         * [] [] []
+         */
+    Entity[][][] map = new Entity[3][3][Layer.LAYER_SIZE];
+    map[player.getPosition().getX()][player.getPosition().getY()][player.getPosition().getLayer()] = player;
+    map[mercenary.getPosition().getX()][mercenary.getPosition().getY()][mercenary.getPosition().getLayer()] = mercenary;
+
+    Grid grid = new Grid(3, 3, map, player);
+    mercenary.update(grid);
+
+    assertEquals(1, mercenary.getPosition().getX());
+    assertEquals(0, mercenary.getPosition().getY());
+    }
+    
+    @Test
+    public void testMercenaryFollowsPlayerWithObstacles() {
         Mercenary mercenary = new Mercenary(new Position(0, 1), 1, 1, 1);
         Player player = new Player(new Position(2, 1), new Standard());
         Wall wall = new Wall(new Position(1, 1));
@@ -62,27 +84,32 @@ public class MercenaryTest {
         assertEquals(0, mercenary.getPosition().getX());
         assertEquals(0, mercenary.getPosition().getY());
     }
-    
+
     @Test
-    public void testMercenaryFollowsPlayerWithObstacles() {
-        
-    Mercenary mercenary = new Mercenary(new Position(1, 1), 1, 1, 1);
-    Player player = new Player(new Position(0, 0), new Standard());
+    public void testMercenaryFollowsPlayerWithObstacles2() {
+        Mercenary mercenary = new Mercenary(new Position(0, 1), 1, 1, 1);
+        Player player = new Player(new Position(2, 1), new Standard());
+        Wall wall = new Wall(new Position(1, 0));
+        Wall wall2 = new Wall(new Position(1, 1));
+        Wall wall3 = new Wall(new Position(1, 2));
 
         /**
-         * [Player] [] []
-         * [] [Mercenary] []
-         * [] [] []
+         * [] [W] []
+         * [M] [W] [P]
+         * [] [W] []
+         *
          */
-    Entity[][][] map = new Entity[3][3][Layer.LAYER_SIZE];
-    map[player.getPosition().getX()][player.getPosition().getY()][player.getPosition().getLayer()] = player;
-    map[mercenary.getPosition().getX()][mercenary.getPosition().getY()][mercenary.getPosition().getLayer()] = mercenary;
+        Entity[][][] map = new Entity[3][3][Layer.LAYER_SIZE];
+        map[player.getPosition().getX()][player.getPosition().getY()][player.getPosition().getLayer()] = player;
+        map[mercenary.getPosition().getX()][mercenary.getPosition().getY()][mercenary.getPosition().getLayer()] = mercenary;
+        map[wall.getPosition().getX()][wall.getPosition().getY()][wall.getPosition().getLayer()] = wall;
+        map[wall2.getPosition().getX()][wall2.getPosition().getY()][wall2.getPosition().getLayer()] = wall2;
+        map[wall3.getPosition().getX()][wall3.getPosition().getY()][wall3.getPosition().getLayer()] = wall3;
 
-    Grid grid = new Grid(3, 3, map, player);
-    mercenary.update(grid);
+        Grid grid = new Grid(3, 3, map, player);
+        mercenary.update(grid);
 
-    assertEquals(1, mercenary.getPosition().getX());
-    assertEquals(0, mercenary.getPosition().getY());
+        assertEquals(0, mercenary.getPosition().getX());
+        assertEquals(1, mercenary.getPosition().getY());
     }
-    
 }
