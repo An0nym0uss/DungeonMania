@@ -83,10 +83,6 @@ public class Dungeon implements GameToJSON {
             this.goal = null;
         }
 
-        for (Tick tick : grid.getPlayer().getPrevTicks()) {
-            System.out.println("current player: " + tick.getMovementDirection());
-        }
-
         // older selves move or use item
         Iterator<Player> itr = grid.getOlderSelves().iterator();
         while (itr.hasNext()) {

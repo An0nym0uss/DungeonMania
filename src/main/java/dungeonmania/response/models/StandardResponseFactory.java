@@ -35,11 +35,6 @@ public class StandardResponseFactory implements ResponseFactory {
         }
         List<AnimationQueue> animations = new ArrayList<>();
 
-        System.out.println("------------------------");
-        for (EntityResponse response : entities) {
-            System.out.println(response.getId() + " " + response.getType() + " position: " + response.getPosition().getX() +"," + response.getPosition().getY()+","+response.getPosition().getLayer());
-        }
-
         return new DungeonResponse(dungeonId, dungeonName, entities, inventory, buildables, goals, animations);
     }
 
