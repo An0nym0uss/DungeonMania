@@ -13,18 +13,6 @@ import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.util.Position;
 
 public class OlderSelf extends Player{
-    private int damage;
-    private int maxHealth;
-    private int currentHealth;
-    private Inventory inventory;
-    private StatusEffect statusEffect;
-    private Sword sword;
-    private Armour armour;
-    private Bow bow;
-    private Shield shield;
-    private dungeonmania.util.Direction movement;
-    private boolean isTeleported;
-    private List<Tick> prevTicks = new ArrayList<>();
 
     public OlderSelf(Player player) {
         super(player);

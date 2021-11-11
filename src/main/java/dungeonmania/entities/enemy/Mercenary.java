@@ -26,48 +26,23 @@ public class Mercenary extends Enemy {
 
     @Override
     public void update(Grid grid) {
-//        return;
-        /* TODO:
-        * find out which direction it should move by doing something with player's and mercenary's x and y position
-        * try move in that direction
-        * if it cant, try move in the other direction closer to the player
-        */
-        // get player
-        // breadth first search
-        // A* search
-        
-        //List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
-        // grid.getPlayer().getPosition().getAdjacentCardinalPositions();
-
-         List<Position> shortestPath = this.breadthFirstSearch(grid);
-        // System.out.println(shortestPath);
-
-        // Perform movement
-         Position nextStep = shortestPath.get(1);
-        // System.out.println(nextStep);
-         this.setPosition(nextStep);
-        // TODO: Bribing
-        // boolean bribed = this.isBribed();
-    }
-
-    public boolean isBribed() {
-        if (this.getBribed()) {
-            // Mercenary follows player
-            return true;
+        if (this.shouldCommenceBattle(grid) && !this.getBribed()) {
+            this.commenceBattle(grid);
         }
         else {
-            // Mercenary attacks player
-            return false;
+         List<Position> shortestPath = this.breadthFirstSearch(grid);
+
+            // Perform movement
+            if (shortestPath.size() > 1) {
+                // There is a valid path
+                Position nextStep = shortestPath.get(1);
+                this.setPosition(nextStep);
+            }
         }
+
+
     }
 
-    // public boolean isHasBeenBribed() {
-    //     return hasBeenBribed;
-    // }
-
-    // public void setHasBeenBribed(boolean hasBeenBribed) {
-    //     this.hasBeenBribed = hasBeenBribed;
-    // }
 
     // Returns the shortest path between the start (mercenary) and the goal (player)
     public List<Position> breadthFirstSearch(Grid grid) {
@@ -110,21 +85,8 @@ public class Mercenary extends Enemy {
                         queue.add(w);
                     }
                 }
-
             }
         }
-        
-
-
-        // visited
-        // get shortest path as a list of positions
-//        path is empty list
-//        current node is goal
-
-
-//        while node is not null:
-//           add current node to path
-//           set current node as parent
         
         List<Position> path = new ArrayList<Position>();
         Position currentNode = grid.getPlayer().getPosition();
@@ -146,18 +108,7 @@ public class Mercenary extends Enemy {
     }
 
     @Override
-    public int damageDealt() {
-        return 0;
-    }
-
-    @Override
-    public boolean isDead() {
-        return false;
-    }
-
-    @Override
     public void move(Grid grid, Direction d) {
-
     }
 
     @Override
@@ -172,9 +123,6 @@ public class Mercenary extends Enemy {
             return true;
         }
         if (e instanceof Enemy) {
-            return true;
-        }
-        if (e instanceof Player) {
             return true;
         }
         return false;

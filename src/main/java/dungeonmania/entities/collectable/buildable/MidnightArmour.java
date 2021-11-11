@@ -14,9 +14,8 @@ public class MidnightArmour extends Armour implements Buildable{
 
     public MidnightArmour(Position position) {
         super("midnight_armour", position);
-        this.setDurability(-1);
-        this.attack = 1;
-        this.defense = 3;
+        this.attack = 10;
+        this.defense = 10;
 
         ReadRecipe read = new ReadRecipe();
         this.recipes = read.readRecipes(recipeFile);

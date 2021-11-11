@@ -7,8 +7,6 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 public class SpiderTest {
     @Test
     /**

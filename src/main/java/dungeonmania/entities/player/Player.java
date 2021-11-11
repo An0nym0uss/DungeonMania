@@ -25,8 +25,9 @@ import dungeonmania.modes.Standard;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.*;
+import dungeonmania.entities.collectable.rarecollectable.*;
 
-public class Player extends Entity implements Damage, Health, Moving{
+public class Player extends Entity implements Damage, Health, Moving {
     private int damage;
     private int maxHealth;
     private int currentHealth;
@@ -36,8 +37,12 @@ public class Player extends Entity implements Damage, Health, Moving{
     private Armour armour;
     private Bow bow;
     private Shield shield;
+    private Anduril anduril;
+    private MidnightArmour midnightArmour;
     private Direction movement;
     private boolean isTeleported;
+    private Mercenary mercenary;
+    private boolean rareDrop;
     private List<Tick> prevTicks = new ArrayList<>();
 
     public Player(Position position, Mode mode) {
@@ -47,7 +52,8 @@ public class Player extends Entity implements Damage, Health, Moving{
         this.inventory = new Inventory();
         this.statusEffect = new StatusEffect();
         this.isTeleported = false;
-        this.damage = 10;
+        this.rareDrop = true;
+        this.damage = 1;
     }
 
     public Player(Player that) {
@@ -190,9 +196,41 @@ public class Player extends Entity implements Damage, Health, Moving{
         return false;
     }
 
+    public boolean hasAnduril() {
+        for (CollectableEntity collectable : this.inventory.getItems()) {
+            if (collectable instanceof Anduril) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasMidnightArmour() {
+        for (CollectableEntity collectable : this.inventory.getItems()) {
+            if (collectable instanceof MidnightArmour) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasMercAlly() {
+        if (mercenary != null) {
+            return true;
+        }
+        return false;
+    }
+
     public int getShieldDefense() {
         if (this.hasShield()) {
             return this.shield.getDefense();
+        }
+        return 0;
+    }
+
+    public int getMidnightArmourDefense() {
+        if (this.hasMidnightArmour()) {
+            return this.midnightArmour.getDefense();
         }
         return 0;
     }
@@ -249,6 +287,21 @@ public class Player extends Entity implements Damage, Health, Moving{
         }
     }
 
+    public int useAnduril() {
+        if (hasAnduril()) {
+            return anduril.getAttack();
+        }
+        return 0;
+    }
+
+    public int useMidnightArmour() {
+        if (hasMidnightArmour()) {
+            int damage = midnightArmour.getAttack();
+            return damage;
+        }
+        return 0;
+    }
+
     @Override
     public void collidesWith(Entity other, Grid grid) {
         if (canMoveInto(other)) {
@@ -256,11 +309,12 @@ public class Player extends Entity implements Damage, Health, Moving{
                 collectItem(other, grid);
             } else if (other instanceof Boulder) {
                 pushBoulder((Boulder)other, grid);
-            } else if (other instanceof Mercenary) {
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // if mercenary is ally do not enter battle
-                //
-            } else if (other instanceof Enemy) {
+            }
+            // TODO: uncomment once mercenary state pattern implemented
+            // else if (other instanceof BribedMercenary || other instanceof
+            // MindCintrolledMercenary) {
+            // } 
+            else if (other instanceof Enemy) {
                 Battle.battle(this, (Enemy)other, grid);
             } else if (other instanceof Door) {
                 // door not open
@@ -430,25 +484,19 @@ public class Player extends Entity implements Damage, Health, Moving{
 
     @Override
     public int damageDealt() {
-        int totalDamageDealt = attack();
-        // bow allows player to attack twice
-        if (hasBow()) {
-            useBow();
-            return totalDamageDealt * 2;
-        }
-        return totalDamageDealt;
+        return (getCurrentHealth() * getDamage())/5;
     }
 
     /**
      * damage dealt by player when he attacks
      */
-    private int attack() {
-        if (hasSword()) {
-            return (this.currentHealth * (this.damage + useSword())) / 5;
-        } else {
-            return (this.currentHealth * this.damage) / 5;
-        }
-    }
+    // private int attack() {
+    //     if (hasSword()) {
+    //         return (this.currentHealth * (this.damage + useSword())) / 5;
+    //     } else {
+    //         return (this.currentHealth * this.damage) / 5;
+    //     }
+    // }
 
     public void useItem(String itemId, Grid grid) {
         CollectableEntity collectable = this.inventory.getItemfromId(itemId);
@@ -462,6 +510,22 @@ public class Player extends Entity implements Damage, Health, Moving{
         ) {
             collectable.useItemWithEffect(this.statusEffect);
             this.inventory.removeItem(collectable);
+        } else if (collectable instanceof Treasure) {
+            // Bribe mercenary
+            List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
+            adjacentSquares.add(this.getPosition());
+            for (Position square : adjacentSquares) {
+                // Check if a mercenary is on that square
+                List<Entity> squareEntities = grid.getEntities(square.getX(), square.getY());
+                for (Entity squareEntity : squareEntities) {
+                    if (squareEntity instanceof Mercenary) {
+                        ((Mercenary)squareEntity).setBribed(true);
+                        this.inventory.removeItem(collectable);
+                        return;
+                    }
+                }
+            }
+
         } else if (collectable == null) {
             throw new InvalidActionException("Item is not in inventory.");
         } else {
@@ -520,7 +584,7 @@ public class Player extends Entity implements Damage, Health, Moving{
             }
             useIngredient(buildable, recipe);
             MidnightArmour midnightArmour = new MidnightArmour(new Position(0, 0));
-            this.armour = midnightArmour;
+            this.midnightArmour = midnightArmour;
             this.inventory.addItem(midnightArmour);
         }
         else {
@@ -547,6 +611,26 @@ public class Player extends Entity implements Damage, Health, Moving{
             }
         }
         return false;
+    }
+
+    public void setMerc(Mercenary mercenary) {
+        this.mercenary = mercenary;
+    }
+
+    public Mercenary getMerc() {
+        return this.mercenary;
+    }
+
+    public void setRareDrop(Boolean rareDrop) {
+        this.rareDrop = rareDrop;
+    }
+
+    public boolean isRareDrop() {
+        return this.rareDrop;
+    }
+
+    public void setAnduril(Anduril anduril) {
+        this.anduril = anduril;
     }
 
     public List<String> getBuildables() {
@@ -604,11 +688,11 @@ public class Player extends Entity implements Damage, Health, Moving{
         Entity entity = null;
         for (int i = 0; i < grid.getWidth(); i++) {
             for (int j = 0; j < grid.getHeight(); j++) {
-                for (int k = 0; k < grid.getEntities(i, j).size(); k++) {
-                    if (grid.getEntities(i, j).get(k).getId() == EntityId && 
-                       (grid.getEntities(i, j).get(k).getType() == "zombie_toast_spawner" || 
-                        grid.getEntities(i, j).get(k).getType() == "mecenary")) {
-                            entity = grid.getEntities(i, j).get(k);
+                for (Entity theEntity : grid.getEntities(i, j)) {
+                    if (theEntity.getId().equals(EntityId) && 
+                       (theEntity instanceof ZombieToastSpawner || 
+                        theEntity instanceof Mercenary)) {
+                            entity = theEntity;
                             break;
                     }
                 }
@@ -649,5 +733,10 @@ public class Player extends Entity implements Damage, Health, Moving{
 
     public OlderSelf duplicate() {
         return new OlderSelf(this);
+    }
+
+    @Override
+    public void receiveDamage(int damage) {
+        setCurrentHealth(getCurrentHealth() - damage);
     }
 }

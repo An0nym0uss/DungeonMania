@@ -1,0 +1,11 @@
+{
+    "entities": [
+        {
+            "x": 0,
+            "y": 0,
+            "type": "player"
+        }
+    ],
+    "width": 1,
+    "height": 2
+}

@@ -1,14 +1,13 @@
 package dungeonmania;
 
 import java.time.LocalDateTime;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONObject;
 
-import dungeonmania.entities.Entity;
+import dungeonmania.entities.enemy.Hydra;
 import dungeonmania.entities.enemy.Spider;
 import dungeonmania.entities.player.OlderSelf;
 import dungeonmania.entities.player.Player;
@@ -104,8 +103,10 @@ public class Dungeon implements GameToJSON {
         }
 
         grid.notifyObserverEntities();
-        Spider.checkForNextSpawn(grid);
-
+        new Spider().checkForNextSpawn(grid, new Spider().getClass());
+        if (gameMode.canSpawnHydra()) {
+            new Hydra().checkForNextSpawn(grid, new Hydra().getClass());
+        }
     }
 
     public void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
