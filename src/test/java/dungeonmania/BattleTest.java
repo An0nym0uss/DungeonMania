@@ -32,6 +32,7 @@ public class BattleTest {
         grid.attach(player);
         grid.attach(enemy);
         grid.attach(shelob);
+        player.setRareDrop(false);
 
         // enemy dead
         player.move(grid, Direction.RIGHT);
@@ -78,6 +79,7 @@ public class BattleTest {
         Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
         grid.attach(player);
         grid.attach(shelob);
+        player.setRareDrop(false);
 
         // spawn a one ring
         RareCollectableEntities ring = new TheOneRing();
@@ -102,6 +104,7 @@ public class BattleTest {
         CollectableEntity arrow1 = new Arrow(new Position(4, 1, Layer.COLLECTABLE));
         CollectableEntity arrow2 = new Arrow(new Position(5, 1, Layer.COLLECTABLE));
         CollectableEntity arrow3 = new Arrow(new Position(6, 1, Layer.COLLECTABLE));
+        Enemy shelob = new Spider(new Position(7, 2), 1, 200, 10);
         Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
         grid.attach(player);
         grid.attach(sword);
@@ -109,21 +112,31 @@ public class BattleTest {
         grid.attach(arrow1);
         grid.attach(arrow2);
         grid.attach(arrow3);
+        grid.attach(shelob);
 
-        // get the potion
-        for (int i = 0; i < 5; i++){
+        // attack without weapon
+        player.move(grid, Direction.DOWN);
+        for (int i = 0; i < 6; i++) {
             player.move(grid, Direction.RIGHT);
         }
+        assertTrue(grid.getEntities(7, 2).get(0).getType().equals("spider"));
+        assertTrue(shelob.getHealth() < 200);
+        int prevHealthLeft =  shelob.getHealth();
+        grid.dettach(shelob);
 
-        // build a bow
-        int prevDamage = player.damageDealt();
+         // attack with weapons
+        player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
+        shelob = new Spider(new Position(7, 2), 1, 200, 10);
+        grid.attach(player);
+        grid.attach(shelob);
+        for (int i = 0; i < 6; i++) {
+            player.move(grid, Direction.RIGHT);
+        }
         player.craftItem(player.getBuildables().get(0), grid);
-        assertTrue(player.damageDealt() == prevDamage*2);
-        prevDamage = player.damageDealt();
-
-        // pick up sword
-        player.move(grid, Direction.RIGHT);
-        assertTrue(player.damageDealt() > prevDamage);
+        assertTrue(grid.getEntities(7, 1).get(0).getType().equals("player"));
+        assertTrue(player.getInventory().getItems().size() == 2);
+        player.move(grid, Direction.DOWN);
+        assertTrue(shelob.getHealth() < prevHealthLeft);
     }
 
     @Test
