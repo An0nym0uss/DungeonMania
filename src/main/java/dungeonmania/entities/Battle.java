@@ -44,12 +44,13 @@ public class Battle {
                     // mecenary attack does not count as an attack with anduril
                     int mercDamageDealt = MercDamage(player, enemy);
                     enemy.receiveDamage(mercDamageDealt);
-
                 }
 
                 if (enemy.isDead()) {
                     grid.dettach(enemy);
-                    RareCollectableEntities.spawnnRareCollectableEntities(player);
+                    if (player.isRareDrop()) {
+                        RareCollectableEntities.spawnnRareCollectableEntities(player);
+                    }
                 }
             } else {
                 // player is dead
@@ -68,11 +69,12 @@ public class Battle {
 
     private static int playerDamage(Player player, Enemy enemy) {
         // calculate character base damage
-        int damage =  (player.getCurrentHealth() * player.getDamage())/5;
+        int damage =  player.damageDealt();
 
         // add weapon damage if player has any weapon
         damage += player.useSword();
         damage += player.useAnduril();
+        damage += player.useMidnightArmour();
 
         // player with anduril deal triple damage against bosses
         if (player.hasAnduril() && (enemy instanceof Hydra /* || instanceof Assassin*/)) {
@@ -103,16 +105,16 @@ public class Battle {
         // damage is deducted by the shield's defense if layer have one 
         damage = damage - player.getShieldDefense();
         player.useShield();
+        damage = damage - player.getMidnightArmourDefense();
         // armour halves enemy damage
         if (player.hasArmour()) {
-                        player.setCurrentHealth(player.getMaxHealth());
-                    player.getInventory().removeNonSpecificItem("one_ring");
-                    grid.dettach(enemy);
-                } else {
-                    // player dies   
-                    grid.dettach(player);
-                }
-            }
+            damage = damage / 2;
         }
+        // enemy damage can not go negative 
+        player.useArmour();
+        if (damage < 0) {
+            damage = 0;
+        }
+        return damage;
     }
 }
