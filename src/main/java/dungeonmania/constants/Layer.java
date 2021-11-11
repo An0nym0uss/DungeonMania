@@ -1,7 +1,7 @@
 package dungeonmania.constants;
 
 public class Layer {
-    public static final int LAYER_SIZE = 5;
+    public static final int LAYER_SIZE = 6;
 
     public static final int STATIC = 0;
 
@@ -12,7 +12,9 @@ public class Layer {
 
     public static final int SPIDER = 3;
 
-    public static final int PLAYER = 4;
+    public static final int OLDER_SELF = 4;
+
+    public static final int PLAYER = 5;
     
 }
 

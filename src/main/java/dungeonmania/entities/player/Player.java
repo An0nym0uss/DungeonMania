@@ -8,6 +8,8 @@ import java.util.List;
 import org.json.JSONObject;
 
 import dungeonmania.Grid;
+import dungeonmania.Tick;
+import dungeonmania.constants.Layer;
 import dungeonmania.entities.Battle;
 import dungeonmania.entities.Interaction;
 import dungeonmania.entities.Damage;
@@ -19,6 +21,7 @@ import dungeonmania.util.Position;
 import dungeonmania.entities.statics.*;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.modes.Mode;
+import dungeonmania.modes.Standard;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.*;
@@ -35,6 +38,7 @@ public class Player extends Entity implements Damage, Health, Moving{
     private Shield shield;
     private Direction movement;
     private boolean isTeleported;
+    private List<Tick> prevTicks = new ArrayList<>();
 
     public Player(Position position, Mode mode) {
         super("player", position, false);
@@ -44,6 +48,32 @@ public class Player extends Entity implements Damage, Health, Moving{
         this.statusEffect = new StatusEffect();
         this.isTeleported = false;
         this.damage = 10;
+    }
+
+    public Player(Player that) {
+        super("older_self", new Position(that.getPosition().getX(), that.getPosition().getY(), Layer.OLDER_SELF), false);
+        this.damage = that.getDamage();
+        this.maxHealth = that.getMaxHealth();
+        this.currentHealth = that.getCurrentHealth();
+        this.inventory = that.getInventory().clone();
+        this.statusEffect = that.getStatusEffect().clone();
+        if (that.getSword() != null) {
+            this.sword = that.getSword().clone();
+        }
+        if (that.getArmour() != null) {
+            this.armour = that.getArmour().clone();
+        }
+        if (that.getBow() != null) {
+            this.bow = that.getBow().clone();
+        }
+        if (that.getShield() != null) {
+            this.shield = that.getShield().clone();
+        }
+        this.isTeleported = that.hasTeleported();
+
+        for (Tick tick : that.getPrevTicks()) {
+            this.prevTicks.add(tick);
+        }
     }
 
     public void setInventory(Inventory inventory) {
@@ -76,6 +106,34 @@ public class Player extends Entity implements Damage, Health, Moving{
 
     public StatusEffect getStatusEffect() {
         return this.statusEffect;
+    }
+    
+    public Sword getSword() {
+        return this.sword;
+    }
+
+    public Armour getArmour() {
+        return this.armour;
+    }
+
+    public Bow getBow() {
+        return this.bow;
+    }
+
+    public Shield getShield() {
+        return this.shield;
+    }
+
+    public Boolean hasTeleported() {
+        return isTeleported;
+    }
+
+    public List<Tick> getPrevTicks() {
+        return this.prevTicks;
+    }
+
+    public void setPrevTicks(List<Tick> prevTicks) {
+        this.prevTicks = prevTicks;
     }
 
     public boolean hasArmour() {
@@ -170,6 +228,9 @@ public class Player extends Entity implements Damage, Health, Moving{
 
     public void useArmour() {
         if (hasArmour()) {
+            if (this.armour instanceof MidnightArmour) {
+                return;
+            }
             this.armour.setDurability(this.armour.getDurability() - 1);
             if (this.armour.isBroken()) {
                 this.inventory.removeItem(this.armour);
@@ -260,8 +321,8 @@ public class Player extends Entity implements Damage, Health, Moving{
                     this.inventory.addItem((CollectableEntity)entity);
                     this.armour = (Armour) entity;
                     grid.dettach(entity);
-                } else if (!(entity instanceof Sword && hasSword() ||
-                    entity instanceof Armour && hasArmour())
+                } else if (!((entity instanceof Sword && hasSword()) ||
+                    (entity instanceof Armour && hasArmour()))
                 ) {
                     this.inventory.addItem((CollectableEntity)entity);
                     grid.dettach(entity);
@@ -459,6 +520,7 @@ public class Player extends Entity implements Damage, Health, Moving{
             }
             useIngredient(buildable, recipe);
             MidnightArmour midnightArmour = new MidnightArmour(new Position(0, 0));
+            this.armour = midnightArmour;
             this.inventory.addItem(midnightArmour);
         }
         else {
@@ -584,4 +646,9 @@ public class Player extends Entity implements Damage, Health, Moving{
 
         return player;
     }
-};
+
+    @Override
+    public Player clone() {
+        return new Player(this);
+    }
+}

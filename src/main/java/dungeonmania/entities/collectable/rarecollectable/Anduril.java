@@ -17,6 +17,10 @@ public class Anduril extends RareCollectableEntities {
         this.attack = attack;
     }
 
+    public Anduril(Anduril that) {
+        this(that.getAttack());
+    }
+
     @Override
     public void spawnnAnduril(Inventory inventory) {
         boolean hasRareCollectable = false;
@@ -35,5 +39,10 @@ public class Anduril extends RareCollectableEntities {
 
     public int getAttack() {
         return this.attack;
+    }
+
+    @Override
+    public Anduril clone() {
+        return new Anduril(this);
     }
 }

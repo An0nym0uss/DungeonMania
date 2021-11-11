@@ -7,16 +7,8 @@ import dungeonmania.entities.player.Inventory;
 import dungeonmania.entities.player.Recipe;
 import dungeonmania.util.Position;
 
-public abstract class BuildableEntity extends CollectableEntity{
-    protected List<Recipe> recipes;
-
-    public BuildableEntity(String type, Position position, boolean isInteractable) {
-        super(type, position, isInteractable);
-    }
-
-    public List<Recipe> getRecipes() {
-        return this.recipes;
-    }
+public interface Buildable{
+    public List<Recipe> getRecipes();
 
     // public boolean isBuildable(Inventory inventory) {
     //     for (Recipe recipe : recipes) {

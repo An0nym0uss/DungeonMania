@@ -15,5 +15,10 @@ public class InvincibilityPotion extends CollectableEntity {
         statusEffect.setInvincible(true);
         statusEffect.setInvincibleDuration(10);
     }
+
+    @Override
+    public InvincibilityPotion clone() {
+        return new InvincibilityPotion(this.getPosition());
+    }
 }
 

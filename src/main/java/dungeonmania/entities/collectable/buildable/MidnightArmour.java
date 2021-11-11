@@ -1,35 +1,44 @@
 package dungeonmania.entities.collectable.buildable;
 
+import java.util.List;
+
+import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.player.ReadRecipe;
+import dungeonmania.entities.player.Recipe;
 import dungeonmania.util.Position;
 
-public class MidnightArmour extends BuildableEntity{
-    private int attack;
-    private int defense;
+public class MidnightArmour extends Armour implements Buildable{
+    private List<Recipe> recipes;
     
     private String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/midnightArmourRecipe.json";
 
     public MidnightArmour(Position position) {
-        super("midnight_armour", position, false);
+        super("midnight_armour", position);
+        this.setDurability(-1);
         this.attack = 1;
-        this.defense = 1;
+        this.defense = 3;
 
         ReadRecipe read = new ReadRecipe();
         this.recipes = read.readRecipes(recipeFile);
     }
 
     public MidnightArmour(Position position, int attack, int defense) {
-        super("midnight_armour", position, false);
+        this(position);
         this.attack = attack;
         this.defense = defense;
     }
 
-    public int getAttack() {
-        return this.attack;
+    public MidnightArmour(MidnightArmour that) {
+        this(that.getPosition(), that.getAttack(), that.getDefense());
     }
 
-    public int getDefense() {
-        return this.defense;
+    @Override
+    public List<Recipe> getRecipes() {
+        return this.recipes;
     }
-    
+
+    @Override
+    public MidnightArmour clone() {
+        return new MidnightArmour(this);
+    }
 }

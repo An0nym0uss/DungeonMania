@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,8 @@ public class Grid implements GridSubject, GameToJSON {
     private Entity[][][] map;
     private Player player;
     private Map<String, Position> portalMapping = new HashMap<>();
+    private List<Player> olderSelves = new ArrayList<>();
+    private Player prevPlayer;
 
     /**
      * Getter for height.
@@ -77,11 +80,47 @@ public class Grid implements GridSubject, GameToJSON {
         return this.player;
     }
 
+    public List<Player> getOlderSelves() {
+        return this.olderSelves;
+    }
+
+    public Player getPrevPlayer() {
+        return this.prevPlayer;
+    }
+
+    public void setPrevPlayer(Player p) {
+        this.prevPlayer = p;
+    }
+
     public Grid(int height, int width, Entity[][][] map, Player player) {
         this.HEIGHT = height;
         this.WIDTH = width;
         this.map = map;
         this.player = player;
+    }
+
+    public Grid(Grid that) {
+        this.HEIGHT = that.getHeight();
+        this.WIDTH = that.getWidth();
+        this.map = new Entity[WIDTH][HEIGHT][LAYER_SIZE];
+        this.player = null;
+        this.olderSelves = new ArrayList<>();
+        for (int i = 0; i < that.getOlderSelves().size(); i++) {
+            this.olderSelves.add(that.getOlderSelves().get(i).clone());
+        }
+
+        for (int x = 0; x < this.getWidth(); x++) {
+            for (int y = 0; y < this.getHeight(); y++) {
+                for (int z = 0; z < this.getLayerSize(); z++) {
+                    if (that.getMap()[x][y][z] != null) {
+                        this.map[x][y][z] = that.getMap()[x][y][z].clone();
+                        if (that.getMap()[x][y][z].getType().equals("player")) {
+                            this.prevPlayer = ((Player)map[x][y][z]);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -218,6 +257,10 @@ public class Grid implements GridSubject, GameToJSON {
         grid.put("entities", entities);
 
         return grid;
+    }
+
+    public Grid clone() {
+        return new Grid(this);
     }
 
 }

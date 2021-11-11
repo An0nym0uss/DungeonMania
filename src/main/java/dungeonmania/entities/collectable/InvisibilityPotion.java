@@ -14,5 +14,10 @@ public class InvisibilityPotion extends CollectableEntity {
         statusEffect.setInvisible(true);
         statusEffect.setInvisibleDuration(10);
     }
+
+    @Override
+    public InvisibilityPotion clone() {
+        return new InvisibilityPotion(this.getPosition());
+    }
 }
 
