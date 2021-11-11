@@ -88,4 +88,13 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage {
     public void receiveAndruilDamage(int damage) {
         setHealth(getHealth() - damage);
     }
+
+    public boolean shouldCommenceBattle(Grid grid) {
+        // Checks if enemy is on the same square as the player. If so, commence battle (see Battle class)
+        return grid.getPlayer().getPosition() == this.getPosition();
+    }
+
+    public void commenceBattle(Grid grid) {
+        Battle.battle(grid.getPlayer(), this, grid);
+    }
 }
