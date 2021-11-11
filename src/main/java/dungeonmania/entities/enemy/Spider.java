@@ -17,7 +17,6 @@ import java.util.Random;
 
 /**
  * 
- * 
  * @author Lachlan Kerr, William Wong
  */
 public class Spider extends Enemy {
@@ -128,7 +127,7 @@ public class Spider extends Enemy {
 
     @Override
     public boolean isDead() {
-        return super.isdead();
+        return super.isDead();
     }
 
     @Override
@@ -226,7 +225,8 @@ public class Spider extends Enemy {
         }
         else if (e instanceof CollectableEntity) {
             return true;
-        } else if (e instanceof Enemy) {
+        } 
+        else if (e instanceof Enemy) {
             return true;
         }
         return false;

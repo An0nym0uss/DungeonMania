@@ -69,17 +69,24 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage {
 
     }
 
-    // TODO temporary code for testing battle
-    public boolean isdead() {
+    public boolean isDead() {
         if (this.health <= 0) {
             return true;
         }
         return false;
     }
 
-    // TODO temporary code for testing battle
     public int damageDealt() {
-        return this.getDamage();
+        return (getHealth() * getDamage()) / 10;
+    }
+
+    @Override
+    public void receiveDamage(int damage) {
+        setHealth(getHealth() - damage);
+    }
+
+    public void receiveAndruilDamage(int damage) {
+        setHealth(getHealth() - damage);
     }
 
     public boolean shouldCommenceBattle(Grid grid) {

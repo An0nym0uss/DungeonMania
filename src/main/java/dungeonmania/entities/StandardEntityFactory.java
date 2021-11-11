@@ -15,7 +15,7 @@ import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.MidnightArmour;
 import dungeonmania.entities.collectable.buildable.Sceptre;
 import dungeonmania.entities.collectable.buildable.Shield;
-import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
+import dungeonmania.entities.collectable.rarecollectable.*;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.player.Inventory;
 import dungeonmania.entities.player.Player;
@@ -165,6 +165,8 @@ public class StandardEntityFactory implements EntityFactory {
             return new HealthPotion(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("sun_stone")) {
             return new SunStone(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("anduril")) {
+            return new Anduril(new Position(x, y, Layer.COLLECTABLE));
         }
 
         else if (entityType.equalsIgnoreCase("player")) {
