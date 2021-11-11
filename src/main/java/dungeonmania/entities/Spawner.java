@@ -1,6 +1,7 @@
 package dungeonmania.entities;
 
 import dungeonmania.Grid;
+import dungeonmania.constants.Layer;
 import dungeonmania.util.Position;
 
 /**

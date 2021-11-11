@@ -1,5 +1,6 @@
 package dungeonmania.entities.enemy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.Grid;
@@ -89,19 +90,21 @@ public class Hydra extends RandomMovingEnemy implements Spawner {
         boolean redo = true;
         Position randomPosition = null;
 
-        while (redo) {
-            redo = false;
-            int newX = random.nextInt(grid.getWidth());
-            int newY = random.nextInt(grid.getHeight());
+        List<Position> possiblePositions = new ArrayList<Position>();
 
-            randomPosition = new Position(newX, newY, Layer.SPIDER);
+        for (int x = 0; x < grid.getWidth(); x++) {
+            for (int y = 0; y < grid.getHeight(); y++) {
+                possiblePositions.add(new Position(x, y, Layer.ENEMY));
+            }
+        }
+
+        while (redo && possiblePositions.size() > 0) {
+            redo = false;
+            randomPosition = possiblePositions.remove(random.nextInt(possiblePositions.size()));
 
             List<Entity> positionEntities = grid.getEntities(randomPosition.getX(), randomPosition.getY());
             for (Entity positionEntity : positionEntities) {
-                if (positionEntity instanceof Player) { // exit condition for while loop in case there is no valid spots to spawn, tho this might take awhile to occur...
-                    randomPosition = null;              // TODO make this better, pick a spot on grid only once so we can have better exit condition
-                }
-                else if (movingConstraints(positionEntity)) { 
+                if (movingConstraints(positionEntity) || positionEntity instanceof Player) { 
                     redo = true;
                 } 
             }

@@ -125,7 +125,7 @@ public class Spider extends Enemy implements Spawner {
         }
 
         if (doBattle != null) {
-            this.commenceBattle(grid);
+            commenceBattle(grid);
         }
 
         nextDirection();
@@ -217,26 +217,29 @@ public class Spider extends Enemy implements Spawner {
         //Random random = new Random(seed);
 
         // the amount of padding to use when selecting a position. 
-        // a padding of 1 allows the spider to always stay inside the grid while moving, however is not possible when the grid is too small
+        // a padding of 1 allows the spider to always stay inside the grid while moving, 
+        // however is not possible when the grid is too small
         int widthBorderPadding = grid.getWidth() >= 3 ? 1 : 0;
         int heightBorderPadding = grid.getHeight() >= 3 ? 1 : 0;
 
         boolean redo = true;
         Position randomPosition = null;
 
-        while (redo) {
-            redo = false;
-            int newX = random.nextInt(grid.getWidth() - (widthBorderPadding != 0 ? 1 + widthBorderPadding : 0));
-            int newY = random.nextInt(grid.getHeight() - (heightBorderPadding != 0 ? 1 + heightBorderPadding : 0));
+        List<Position> possiblePositions = new ArrayList<Position>();
 
-            randomPosition = new Position(widthBorderPadding + newX, heightBorderPadding + newY, Layer.SPIDER);
+        for (int x = widthBorderPadding; x < grid.getWidth() - widthBorderPadding; x++) {
+            for (int y = heightBorderPadding; y < grid.getHeight() - heightBorderPadding; y++) {
+                possiblePositions.add(new Position(x, y, Layer.SPIDER));
+            }
+        }
+
+        while (redo && possiblePositions.size() > 0) {
+            redo = false;
+            randomPosition = possiblePositions.remove(random.nextInt(possiblePositions.size()));
 
             List<Entity> positionEntities = grid.getEntities(randomPosition.getX(), randomPosition.getY());
             for (Entity positionEntity : positionEntities) {
-                if (positionEntity instanceof Player) { // return null as if player defeated spider instantly
-                    randomPosition = null;              // TODO make this better, pick a spot on grid only once so we can have better exit condition
-                }
-                else if (movingConstraints(positionEntity)) { 
+                if (movingConstraints(positionEntity) || positionEntity instanceof Player) { 
                     redo = true;
                 } 
             }
