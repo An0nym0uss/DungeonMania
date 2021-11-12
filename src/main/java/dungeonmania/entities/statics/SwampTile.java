@@ -30,7 +30,7 @@ public class SwampTile extends StaticEntity {
      * @param entity The entity we wish to check.
      * @return True if swamp tiles affects entity, otherwise false.
      */
-    public boolean isAffectedBy(Entity entity) {
+    public boolean affects(Entity entity) {
         if (entity instanceof Enemy) {
             return true;
         }
