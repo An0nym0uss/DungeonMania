@@ -30,15 +30,7 @@ public class FloorSwitchTest {
         // attempt to walk into wall
         DungeonResponse secondTick = controller.tick(null, Direction.RIGHT);
 
-        int playerId = 0;
-
-        // get playerId
-        for( int i = 0; i < secondTick.getEntities().size(); i++) {
-            EntityResponse entResponse = secondTick.getEntities().get(i);
-            if (entResponse.getType().equals("player")) {
-                playerId = i;
-            }
-        }
+        int playerId = getPlayerId(secondTick);
 
         // wall impassable
         assertTrue(secondTick.getEntities().get(playerId).getType().equals("player") && secondTick.getEntities().get(playerId).getPosition().getX() == 1);
@@ -51,10 +43,22 @@ public class FloorSwitchTest {
         // attempt to walk into wall
         DungeonResponse fourthTick = controller.tick(null, Direction.RIGHT);
 
+        playerId = getPlayerId(fourthTick);
         // wall destroyed
         assertTrue(fourthTick.getEntities().get(playerId).getType().equals("player") && fourthTick.getEntities().get(playerId).getPosition().getX() == 2);
 
         // finish game
         assertEquals("", controller.tick(null, Direction.RIGHT).getGoals());
+    }
+
+    private int getPlayerId(DungeonResponse response) {
+        // get playerId
+        for( int i = 0; i < response.getEntities().size(); i++) {
+            EntityResponse entResponse = response.getEntities().get(i);
+            if (entResponse.getType().equals("player")) {
+                return i;
+            }
+        }
+        return 0;
     }
 }

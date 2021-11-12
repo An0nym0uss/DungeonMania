@@ -65,10 +65,15 @@ public class BattleTest {
         // pick up health potion
         player.move(grid, Direction.RIGHT);
         assertTrue(!player.getInventory().getItems().isEmpty());
-        String id = player.getInventory().getItems().get(0).getId();
+
+        String id = "";
+        if (player.getInventory().getItems().get(0).getType().equalsIgnoreCase("health_potion")) {   
+            id = player.getInventory().getItems().get(0).getId();
+        } else {
+            id = player.getInventory().getItems().get(1).getId();
+        }
         player.useItem(id, grid);
         assertTrue(player.getCurrentHealth() == player.getMaxHealth());
-
     }
 
     @Test
