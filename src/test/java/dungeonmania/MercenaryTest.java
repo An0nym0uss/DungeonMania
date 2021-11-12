@@ -2,6 +2,7 @@ package dungeonmania;
 
 import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.enemy.Mercenary;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Wall;
@@ -111,5 +112,30 @@ public class MercenaryTest {
 
         assertEquals(0, mercenary.getPosition().getX());
         assertEquals(1, mercenary.getPosition().getY());
+    }
+
+    @Test
+    public void testMercenaryBribed() {
+        Mercenary mercenary = new Mercenary(new Position(2, 1), 1, 1, 1);
+        Player player = new Player(new Position(0, 0), new Standard());
+        Treasure treasure = new Treasure(new Position(0, 1));
+
+        /**
+         * [P] [] []
+         * [0] [] [M]
+         * [] [] []
+         *
+         */
+        Entity[][][] map = new Entity[3][3][Layer.LAYER_SIZE];
+        map[player.getPosition().getX()][player.getPosition().getY()][player.getPosition().getLayer()] = player;
+        map[mercenary.getPosition().getX()][mercenary.getPosition().getY()][mercenary.getPosition().getLayer()] = mercenary;
+        map[treasure.getPosition().getX()][treasure.getPosition().getY()][treasure.getPosition().getLayer()] = treasure;
+
+
+        Grid grid = new Grid(3, 3, map, player);
+        mercenary.update(grid);
+
+        assertEquals(2, mercenary.getPosition().getX());
+        assertEquals(0, mercenary.getPosition().getY());
     }
 }
