@@ -4,6 +4,7 @@ import dungeonmania.entities.collectable.CollectableEntity;
 import org.json.JSONObject;
 
 import dungeonmania.Grid;
+import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
@@ -42,7 +43,10 @@ public class Mercenary extends Enemy {
             else if (shortestPath.size() > 1) {
                 // There is a valid path
                 Position nextStep = shortestPath.get(1);
-                this.setPosition(nextStep);
+                grid.dettach(this);
+                Position newPos = new Position(nextStep.getX(), nextStep.getY(), Layer.ENEMY);
+                this.setPosition(newPos);
+                grid.attach(this);
             }
 
             if (this.shouldCommenceBattle(grid) && !this.getBribed()) {
@@ -158,5 +162,14 @@ public class Mercenary extends Enemy {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Mercenary clone() {
+        Mercenary copy = new Mercenary(this.getPosition(), this.getSpeed(), this.getHealth(), this.getDamage());
+        copy.bribed = this.bribed;
+        
+        return copy;
+
     }
 }

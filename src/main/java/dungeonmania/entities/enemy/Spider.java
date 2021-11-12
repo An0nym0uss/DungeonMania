@@ -247,6 +247,16 @@ public class Spider extends Enemy implements Spawner {
         
         return randomPosition;
     }
+
+    @Override
+    public Spider clone() {
+        Spider copy = new Spider(this.getPosition(), this.getSpeed(), this.getHealth(), this.getDamage());
+        copy.directionCount = this.directionCount;
+        copy.setSpawnCounter(this.getSpawnCounter());
+        copy.isReverse = this.isReverse;
+
+        return copy;
+    }
     
     /**
      * Gets the number of spiders on the supplied Grid object.
