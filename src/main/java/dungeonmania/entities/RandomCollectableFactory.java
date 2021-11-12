@@ -58,7 +58,7 @@ public class RandomCollectableFactory implements EntityFactory {
             return new InvincibilityPotion(null);
         } else {
 
-            return new Bomb(null, 1);
+            return new Bomb(null);
         }
     }
     

@@ -93,4 +93,9 @@ public class Boulder extends StaticEntity {
 
         return true;
     }
+
+    @Override
+    public Boulder clone() {
+        return new Boulder(this.getPosition());
+    }
 }

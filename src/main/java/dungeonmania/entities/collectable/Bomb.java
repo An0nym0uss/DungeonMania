@@ -27,11 +27,6 @@ public class Bomb extends CollectableEntity{
         this.blastRadius = blastRadius;
     }
 
-    public Bomb(Bomb that) {
-        this(that.getPosition(), that.getBlastRadius());
-        this.isPlaced = that.hasPlaced();
-    }
-
     public int getBlastRadius() {
         return this.blastRadius;
     }
@@ -124,7 +119,9 @@ public class Bomb extends CollectableEntity{
 
     @Override
     public Bomb clone() {
-        return new Bomb(this);
+        Bomb copy = new Bomb(this.getPosition(), this.getBlastRadius());
+        copy.isPlaced = this.hasPlaced();
+        return copy;
     }
 
 }
