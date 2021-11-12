@@ -8,6 +8,7 @@ import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.player.Inventory;
+import dungeonmania.entities.player.Player;
 import dungeonmania.util.Position;
 
 /**
@@ -54,8 +55,10 @@ public class StandardResponseFactory implements ResponseFactory {
                 for (int z = 0; z < grid.getLayerSize(); z++) {
                     Entity entity = grid.getMap()[x][y][z];
                     if (entity != null) {
+                        if (entity instanceof Player) {
 
-                        System.out.println(x + ", " + y + ", " + z + " : " + entity);
+                            System.out.println(x + ", " + y + ", " + z + " : " + entity);
+                        }
                         entities.add(createEntityResponse(entity));
                     }
                 }

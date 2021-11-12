@@ -70,6 +70,7 @@ public class Inventory implements GameToJSON {
 
             if (e.getType().equals(item)) {
                 itr.remove();
+                break;
             }
         }
     }

@@ -104,13 +104,8 @@ public class Grid implements GridSubject, GameToJSON {
         this.HEIGHT = that.getHeight();
         this.WIDTH = that.getWidth();
         this.map = new Entity[WIDTH][HEIGHT][LAYER_SIZE];
-        this.player = that.getPlayer(); /////////////////////////////////
+        this.player = null;
         this.olderSelves = new ArrayList<>();
-        for (int i = 0; i < that.getOlderSelves().size(); i++) {
-            OlderSelf older = that.getOlderSelves().get(i).duplicate();
-            this.olderSelves.add(older);
-            this.attach(older);
-        }
 
         for (int x = 0; x < this.getWidth(); x++) {
             for (int y = 0; y < this.getHeight(); y++) {
@@ -118,11 +113,12 @@ public class Grid implements GridSubject, GameToJSON {
                     Entity entity = that.getMap()[x][y][z];
                     if (entity != null) {
                         if (entity.getType().equalsIgnoreCase("player")) {
-                            Player p = (Player)entity;
-                            prevPlayer = p.duplicate();
-                            //map[x][y][z] = prevPlayer;
+                            OlderSelf older = new OlderSelf((Player)entity);
+                            this.prevPlayer = older;
                         } else if (entity.getType().equalsIgnoreCase("older_self")) {
-                            // do nothing
+                            OlderSelf older = new OlderSelf((OlderSelf)entity, true);
+                            this.olderSelves.add(older);
+                            map[x][y][z] = older;
                         } else {
                             map[x][y][z] = entity.clone();
                         }
@@ -194,7 +190,7 @@ public class Grid implements GridSubject, GameToJSON {
 
         map[x][y][layer] = e;
 
-        if (e instanceof Player) {
+        if (e.getType().equalsIgnoreCase("player")) {
             setPlayer((Player) e);
         // For linking portals
         } else if (e instanceof Portal) {

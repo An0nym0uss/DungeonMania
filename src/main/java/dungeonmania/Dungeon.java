@@ -24,6 +24,8 @@ public class Dungeon implements GameToJSON {
     private ComponentGoal goal = null;
     private Grid grid = null;
     private List<Grid> prevGrids = new ArrayList<>();
+    private List<Tick> prevTicks = new ArrayList<>();
+    private int currentTick = 0;
 
     public Dungeon(String name, Mode mode) {
         this.dungeonId = name + " (" + LocalDateTime.now().toString() + ")";
@@ -69,7 +71,7 @@ public class Dungeon implements GameToJSON {
     }
 
     public void tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        grid.getPlayer().getPrevTicks().add(new Tick(itemUsed, movementDirection));
+        prevTicks.add(new Tick(itemUsed, movementDirection));
         prevGrids.add(grid.clone());
         
         if (movementDirection != null) {
@@ -107,6 +109,8 @@ public class Dungeon implements GameToJSON {
         if (gameMode.canSpawnHydra()) {
             new Hydra().checkForNextSpawn(grid, new Hydra().getClass());
         }
+
+        currentTick++;
     }
 
     public void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
@@ -129,35 +133,40 @@ public class Dungeon implements GameToJSON {
         Grid prevGrid = prevGrids.get(targetIndex);
 
         // copy previous movements to older self
-        List<Tick> prevTicks = new ArrayList<>();
-        int start = grid.getPlayer().getPrevTicks().size() - ticks;
+        List<Tick> currentTicks = new ArrayList<>();
+        int start = prevTicks.size() - ticks;
         if (start < 0) {
             start = 0;
         }
-        for (int i = start; i < grid.getPlayer().getPrevTicks().size(); i++) {
-            prevTicks.add(grid.getPlayer().getPrevTicks().get(i));
+        for (int i = start; i < prevTicks.size(); i++) {
+            currentTicks.add(prevTicks.get(i));
         }
-        OlderSelf prev = prevGrid.getPrevPlayer();
-        prev.setPrevTicks(prevTicks);
+        System.out.println("size movement:" + currentTicks.size());
+        // for (Tick tick : prevTicks) {
+        //     currentTicks.add(tick);
+        // }
+        OlderSelf olderSelf = prevGrid.getPrevPlayer();
+        olderSelf.setPrevTicks(currentTicks);
 
         // add player at that time into the list of older selves
-        prevGrid.getOlderSelves().add(prev);
-        prevGrid.attach(prev);
-
-        // set current player to previous grid
-        prevGrid.setPrevPlayer(grid.getPlayer().duplicate());
+        prevGrid.getOlderSelves().add(olderSelf);
+        prevGrid.attach(olderSelf);
 
         Player currentPlayer = grid.getPlayer();
+        // // set current player to previous grid
         prevGrid.setPlayer(currentPlayer);
         prevGrid.attach(currentPlayer);
-        grid = prevGrid;
-        grid.setPlayer(currentPlayer);
+        prevGrid.setPrevPlayer(currentPlayer.clone());
+        this.grid = prevGrid;
 
         // delete grids after current (rewinded) tick
         int size = prevGrids.size() - 1;
         for (int i = size; i > targetIndex; i--) {
             prevGrids.remove(i);
         }
+
+        currentTick = targetIndex;
+        this.grid.getPlayer().getInventory().removeNonSpecificItem("time_turner");
     }
 
     @Override

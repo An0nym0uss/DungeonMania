@@ -28,22 +28,21 @@ import dungeonmania.entities.collectable.buildable.*;
 import dungeonmania.entities.collectable.rarecollectable.*;
 
 public class Player extends Entity implements Damage, Health, Moving {
-    private int damage;
-    private int maxHealth;
-    private int currentHealth;
-    private Inventory inventory;
-    private StatusEffect statusEffect;
-    private Sword sword;
-    private Armour armour;
-    private Bow bow;
-    private Shield shield;
-    private Anduril anduril;
-    private MidnightArmour midnightArmour;
-    private Direction movement;
-    private boolean isTeleported;
-    private Mercenary mercenary;
-    private boolean rareDrop;
-    private List<Tick> prevTicks = new ArrayList<>();
+    protected int damage;
+    protected int maxHealth;
+    protected int currentHealth;
+    protected Inventory inventory;
+    protected StatusEffect statusEffect;
+    protected Sword sword;
+    protected Armour armour;
+    protected Bow bow;
+    protected Shield shield;
+    protected Anduril anduril;
+    protected MidnightArmour midnightArmour;
+    protected Direction movement;
+    protected boolean isTeleported;
+    protected Mercenary mercenary;
+    protected boolean rareDrop;
 
     public Player(Position position, Mode mode) {
         super("player", position, false);
@@ -76,10 +75,6 @@ public class Player extends Entity implements Damage, Health, Moving {
             this.shield = that.getShield().clone();
         }
         this.isTeleported = that.hasTeleported();
-
-        for (Tick tick : that.getPrevTicks()) {
-            this.prevTicks.add(tick);
-        }
     }
 
     public void setInventory(Inventory inventory) {
@@ -132,14 +127,6 @@ public class Player extends Entity implements Damage, Health, Moving {
 
     public Boolean hasTeleported() {
         return isTeleported;
-    }
-
-    public List<Tick> getPrevTicks() {
-        return this.prevTicks;
-    }
-
-    public void setPrevTicks(List<Tick> prevTicks) {
-        this.prevTicks = prevTicks;
     }
 
     public boolean hasArmour() {
@@ -510,21 +497,21 @@ public class Player extends Entity implements Damage, Health, Moving {
         ) {
             collectable.useItemWithEffect(this.statusEffect);
             this.inventory.removeItem(collectable);
-        } else if (collectable instanceof Treasure) {
-            // Bribe mercenary
-            List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
-            adjacentSquares.add(this.getPosition());
-            for (Position square : adjacentSquares) {
-                // Check if a mercenary is on that square
-                List<Entity> squareEntities = grid.getEntities(square.getX(), square.getY());
-                for (Entity squareEntity : squareEntities) {
-                    if (squareEntity instanceof Mercenary) {
-                        ((Mercenary)squareEntity).setBribed(true);
-                        this.inventory.removeItem(collectable);
-                        return;
-                    }
-                }
-            }
+        // } else if (collectable instanceof Treasure) {
+        //     // Bribe mercenary
+        //     List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
+        //     adjacentSquares.add(this.getPosition());
+        //     for (Position square : adjacentSquares) {
+        //         // Check if a mercenary is on that square
+        //         List<Entity> squareEntities = grid.getEntities(square.getX(), square.getY());
+        //         for (Entity squareEntity : squareEntities) {
+        //             if (squareEntity instanceof Mercenary) {
+        //                 ((Mercenary)squareEntity).setBribed(true);
+        //                 this.inventory.removeItem(collectable);
+        //                 return;
+        //             }
+        //         }
+        //     }
 
         } else if (collectable == null) {
             throw new InvalidActionException("Item is not in inventory.");
@@ -673,7 +660,7 @@ public class Player extends Entity implements Damage, Health, Moving {
 
             // player moves
             grid.dettach(this);
-            this.setPosition(new Position(newX, newY, this.getPosition().getLayer()));
+            this.setPosition(new Position(newX, newY, Layer.PLAYER));
             grid.attach(this);
 
             // player interacts with entities in the cell
@@ -731,7 +718,8 @@ public class Player extends Entity implements Damage, Health, Moving {
         return player;
     }
 
-    public OlderSelf duplicate() {
+    @Override
+    public OlderSelf clone() {
         return new OlderSelf(this);
     }
 
