@@ -28,4 +28,9 @@ public class Zombie extends RandomMovingEnemy {
     public boolean isDead() {
         return super.isDead();
     }
+
+    @Override
+    public Zombie clone() {
+        return new Zombie(this.getPosition(), this.getSpeed(), this.getHealth(), this.getDamage());
+    }
 }

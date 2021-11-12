@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.ObserverEntity;
+import dungeonmania.entities.enemy.Mercenary;
 import dungeonmania.entities.enemy.Zombie;
 import dungeonmania.entities.player.OlderSelf;
 import dungeonmania.entities.player.Player;
