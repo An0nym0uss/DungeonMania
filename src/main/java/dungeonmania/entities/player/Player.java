@@ -131,7 +131,7 @@ public class Player extends Entity implements Damage, Health, Moving {
 
     public boolean hasArmour() {
         for (CollectableEntity collectable : this.inventory.getItems()) {
-            if (collectable instanceof Armour) {
+            if (collectable instanceof Armour && !(collectable instanceof MidnightArmour)) {
                 return true;
             }
         }
@@ -563,7 +563,7 @@ public class Player extends Entity implements Damage, Health, Moving {
             Sceptre sceptre = new Sceptre(new Position(0, 0));
             this.inventory.addItem(sceptre);
         } else if (buildable.equals("midnight_armour")) {
-            if (hasZombie(grid)) {
+            if (grid.hasZombie()) {
                 throw new InvalidActionException("You cannot craft midnight armour when zombie is in game.");
             }
             Recipe recipe = getAvailableRecipe(buildable);
@@ -586,19 +586,6 @@ public class Player extends Entity implements Damage, Health, Moving {
                 this.inventory.removeNonSpecificItem(ingredient.getKey());
             }
         }
-    }
-
-    private boolean hasZombie(Grid grid) {
-        for (int x = 0; x < grid.getWidth(); x++) {
-            for (int y = 0; y < grid.getHeight(); y++) {
-                for (Entity e : grid.getEntities(x, y)) {
-                    if (e instanceof Zombie) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     public void setMerc(Mercenary mercenary) {

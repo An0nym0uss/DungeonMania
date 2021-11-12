@@ -85,6 +85,11 @@ public class Dungeon implements GameToJSON {
             this.goal = null;
         }
 
+        if (grid.isPlayerOnTimeTravelPortal()) {
+            rewind(30);
+            return;
+        }
+
         // older selves move or use item
         Iterator<OlderSelf> itr = grid.getOlderSelves().iterator();
         while (itr.hasNext()) {

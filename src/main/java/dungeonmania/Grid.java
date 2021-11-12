@@ -13,9 +13,11 @@ import org.json.JSONObject;
 import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.ObserverEntity;
+import dungeonmania.entities.enemy.Zombie;
 import dungeonmania.entities.player.OlderSelf;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Portal;
+import dungeonmania.entities.statics.TimeTravellingPortal;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -104,7 +106,7 @@ public class Grid implements GridSubject, GameToJSON {
         this.HEIGHT = that.getHeight();
         this.WIDTH = that.getWidth();
         this.map = new Entity[WIDTH][HEIGHT][LAYER_SIZE];
-        this.player = null;
+        this.player = that.getPlayer();
         this.olderSelves = new ArrayList<>();
 
         for (int x = 0; x < this.getWidth(); x++) {
@@ -164,6 +166,45 @@ public class Grid implements GridSubject, GameToJSON {
      */
     public List<Entity> getEntities(int x, int y) {
         return Arrays.asList(map[x][y]).stream().filter(e -> e != null).collect(Collectors.toList());
+    }
+
+    /**
+     * check if zombie is present in the map
+     * @return
+     */
+    public boolean hasZombie() {
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                for (Entity entity : getEntities(x, y)) {
+                    if (entity instanceof Zombie) {
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        return false;
+    }
+
+    public boolean isPlayerOnTimeTravelPortal() {
+        Position playerPos = this.player.getPosition();
+        Position portalPos = null;
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                for (Entity entity : getEntities(x, y)) {
+                    if (entity instanceof TimeTravellingPortal) {
+                        portalPos = entity.getPosition();
+                        if (playerPos.equals(portalPos)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            }
+            
+        }
+        return false;
     }
 
     /**

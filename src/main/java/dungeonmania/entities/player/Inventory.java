@@ -35,6 +35,7 @@ public class Inventory implements GameToJSON {
 
             if (e.getId() == item.getId()) {
                 itr.remove();
+                return;
             }
         }
     }
@@ -70,7 +71,7 @@ public class Inventory implements GameToJSON {
 
             if (e.getType().equals(item)) {
                 itr.remove();
-                break;
+                return;
             }
         }
     }
