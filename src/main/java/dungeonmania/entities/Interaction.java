@@ -23,7 +23,7 @@ public class Interaction {
                         entity.setMindcontrolDuration(10);
                     } else {
                         entity.setBribed(true);
-                        player.getInventory().removeNonSpecificItem("trerasure");
+                        player.getInventory().removeNonSpecificItem("treasure");
                         success = true;
                     }
                 }
