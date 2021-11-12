@@ -18,14 +18,17 @@ import java.util.*;
 public class Mercenary extends Enemy {
 
     private boolean bribed;
+    private int mindcontrolDuration;
     
     public Mercenary(Position position, int speed, int health, int damage) {
         super("mercenary", position, true, speed, health, damage);
         this.bribed = false;
+        this.mindcontrolDuration = 0;
     }
 
     @Override
     public void update(Grid grid) {
+        this.tickDown();
         if (this.shouldCommenceBattle(grid) && !this.getBribed()) {
             this.commenceBattle(grid);
         }
@@ -113,6 +116,28 @@ public class Mercenary extends Enemy {
     public void setBribed(boolean bribed) {
         this.bribed = bribed;
     }
+
+    public int getMindcontrolDuration() {
+        return this.mindcontrolDuration;
+    }
+
+    public void setMindcontrolDuration(int mindcontrolDuration) {
+        this.mindcontrolDuration = mindcontrolDuration;
+    }
+
+    /**
+     * check if the mercenary is mind controlled, i.e. mindControlled duration > 0
+     * for each tick, if so, set the mercenary to bribed state and reduce the 
+     * duration bty one 
+     */
+    public void tickDown() {
+        if (this.mindcontrolDuration > 0) {
+            this.bribed = true;
+            this.mindcontrolDuration -= 1;
+        } else {
+            this.bribed = false;
+        }
+    } 
 
     @Override
     public void move(Grid grid, Direction d) {

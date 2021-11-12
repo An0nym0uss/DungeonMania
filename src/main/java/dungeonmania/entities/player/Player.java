@@ -205,6 +205,15 @@ public class Player extends Entity implements Damage, Health, Moving {
         return false;
     }
 
+    public boolean hasSceptre() {
+        for (CollectableEntity collectable : this.inventory.getItems()) {
+            if (collectable instanceof Sceptre) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean hasMercAlly() {
         if (mercenary != null) {
             return true;
