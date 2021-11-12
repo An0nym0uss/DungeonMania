@@ -89,6 +89,9 @@ public class StandardEntityFactory implements EntityFactory {
         } else if (entityType.equalsIgnoreCase("door_unlocked")) {
             int keyNumber = entityData.get("key").getAsInt();
             return new Door("door_unlocked", new Position(x, y, Layer.STATIC), keyNumber, true);
+        } else if (entityType.equalsIgnoreCase("swamp_tile")) {
+            int movementFactor = entityData.get("movement_factor").getAsInt();
+            return new SwampTile(new Position(x, y, Layer.STATIC), movementFactor);
         // Enemies TODO
         // Mercancy TODO
         } else if (entityType.equalsIgnoreCase("mercenary")) {
