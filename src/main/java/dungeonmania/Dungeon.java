@@ -141,10 +141,6 @@ public class Dungeon implements GameToJSON {
         for (int i = start; i < prevTicks.size(); i++) {
             currentTicks.add(prevTicks.get(i));
         }
-        System.out.println("size movement:" + currentTicks.size());
-        // for (Tick tick : prevTicks) {
-        //     currentTicks.add(tick);
-        // }
         OlderSelf olderSelf = prevGrid.getPrevPlayer();
         olderSelf.setPrevTicks(currentTicks);
 

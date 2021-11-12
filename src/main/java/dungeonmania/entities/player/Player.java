@@ -497,6 +497,7 @@ public class Player extends Entity implements Damage, Health, Moving {
         ) {
             collectable.useItemWithEffect(this.statusEffect);
             this.inventory.removeItem(collectable);
+        // // bribing mercenary should be done in interact method
         // } else if (collectable instanceof Treasure) {
         //     // Bribe mercenary
         //     List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
