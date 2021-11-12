@@ -20,7 +20,7 @@ public class Mercenary extends Enemy {
     private boolean bribed;
     
     public Mercenary(Position position, int speed, int health, int damage) {
-        super("mercenary", position, false, speed, health, damage);
+        super("mercenary", position, true, speed, health, damage);
         this.bribed = false;
     }
 
@@ -33,10 +33,17 @@ public class Mercenary extends Enemy {
          List<Position> shortestPath = this.breadthFirstSearch(grid);
 
             // Perform movement
-            if (shortestPath.size() > 1) {
+            if (shortestPath.size() == 2 && getBribed()) {
+
+            }
+            else if (shortestPath.size() > 1) {
                 // There is a valid path
                 Position nextStep = shortestPath.get(1);
                 this.setPosition(nextStep);
+            }
+
+            if (this.shouldCommenceBattle(grid) && !this.getBribed()) {
+                this.commenceBattle(grid);
             }
         }
 

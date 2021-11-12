@@ -12,8 +12,8 @@
             "type": "mercenary"
         },
         {
-            "x": 3,
-            "y": 3,
+            "x": 2,
+            "y": 2,
             "type": "exit"
         }
     ],
