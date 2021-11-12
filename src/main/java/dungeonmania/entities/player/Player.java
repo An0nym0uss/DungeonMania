@@ -1,6 +1,7 @@
 package dungeonmania.entities.player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,7 @@ import dungeonmania.util.Position;
 import dungeonmania.entities.statics.*;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.modes.Mode;
-import dungeonmania.modes.Standard;
+import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.*;
@@ -31,6 +32,7 @@ public class Player extends Entity implements Damage, Health, Moving {
     protected int damage;
     protected int maxHealth;
     protected int currentHealth;
+    protected int previousHealth;
     protected Inventory inventory;
     protected StatusEffect statusEffect;
     protected Sword sword;
@@ -48,6 +50,7 @@ public class Player extends Entity implements Damage, Health, Moving {
         super("player", position, false);
         this.maxHealth = mode.getMaxPlayerHealth();
         this.currentHealth = mode.getMaxPlayerHealth();
+        this.previousHealth = mode.getMaxPlayerHealth();
         this.inventory = new Inventory();
         this.statusEffect = new StatusEffect();
         this.isTeleported = false;
@@ -102,6 +105,7 @@ public class Player extends Entity implements Damage, Health, Moving {
     }
 
     public void setCurrentHealth(int currentHealth) {
+        this.previousHealth = currentHealth;
         this.currentHealth = currentHealth;
     }
 
@@ -287,6 +291,33 @@ public class Player extends Entity implements Damage, Health, Moving {
             return damage;
         }
         return 0;
+    }
+
+    @Override
+    public AnimationQueue getAnimation() {
+
+        Double percentage_prev = previousHealth/((double)maxHealth);
+        Double percentage_curr = currentHealth/((double)maxHealth);
+        String colour_1;
+        String colour_2;
+        String prev_healthbar = String.format("healthbar set %2.1f", percentage_prev);
+        String curr_healthbar = String.format("healthbar set %2.1f, over 1.5s", percentage_curr);
+
+        if (percentage_prev >= 0.8) {
+            colour_1 = "healthbar tint 0x00ff00";
+        } else {
+            colour_1 = "healthbar tint 0xff0000";
+        }
+
+        if (percentage_curr >= 0.8) {
+            colour_2 = "healthbar tint 0x00ff00, over 0.5s";
+        } else {
+            colour_2 = "healthbar tint 0xff0000, over 0.5s";
+        }
+
+        return new AnimationQueue("PostTick", getId(), Arrays.asList(
+            prev_healthbar, colour_1, curr_healthbar, colour_2
+        ), false, -1);
     }
 
     @Override
