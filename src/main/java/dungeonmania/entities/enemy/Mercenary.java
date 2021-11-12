@@ -108,16 +108,6 @@ public class Mercenary extends Enemy {
     }
 
     @Override
-    public int damageDealt() {
-        return 0;
-    }
-
-    @Override
-    public boolean isDead() {
-        return false;
-    }
-
-    @Override
     public void move(Grid grid, Direction d) {
     }
 

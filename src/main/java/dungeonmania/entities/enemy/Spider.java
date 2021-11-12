@@ -4,6 +4,7 @@ import dungeonmania.Grid;
 import dungeonmania.constants.Layer;
 import dungeonmania.entities.Battle;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Spawner;
 import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Boulder;
@@ -17,10 +18,9 @@ import java.util.Random;
 
 /**
  * 
- * 
  * @author Lachlan Kerr, William Wong
  */
-public class Spider extends Enemy {
+public class Spider extends Enemy implements Spawner {
     private List<Direction> movementArray = new ArrayList<Direction>();
     private int directionCount;
     private boolean isReverse;
@@ -41,84 +41,30 @@ public class Spider extends Enemy {
         this.isReverse = false;
     }
 
-    public static void checkForNextSpawn(Grid grid) {
-        if (getNumSpidersOnGrid(grid) < maxSpiders)
-        {
+    public Spider() {
+        this(new Position(0, 0), 1, 1, 1);
+    }
+
+    /*@Override
+    public void checkForNextSpawn(Grid grid) {
+        if (getNumSpidersOnGrid(grid) < maxSpiders) {
             spawnCounter++;
             if (spawnCounter == spawnRate) {
                 spawnCounter = 0;
                 Position spawnPosition = getRandomValidSpotOnGrid(grid);
 
                 if (spawnPosition != null) {
-                    Spider newSpider = new Spider(spawnPosition, 1, 1, 1);
-                    grid.attach(newSpider);
+                    Spider newSpider = new Spider();
+                    newSpider.setPosition(spawnPosition);
+                    spawn(newSpider, grid);
                 }
             }
         }
-    }
+    }*/
 
     @Override
     public void update(Grid grid) {
         move(grid, movementArray.get(directionCount));
-    }
-
-    /**
-     * 
-     * @param grid
-     * @param seed
-     * @return Potentially null if there is no valid spots to spawn on.
-     * @post returned position is within the grid bounds with a 1 space buffer, and nothing at the position constrains a spider
-     */
-    private static Position getRandomValidSpotOnGrid(Grid grid) {
-        //Random random = new Random(seed);
-
-        // the amount of padding to use when selecting a position. 
-        // a padding of 1 allows the spider to always stay inside the grid while moving, however is not possible when the grid is too small
-        int widthBorderPadding = grid.getWidth() >= 3 ? 1 : 0;
-        int heightBorderPadding = grid.getHeight() >= 3 ? 1 : 0;
-
-        boolean redo = true;
-        Position randomPosition = null;
-
-        while (redo) {
-            redo = false;
-            int newX = random.nextInt(grid.getWidth() - (widthBorderPadding != 0 ? 1 + widthBorderPadding : 0));
-            int newY = random.nextInt(grid.getHeight() - (heightBorderPadding != 0 ? 1 + heightBorderPadding : 0));
-
-            randomPosition = new Position(widthBorderPadding + newX, heightBorderPadding + newY, Layer.SPIDER);
-
-            List<Entity> positionEntities = grid.getEntities(randomPosition.getX(), randomPosition.getY());
-            for (Entity positionEntity : positionEntities) {
-                if (positionEntity instanceof Player) { // return null as if player defeated spider instantly
-                    randomPosition = null;
-                }
-                else if (positionEntity instanceof Boulder || positionEntity instanceof CollectableEntity) { // we can't use movingConstraints() because we're in a static function
-                    redo = true;
-                } 
-            }
-        }
-        
-        return randomPosition;
-    }
-
-    /**
-     * Gets the number of spiders on the supplied Grid object.
-     * @param grid The grid to check for spiders.
-     * @return The number of spiders that were found.
-     */
-    private static int getNumSpidersOnGrid(Grid grid) {
-        int num = 0;
-        Entity[][][] map = grid.getMap();
-        for (int x = 0; x < grid.getWidth(); x++) {
-            for (int y = 0; y < grid.getHeight(); y++) {
-                for (int z = 0; z < grid.getLayerSize(); z++) {
-                    if (map[x][y][z] instanceof Spider) {
-                        num++;
-                    }
-                }
-            }
-        }
-        return num;
     }
 
     @Override
@@ -128,7 +74,7 @@ public class Spider extends Enemy {
 
     @Override
     public boolean isDead() {
-        return super.isdead();
+        return super.isDead();
     }
 
     @Override
@@ -149,12 +95,9 @@ public class Spider extends Enemy {
             ) { // check grid boundary
                 List<Entity> positionEntities = grid.getEntities(newPosition.getX(), newPosition.getY());
                 for (Entity positionEntity : positionEntities) {
-                    if (this.shouldCommenceBattle(grid)) {
-                        this.commenceBattle(grid);
+                    if (positionEntity instanceof Player) { // do a battle with player
+                        doBattle = positionEntity;
                     }
-//                    if (positionEntity instanceof Player) { // do a battle with player
-//                        doBattle = positionEntity;
-//                    }
                     else if (movingConstraints(positionEntity)) { // if can't move there, reverse direction
                         if (directionCount == 0) { // boulder in first position, do nothing till removed
                             return;
@@ -181,9 +124,9 @@ public class Spider extends Enemy {
             grid.attach(this);
         }
 
-//        if (doBattle != null) {
-//            Battle.battle((Player)doBattle, (Enemy)this, grid);
-//        }
+        if (doBattle != null) {
+            commenceBattle(grid);
+        }
 
         nextDirection();
     }
@@ -226,9 +169,103 @@ public class Spider extends Enemy {
         }
         else if (e instanceof CollectableEntity) {
             return true;
-        } else if (e instanceof Enemy) {
+        } 
+        else if (e instanceof Enemy) {
             return true;
         }
         return false;
     }
+
+    @Override
+    public void spawn(Entity entity, Grid grid) {
+        grid.attach(entity);
+    }
+
+    @Override
+    public int getSpawnRate() {
+        return spawnRate;
+    }
+
+    @Override
+    public int getMaxEntities() {
+        return maxSpiders;
+    }
+
+    @Override
+    public int getSpawnCounter() {
+        return spawnCounter;
+    }
+
+    @Override
+    public void setSpawnCounter(int spawnCounter) {
+        Spider.spawnCounter = spawnCounter;
+    }
+
+    @Override
+    public Entity getSpawnEntity() {
+        return new Spider();
+    }
+
+    /**
+     * 
+     * @param grid
+     * @return Potentially null if there is no valid spots to spawn on.
+     * @post returned position is within the grid bounds with a 1 space buffer, and nothing at the position constrains a spider
+     */
+    @Override
+    public Position getSpawnPosition(Grid grid) {
+        //Random random = new Random(seed);
+
+        // the amount of padding to use when selecting a position. 
+        // a padding of 1 allows the spider to always stay inside the grid while moving, 
+        // however is not possible when the grid is too small
+        int widthBorderPadding = grid.getWidth() >= 3 ? 1 : 0;
+        int heightBorderPadding = grid.getHeight() >= 3 ? 1 : 0;
+
+        boolean redo = true;
+        Position randomPosition = null;
+
+        List<Position> possiblePositions = new ArrayList<Position>();
+
+        for (int x = widthBorderPadding; x < grid.getWidth() - widthBorderPadding; x++) {
+            for (int y = heightBorderPadding; y < grid.getHeight() - heightBorderPadding; y++) {
+                possiblePositions.add(new Position(x, y, Layer.SPIDER));
+            }
+        }
+
+        while (redo && possiblePositions.size() > 0) {
+            redo = false;
+            randomPosition = possiblePositions.remove(random.nextInt(possiblePositions.size()));
+
+            List<Entity> positionEntities = grid.getEntities(randomPosition.getX(), randomPosition.getY());
+            for (Entity positionEntity : positionEntities) {
+                if (movingConstraints(positionEntity) || positionEntity instanceof Player) { 
+                    redo = true;
+                } 
+            }
+        }
+        
+        return randomPosition;
+    }
+    
+    /**
+     * Gets the number of spiders on the supplied Grid object.
+     * @param grid The grid to check for spiders.
+     * @return The number of spiders that were found.
+     */
+    /*@Override
+    public int getNumEntitiesOnGrid(Grid grid) {
+        int num = 0;
+        Entity[][][] map = grid.getMap();
+        for (int x = 0; x < grid.getWidth(); x++) {
+            for (int y = 0; y < grid.getHeight(); y++) {
+                for (int z = 0; z < grid.getLayerSize(); z++) {
+                    if (map[x][y][z] instanceof Spider) {
+                        num++;
+                    }
+                }
+            }
+        }
+        return num;
+    }*/
 }

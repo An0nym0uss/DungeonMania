@@ -2,6 +2,7 @@ package dungeonmania.entities.collectable.rarecollectable;
 
 import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.player.Inventory;
+import dungeonmania.entities.player.Player;
 import dungeonmania.util.Position;
 
 import java.util.Random;
@@ -17,14 +18,14 @@ public class RareCollectableEntities extends CollectableEntity {
         this.random = new Random();
     }
 
-    public static void spawnnRareCollectableEntities(Inventory inventory) {
+    public static void spawnnRareCollectableEntities(Player player) {
         RareCollectableEntities anduril = new Anduril();
-        anduril.spawnnAnduril(inventory);
+        anduril.spawnnAnduril(player, player.getInventory());
         RareCollectableEntities oneRing = new TheOneRing();
-        oneRing.spawnnOneRing(inventory);
+        oneRing.spawnnOneRing(player.getInventory());
     }
 
-    public void spawnnAnduril(Inventory inventory) {
+    public void spawnnAnduril(Player player, Inventory inventory) {
 
     }
 
