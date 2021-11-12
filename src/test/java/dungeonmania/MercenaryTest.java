@@ -118,11 +118,11 @@ public class MercenaryTest {
     public void testMercenaryBribed() {
         Mercenary mercenary = new Mercenary(new Position(2, 1), 1, 1, 1);
         Player player = new Player(new Position(0, 0), new Standard());
-        Treasure treasure = new Treasure(new Position(0, 1));
+        Treasure treasure = new Treasure(new Position(1, 0));
 
         /**
-         * [P] [] []
-         * [0] [] [M]
+         * [P] [0] []
+         * [] [] [M]
          * [] [] []
          *
          */
