@@ -131,4 +131,8 @@ public abstract class Entity implements ObserverEntity, GameToJSON {
 
         return entity;
     }
+
+    public Entity clone() {
+        return this;
+    }
 }

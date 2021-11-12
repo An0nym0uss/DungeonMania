@@ -9,6 +9,7 @@ import dungeonmania.Grid;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.player.Inventory;
+import dungeonmania.entities.player.Player;
 import dungeonmania.util.Position;
 
 /**
@@ -48,11 +49,10 @@ public class StandardResponseFactory implements ResponseFactory {
     public List<EntityResponse> createEntityResponseList(Grid grid) {
 
         List<EntityResponse> entities = new ArrayList<>();
-
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
                 for (Entity entity : grid.getEntities(x, y)) {
-                    entities.add(createEntityResponse(entity));
+                    entities.add(createEntityResponse(entity));    
                 }
             }
         }

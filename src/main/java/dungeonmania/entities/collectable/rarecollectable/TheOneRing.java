@@ -29,4 +29,9 @@ public class TheOneRing extends RareCollectableEntities{
             }
         }
     }
+
+    @Override
+    public TheOneRing clone() {
+        return new TheOneRing(this.getPosition());
+    }
 }

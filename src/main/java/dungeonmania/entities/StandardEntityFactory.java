@@ -167,6 +167,10 @@ public class StandardEntityFactory implements EntityFactory {
             return new SunStone(new Position(x, y, Layer.COLLECTABLE));
         } else if (entityType.equalsIgnoreCase("anduril")) {
             return new Anduril(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("time_turner")) {
+            return new TimeTurner(new Position(x, y, Layer.COLLECTABLE));
+        } else if (entityType.equalsIgnoreCase("time_travelling_portal")) {
+            return new TimeTravellingPortal(new Position(x, y, Layer.STATIC));
         }
 
         else if (entityType.equalsIgnoreCase("player")) {

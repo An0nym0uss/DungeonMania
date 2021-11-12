@@ -119,6 +119,14 @@ public class DungeonManiaController {
         return createDungeonResponse();
     }
 
+    public DungeonResponse rewind(int ticks) throws IllegalArgumentException {
+        
+        currentGame.rewind(ticks);
+
+        return createDungeonResponse();
+    }
+
+
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
 
         currentGame = dungeonMaker.generateRandomDungeon(xStart, yStart, xEnd, yEnd, gameMode);

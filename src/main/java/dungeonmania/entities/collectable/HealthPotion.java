@@ -13,4 +13,9 @@ public class HealthPotion extends CollectableEntity{
     public void useItem(Player player) {
         player.setCurrentHealth(player.getMaxHealth());
     }
+
+    @Override
+    public HealthPotion clone() {
+        return new HealthPotion(this.getPosition());
+    }
 }

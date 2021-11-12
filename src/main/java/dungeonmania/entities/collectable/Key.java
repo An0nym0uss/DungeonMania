@@ -24,5 +24,10 @@ public class Key extends CollectableEntity{
 
         return key;
     }
+
+    @Override
+    public Key clone() {
+        return new Key(this.getType(), this.getPosition(), this.getKeyNumber());
+    }
 }
 

@@ -5,6 +5,7 @@ import java.util.Random;
 import com.google.gson.JsonObject;
 
 import dungeonmania.entities.collectable.*;
+import dungeonmania.util.Position;
 
 public class RandomCollectableFactory implements EntityFactory {
 
@@ -30,7 +31,7 @@ public class RandomCollectableFactory implements EntityFactory {
 
         if (prob < 0.10) {
 
-            return new Sword(null);
+            return new Sword("sword", null);
         } else if (prob < 0.30) {
 
             return new Treasure(null);
