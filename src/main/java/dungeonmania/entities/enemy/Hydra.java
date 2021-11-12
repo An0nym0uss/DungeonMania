@@ -29,6 +29,15 @@ public class Hydra extends RandomMovingEnemy implements Spawner {
     public Hydra() {
         this(new Position(0, 0), 1, 30, 10);
     }
+    
+    /**
+     * Resets spawn counter to 0.
+     * This is required due to how gradle and static fields work, each test is not run independently.
+     * Called on new game.
+     */
+    public static void resetSpawnCounter() {
+        spawnCounter = 0;
+    }
 
     @Override
     public void update(Grid grid) {

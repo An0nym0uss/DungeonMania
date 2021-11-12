@@ -45,6 +45,15 @@ public class Spider extends Enemy implements Spawner {
         this(new Position(0, 0), 1, 1, 1);
     }
 
+    /**
+     * Resets spawn counter to 0.
+     * This is required due to how gradle and static fields work, each test is not run independently.
+     * Called on new game.
+     */
+    public static void resetSpawnCounter() {
+        spawnCounter = 0;
+    }
+
     /*@Override
     public void checkForNextSpawn(Grid grid) {
         if (getNumSpidersOnGrid(grid) < maxSpiders) {
