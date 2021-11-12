@@ -1,6 +1,7 @@
 package dungeonmania.response.models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import dungeonmania.Dungeon;
@@ -33,7 +34,7 @@ public class StandardResponseFactory implements ResponseFactory {
         if (dungeon.getGoal() != null) {
             goals = dungeon.getGoal().toString();
         }
-        List<AnimationQueue> animations = new ArrayList<>();
+        List<AnimationQueue> animations = createAnimations(dungeon.getGrid());
 
         return new DungeonResponse(dungeonId, dungeonName, entities, inventory, buildables, goals, animations);
     }
@@ -57,6 +58,28 @@ public class StandardResponseFactory implements ResponseFactory {
         }
         
         return entities;
+    }
+
+    /**
+     * @param grid
+     * @pre grid is not null
+     * @post List of EntityResponse is created and returned
+     */
+    public List<AnimationQueue> createAnimations(Grid grid) {
+
+        List<AnimationQueue> animations = new ArrayList<>();
+
+        for (int x = 0; x < grid.getWidth(); x++) {
+            for (int y = 0; y < grid.getHeight(); y++) {
+                for (Entity entity : grid.getEntities(x, y)) {
+                    AnimationQueue animation = entity.getAnimation();
+
+                    if (animation != null) animations.add(animation);
+                }
+            }
+        }
+        
+        return animations;
     }
 
     /**
