@@ -30,9 +30,6 @@ public class Mercenary extends Enemy {
 
     @Override
     public void update(Grid grid) {
-        System.out.println("CALL UPDATE");
-        System.out.println("Mercenary bribed: " + this.bribed);
-        System.out.println(this);
         // TODO (fix mind control / tick down)
 //        this.tickDown();
         if (this.shouldCommenceBattle(grid) && !this.getBribed()) {
