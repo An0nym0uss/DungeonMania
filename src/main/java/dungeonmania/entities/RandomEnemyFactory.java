@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.google.gson.JsonObject;
 
+import dungeonmania.entities.enemy.Assassin;
 import dungeonmania.entities.enemy.Mercenary;
 import dungeonmania.entities.enemy.Spider;
 import dungeonmania.entities.enemy.Zombie;
@@ -14,9 +15,11 @@ public class RandomEnemyFactory implements EntityFactory {
 
     @Override
     /**
-     * 60% chance for spide
+     * 60% chance for spider
      * 32% chance for zombie
      *  7% chance for mercenary
+     *      - 30% (2.1%) chance for Assassin to spawn in place of mercenary
+     *      - 70% (4.9%) chance for Mercenary
      */
     public Entity createEntity(JsonObject entityData) {
         
@@ -29,8 +32,11 @@ public class RandomEnemyFactory implements EntityFactory {
 
             return new Zombie(null, 1, 1, 1);
         } else {
-
-            return new Mercenary(null, 1, 1, 1);
+            double prob2 = rand.nextDouble();
+            if (prob2 < 0.30) {
+                return new Assassin(null, 1,20,15);
+            }
+            return new Mercenary(null, 1, 5, 5);
         }
     }
     

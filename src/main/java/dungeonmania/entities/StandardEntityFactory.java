@@ -97,6 +97,8 @@ public class StandardEntityFactory implements EntityFactory {
         // Mercancy TODO
         } else if (entityType.equalsIgnoreCase("mercenary")) {
             return new Mercenary(new Position(x, y, Layer.ENEMY), 1, 1, 1);
+        } else if (entityType.equalsIgnoreCase("assassin")) {
+            return new Assassin(new Position(x, y, Layer.ENEMY), 1, 20, 15);
         } else if (entityType.equalsIgnoreCase("spider")) {
             return new Spider(new Position(x, y, Layer.SPIDER), 1, 1, 1);
         } else if (entityType.equalsIgnoreCase("zombie_toast")) {
