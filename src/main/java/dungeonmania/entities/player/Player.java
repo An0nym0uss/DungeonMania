@@ -65,19 +65,26 @@ public class Player extends Entity implements Damage, Health, Moving {
         this.currentHealth = that.getCurrentHealth();
         this.inventory = that.getInventory().clone();
         this.statusEffect = that.getStatusEffect().clone();
-        if (that.getSword() != null) {
-            this.sword = that.getSword().clone();
+        if (this.hasSword()) {
+            this.sword = (Sword)this.inventory.getItem(that.sword.getType());
         }
-        if (that.getArmour() != null) {
-            this.armour = that.getArmour().clone();
+        if (this.hasArmour()) {
+            this.armour = (Armour)this.inventory.getItem(that.armour.getType());
         }
-        if (that.getBow() != null) {
-            this.bow = that.getBow().clone();
+        if (this.hasBow()) {
+            this.bow = (Bow)this.inventory.getItem(that.bow.getType());
         }
-        if (that.getShield() != null) {
-            this.shield = that.getShield().clone();
+        if (this.hasShield()) {
+            this.shield = (Shield)this.inventory.getItem(that.shield.getType());
+        }
+        if (this.hasAnduril()) {
+            this.anduril = (Anduril)this.inventory.getItem(that.anduril.getType());
+        }
+        if (this.hasMidnightArmour()) {
+            this.midnightArmour = (MidnightArmour)this.inventory.getItem(that.midnightArmour.getType());
         }
         this.isTeleported = that.hasTeleported();
+        this.rareDrop = that.rareDrop;
     }
 
     public void setInventory(Inventory inventory) {
@@ -343,6 +350,10 @@ public class Player extends Entity implements Damage, Health, Moving {
         if (canMoveInto(other)) {
             if (other instanceof CollectableEntity) {
                 collectItem(other, grid);
+            } else if (other instanceof OlderSelf) {
+                if (!(hasSunStone() || hasMidnightArmour())) {
+                    Battle.battle(this, other, grid);
+                }
             } else if (other instanceof Boulder) {
                 pushBoulder((Boulder)other, grid);
             }
@@ -424,7 +435,7 @@ public class Player extends Entity implements Damage, Health, Moving {
     /**
      * player pushes boulder
      */
-    private void pushBoulder(Boulder boulder, Grid grid) {
+    protected void pushBoulder(Boulder boulder, Grid grid) {
         int newX = getPosition().getX() + movement.getOffset().getX();
         int newY = getPosition().getY() + movement.getOffset().getY();
 
@@ -478,7 +489,7 @@ public class Player extends Entity implements Damage, Health, Moving {
     /**
      * move to position of the corresponding teleport
      */
-    private void teleport(Portal portal, Grid grid) {
+    protected void teleport(Portal portal, Grid grid) {
         int x = portal.getCorrespondingPortal().getPosition().getX();
         int y = portal.getCorrespondingPortal().getPosition().getY();
 
@@ -629,7 +640,7 @@ public class Player extends Entity implements Damage, Health, Moving {
         }
     }
 
-    private void useIngredient(String buildable, Recipe recipe) {
+    protected void useIngredient(String buildable, Recipe recipe) {
         for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
             for (int i = 0; i < ingredient.getValue(); i++) {
                 this.inventory.removeNonSpecificItem(ingredient.getKey());

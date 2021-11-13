@@ -168,10 +168,8 @@ public class Mercenary extends Enemy {
 
     @Override
     public Mercenary clone() {
-        Mercenary copy = new Mercenary(this.getPosition(), this.getSpeed(), this.getHealth(), this.getDamage());
-        copy.bribed = this.bribed;
-        return copy;
-
+        Position oldPos = new Position(this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getLayer());
+        return new Mercenary(oldPos, this.getSpeed(), this.getHealth(), this.getDamage());
     }
 
     @Override

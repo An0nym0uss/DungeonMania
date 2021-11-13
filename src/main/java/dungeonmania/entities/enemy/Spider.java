@@ -259,9 +259,9 @@ public class Spider extends Enemy implements Spawner {
 
     @Override
     public Spider clone() {
-        Spider copy = new Spider(this.getPosition(), this.getSpeed(), this.getHealth(), this.getDamage());
+        Position oldPos = new Position(this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getLayer());
+        Spider copy = new Spider(oldPos, this.getSpeed(), this.getHealth(), this.getDamage());
         copy.directionCount = this.directionCount;
-        copy.setSpawnCounter(this.getSpawnCounter());
         copy.isReverse = this.isReverse;
 
         return copy;

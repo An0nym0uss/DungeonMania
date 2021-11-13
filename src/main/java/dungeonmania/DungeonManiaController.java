@@ -142,4 +142,8 @@ public class DungeonManiaController {
 
         return dungeonResponseFactory.createDungeonResponse(currentGame);
     }
+
+    public Grid getGrid() {
+        return currentGame.getGrid();
+    }
 }
