@@ -18,6 +18,7 @@ import dungeonmania.entities.enemy.Zombie;
 import dungeonmania.entities.player.OlderSelf;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Portal;
+import dungeonmania.entities.statics.SwampTile;
 import dungeonmania.entities.statics.TimeTravellingPortal;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -151,7 +152,11 @@ public class Grid implements GridSubject, GameToJSON {
         for (int x = 0; x < getWidth(); x++) {
             for (int y = 0; y < getHeight(); y++) {
                 for (int z = 0; z < getLayerSize(); z++) {
-                    if (clonedMap[x][y][z] != null) clonedMap[x][y][z].update(this);
+                    if (clonedMap[x][y][z] != null) {
+                        if (z == 0 || !(clonedMap[x][y][Layer.STATIC] instanceof SwampTile && !((SwampTile)clonedMap[x][y][Layer.STATIC]).canMoveOff(clonedMap[x][y][z]))) {
+                            clonedMap[x][y][z].update(this);
+                        }
+                    }
                 }
             }
         }
