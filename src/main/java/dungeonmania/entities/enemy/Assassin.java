@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.*;
 
 public class Assassin extends Mercenary {
-    private Mercenary mercenary;
 
     public Assassin(Position position, int speed, int health, int damage) {
         super(position, speed, health, damage);

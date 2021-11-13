@@ -178,6 +178,15 @@ public class Player extends Entity implements Damage, Health, Moving {
         return false;
     }
 
+    public boolean hasTheOneRing() {
+        for (CollectableEntity collectable : this.inventory.getItems()) {
+            if (collectable instanceof TheOneRing) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean hasSunStone() {
         for (CollectableEntity collectable : this.inventory.getItems()) {
             if (collectable instanceof SunStone) {
@@ -338,9 +347,9 @@ public class Player extends Entity implements Damage, Health, Moving {
                 pushBoulder((Boulder)other, grid);
             }
             // TODO: uncomment once mercenary state pattern implemented
-            // else if (other instanceof BribedMercenary || other instanceof
-            // MindCintrolledMercenary) {
-            // } 
+            else if (other instanceof Mercenary && ((Mercenary)other).getBribed()) {
+                // Do nothing
+            }
             else if (other instanceof Enemy) {
                 Battle.battle(this, (Enemy)other, grid);
             } else if (other instanceof Door) {
