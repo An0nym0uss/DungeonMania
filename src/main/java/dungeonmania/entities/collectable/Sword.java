@@ -18,6 +18,18 @@ public class Sword extends CollectableEntity implements Durable{
         this.attack = attack;
     }
 
+    public Sword(String type, Position position) {
+        super (type, position, false);
+        this.attack = 10;
+        this.durability = 10;
+    }
+
+    public Sword(Sword that) {
+        super(that.getType(), that.getPosition(), false);
+        this.durability = that.getDurability();
+        this.attack = that.getAttack();
+    }
+
     public int getAttack() {
         return this.attack;
     }
@@ -47,5 +59,10 @@ public class Sword extends CollectableEntity implements Durable{
         sword.put("durability", durability);
 
         return sword;
+    }
+
+    @Override
+    public Sword clone() {
+        return new Sword(this);
     }
 }

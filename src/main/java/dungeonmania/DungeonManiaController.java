@@ -1,5 +1,7 @@
 package dungeonmania;
 
+import dungeonmania.entities.enemy.Hydra;
+import dungeonmania.entities.enemy.Spider;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.ResponseFactory;
@@ -53,6 +55,8 @@ public class DungeonManiaController {
 
     public DungeonResponse newGame(String dungeonName, String gameMode) throws IllegalArgumentException {
         currentGame = dungeonMaker.createNewDungeon(dungeonName, gameMode);
+        Spider.resetSpawnCounter();
+        Hydra.resetSpawnCounter();
         return createDungeonResponse();
     }
     
@@ -118,6 +122,14 @@ public class DungeonManiaController {
 
         return createDungeonResponse();
     }
+
+    public DungeonResponse rewind(int ticks) throws IllegalArgumentException {
+        
+        currentGame.rewind(ticks);
+
+        return createDungeonResponse();
+    }
+
 
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
 

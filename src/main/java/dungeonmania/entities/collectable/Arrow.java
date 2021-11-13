@@ -8,6 +8,11 @@ public class Arrow extends CollectableEntity{
         super("arrow", position, false);
         //TODO Auto-generated constructor stub
     }
+
+    @Override
+    public Arrow clone() {
+        return new Arrow(this.getPosition());
+    }
     
 }
 

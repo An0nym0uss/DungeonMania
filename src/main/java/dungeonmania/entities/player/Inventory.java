@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import dungeonmania.GameToJSON;
 import dungeonmania.entities.collectable.CollectableEntity;
+import dungeonmania.entities.collectable.Sword;
 
 public class Inventory implements GameToJSON {
 
@@ -34,6 +35,7 @@ public class Inventory implements GameToJSON {
 
             if (e.getId() == item.getId()) {
                 itr.remove();
+                return;
             }
         }
     }
@@ -69,6 +71,7 @@ public class Inventory implements GameToJSON {
 
             if (e.getType().equals(item)) {
                 itr.remove();
+                return;
             }
         }
     }
@@ -99,5 +102,14 @@ public class Inventory implements GameToJSON {
         inventory.put("items", items);
 
         return inventory;
+    }
+
+    public Inventory clone() {
+        Inventory copy = new Inventory();
+        for (CollectableEntity item : items) {
+            copy.addItem(item.clone());
+        }
+
+        return copy;
     }
 }

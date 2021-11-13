@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import dungeonmania.GameToJSON;
 import dungeonmania.Grid;
+import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.util.Position;
 
 public abstract class Entity implements ObserverEntity, GameToJSON {
@@ -97,6 +98,16 @@ public abstract class Entity implements ObserverEntity, GameToJSON {
     public void collidesWith(Entity other, Grid grid) {
 
     }
+
+    /**
+     * 
+     * @param other
+     * @return
+     */
+    public AnimationQueue getAnimation() {
+
+        return null;
+    }
     
     /**
      * This checks this entity can move into other entity.
@@ -119,5 +130,9 @@ public abstract class Entity implements ObserverEntity, GameToJSON {
         entity.put("type", getType());
 
         return entity;
+    }
+
+    public Entity clone() {
+        return this;
     }
 }

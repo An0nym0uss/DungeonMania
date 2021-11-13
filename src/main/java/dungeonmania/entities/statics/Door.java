@@ -121,4 +121,9 @@ public class Door extends StaticEntity {
 
         return door;
     }
+
+    @Override
+    public Door clone() {
+        return new Door(this.getType(), this.getPosition(), this.getKey(), this.isOpen);
+    }
 }

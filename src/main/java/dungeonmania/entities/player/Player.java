@@ -1,6 +1,7 @@
 package dungeonmania.entities.player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.List;
 import org.json.JSONObject;
 
 import dungeonmania.Grid;
+import dungeonmania.Tick;
+import dungeonmania.constants.Layer;
 import dungeonmania.entities.Battle;
 import dungeonmania.entities.Interaction;
 import dungeonmania.entities.Damage;
@@ -19,37 +22,62 @@ import dungeonmania.util.Position;
 import dungeonmania.entities.statics.*;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.modes.Mode;
+import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.entities.enemy.*;
 import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.collectable.buildable.*;
 import dungeonmania.entities.collectable.rarecollectable.*;
 
 public class Player extends Entity implements Damage, Health, Moving {
-    private int damage;
-    private int maxHealth;
-    private int currentHealth;
-    private Inventory inventory;
-    private StatusEffect statusEffect;
-    private Sword sword;
-    private Armour armour;
-    private Bow bow;
-    private Shield shield;
-    private Anduril anduril;
-    private MidnightArmour midnightArmour;
-    private Direction movement;
-    private boolean isTeleported;
-    private Mercenary mercenary;
-    private boolean rareDrop;
+    protected int damage;
+    protected int maxHealth;
+    protected int currentHealth;
+    protected int previousHealth;
+    protected Inventory inventory;
+    protected StatusEffect statusEffect;
+    protected Sword sword;
+    protected Armour armour;
+    protected Bow bow;
+    protected Shield shield;
+    protected Anduril anduril;
+    protected MidnightArmour midnightArmour;
+    protected Direction movement;
+    protected boolean isTeleported;
+    protected Mercenary mercenary;
+    protected boolean rareDrop;
 
     public Player(Position position, Mode mode) {
         super("player", position, false);
         this.maxHealth = mode.getMaxPlayerHealth();
         this.currentHealth = mode.getMaxPlayerHealth();
+        this.previousHealth = mode.getMaxPlayerHealth();
         this.inventory = new Inventory();
         this.statusEffect = new StatusEffect();
         this.isTeleported = false;
         this.rareDrop = true;
         this.damage = 1;
+    }
+
+    public Player(Player that) {
+        super("older_self", new Position(that.getPosition().getX(), that.getPosition().getY(), Layer.OLDER_SELF), false);
+        this.damage = that.getDamage();
+        this.maxHealth = that.getMaxHealth();
+        this.currentHealth = that.getCurrentHealth();
+        this.inventory = that.getInventory().clone();
+        this.statusEffect = that.getStatusEffect().clone();
+        if (that.getSword() != null) {
+            this.sword = that.getSword().clone();
+        }
+        if (that.getArmour() != null) {
+            this.armour = that.getArmour().clone();
+        }
+        if (that.getBow() != null) {
+            this.bow = that.getBow().clone();
+        }
+        if (that.getShield() != null) {
+            this.shield = that.getShield().clone();
+        }
+        this.isTeleported = that.hasTeleported();
     }
 
     public void setInventory(Inventory inventory) {
@@ -77,16 +105,37 @@ public class Player extends Entity implements Damage, Health, Moving {
     }
 
     public void setCurrentHealth(int currentHealth) {
+        this.previousHealth = currentHealth;
         this.currentHealth = currentHealth;
     }
 
     public StatusEffect getStatusEffect() {
         return this.statusEffect;
     }
+    
+    public Sword getSword() {
+        return this.sword;
+    }
+
+    public Armour getArmour() {
+        return this.armour;
+    }
+
+    public Bow getBow() {
+        return this.bow;
+    }
+
+    public Shield getShield() {
+        return this.shield;
+    }
+
+    public Boolean hasTeleported() {
+        return isTeleported;
+    }
 
     public boolean hasArmour() {
         for (CollectableEntity collectable : this.inventory.getItems()) {
-            if (collectable instanceof Armour) {
+            if (collectable instanceof Armour && !(collectable instanceof MidnightArmour)) {
                 return true;
             }
         }
@@ -156,6 +205,15 @@ public class Player extends Entity implements Damage, Health, Moving {
         return false;
     }
 
+    public boolean hasSceptre() {
+        for (CollectableEntity collectable : this.inventory.getItems()) {
+            if (collectable instanceof Sceptre) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean hasMercAlly() {
         if (mercenary != null) {
             return true;
@@ -208,6 +266,9 @@ public class Player extends Entity implements Damage, Health, Moving {
 
     public void useArmour() {
         if (hasArmour()) {
+            if (this.armour instanceof MidnightArmour) {
+                return;
+            }
             this.armour.setDurability(this.armour.getDurability() - 1);
             if (this.armour.isBroken()) {
                 this.inventory.removeItem(this.armour);
@@ -239,6 +300,33 @@ public class Player extends Entity implements Damage, Health, Moving {
             return damage;
         }
         return 0;
+    }
+
+    @Override
+    public AnimationQueue getAnimation() {
+
+        Double percentage_prev = previousHealth/((double)maxHealth);
+        Double percentage_curr = currentHealth/((double)maxHealth);
+        String colour_1;
+        String colour_2;
+        String prev_healthbar = String.format("healthbar set %2.1f", percentage_prev);
+        String curr_healthbar = String.format("healthbar set %2.1f, over 1.5s", percentage_curr);
+
+        if (percentage_prev >= 0.8) {
+            colour_1 = "healthbar tint 0x00ff00";
+        } else {
+            colour_1 = "healthbar tint 0xff0000";
+        }
+
+        if (percentage_curr >= 0.8) {
+            colour_2 = "healthbar tint 0x00ff00, over 0.5s";
+        } else {
+            colour_2 = "healthbar tint 0xff0000, over 0.5s";
+        }
+
+        return new AnimationQueue("PostTick", getId(), Arrays.asList(
+            prev_healthbar, colour_1, curr_healthbar, colour_2
+        ), false, -1);
     }
 
     @Override
@@ -314,8 +402,8 @@ public class Player extends Entity implements Damage, Health, Moving {
                     this.inventory.addItem((CollectableEntity)entity);
                     this.armour = (Armour) entity;
                     grid.dettach(entity);
-                } else if (!(entity instanceof Sword && hasSword() ||
-                    entity instanceof Armour && hasArmour())
+                } else if (!((entity instanceof Sword && hasSword()) ||
+                    (entity instanceof Armour && hasArmour()))
                 ) {
                     this.inventory.addItem((CollectableEntity)entity);
                     grid.dettach(entity);
@@ -449,21 +537,22 @@ public class Player extends Entity implements Damage, Health, Moving {
         ) {
             collectable.useItemWithEffect(this.statusEffect);
             this.inventory.removeItem(collectable);
-        } else if (collectable instanceof Treasure) {
-            // Bribe mercenary
-            List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
-            adjacentSquares.add(this.getPosition());
-            for (Position square : adjacentSquares) {
-                // Check if a mercenary is on that square
-                List<Entity> squareEntities = grid.getEntities(square.getX(), square.getY());
-                for (Entity squareEntity : squareEntities) {
-                    if (squareEntity instanceof Mercenary) {
-                        ((Mercenary)squareEntity).setBribed(true);
-                        this.inventory.removeItem(collectable);
-                        return;
-                    }
-                }
-            }
+        // // bribing mercenary should be done in interact method
+        // } else if (collectable instanceof Treasure) {
+        //     // Bribe mercenary
+        //     List<Position> adjacentSquares = this.getPosition().getAdjacentCardinalPositions();
+        //     adjacentSquares.add(this.getPosition());
+        //     for (Position square : adjacentSquares) {
+        //         // Check if a mercenary is on that square
+        //         List<Entity> squareEntities = grid.getEntities(square.getX(), square.getY());
+        //         for (Entity squareEntity : squareEntities) {
+        //             if (squareEntity instanceof Mercenary) {
+        //                 ((Mercenary)squareEntity).setBribed(true);
+        //                 this.inventory.removeItem(collectable);
+        //                 return;
+        //             }
+        //         }
+        //     }
 
         } else if (collectable == null) {
             throw new InvalidActionException("Item is not in inventory.");
@@ -514,7 +603,7 @@ public class Player extends Entity implements Damage, Health, Moving {
             Sceptre sceptre = new Sceptre(new Position(0, 0));
             this.inventory.addItem(sceptre);
         } else if (buildable.equals("midnight_armour")) {
-            if (hasZombie(grid)) {
+            if (grid.hasZombie()) {
                 throw new InvalidActionException("You cannot craft midnight armour when zombie is in game.");
             }
             Recipe recipe = getAvailableRecipe(buildable);
@@ -537,19 +626,6 @@ public class Player extends Entity implements Damage, Health, Moving {
                 this.inventory.removeNonSpecificItem(ingredient.getKey());
             }
         }
-    }
-
-    private boolean hasZombie(Grid grid) {
-        for (int x = 0; x < grid.getWidth(); x++) {
-            for (int y = 0; y < grid.getHeight(); y++) {
-                for (Entity e : grid.getEntities(x, y)) {
-                    if (e instanceof Zombie) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     public void setMerc(Mercenary mercenary) {
@@ -612,7 +688,7 @@ public class Player extends Entity implements Damage, Health, Moving {
 
             // player moves
             grid.dettach(this);
-            this.setPosition(new Position(newX, newY, this.getPosition().getLayer()));
+            this.setPosition(new Position(newX, newY, Layer.PLAYER));
             grid.attach(this);
 
             // player interacts with entities in the cell
@@ -671,7 +747,12 @@ public class Player extends Entity implements Damage, Health, Moving {
     }
 
     @Override
+    public OlderSelf clone() {
+        return new OlderSelf(this);
+    }
+
+    @Override
     public void receiveDamage(int damage) {
         setCurrentHealth(getCurrentHealth() - damage);
     }
-};
+}

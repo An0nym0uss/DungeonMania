@@ -7,19 +7,16 @@
             "type": "player"
         },
         {
-            "x": 1,
+            "x": 2,
             "y": 1,
             "type": "mercenary"
         },
         {
-            "x": 2,
-            "y": 2,
-            "type": "exit"
+            "x": 1,
+            "y": 0,
+            "type": "treasure"
         }
     ],
     "width": 3,
-    "height": 3,
-    "goal-condition": {
-        "goal": "exit"
-    }
+    "height": 3
 }

@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,9 +13,13 @@ import org.json.JSONObject;
 import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.ObserverEntity;
+import dungeonmania.entities.enemy.Mercenary;
+import dungeonmania.entities.enemy.Zombie;
+import dungeonmania.entities.player.OlderSelf;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Portal;
 import dungeonmania.entities.statics.SwampTile;
+import dungeonmania.entities.statics.TimeTravellingPortal;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -33,6 +38,8 @@ public class Grid implements GridSubject, GameToJSON {
     private Entity[][][] map;
     private Player player;
     private Map<String, Position> portalMapping = new HashMap<>();
+    private List<OlderSelf> olderSelves = new ArrayList<>();
+    private OlderSelf prevPlayer;
 
     /**
      * Getter for height.
@@ -78,11 +85,51 @@ public class Grid implements GridSubject, GameToJSON {
         return this.player;
     }
 
+    public List<OlderSelf> getOlderSelves() {
+        return this.olderSelves;
+    }
+
+    public OlderSelf getPrevPlayer() {
+        return this.prevPlayer;
+    }
+
+    public void setPrevPlayer(OlderSelf prevPlayer) {
+        this.prevPlayer = prevPlayer;
+    }
+
     public Grid(int height, int width, Entity[][][] map, Player player) {
         this.HEIGHT = height;
         this.WIDTH = width;
         this.map = map;
         this.player = player;
+    }
+
+    public Grid(Grid that) {
+        this.HEIGHT = that.getHeight();
+        this.WIDTH = that.getWidth();
+        this.map = new Entity[WIDTH][HEIGHT][LAYER_SIZE];
+        this.player = that.getPlayer();
+        this.olderSelves = new ArrayList<>();
+
+        for (int x = 0; x < this.getWidth(); x++) {
+            for (int y = 0; y < this.getHeight(); y++) {
+                for (int z = 0; z < this.getLayerSize(); z++) {
+                    Entity entity = that.getMap()[x][y][z];
+                    if (entity != null) {
+                        if (entity.getType().equalsIgnoreCase("player")) {
+                            OlderSelf older = new OlderSelf((Player)entity);
+                            this.prevPlayer = older;
+                        } else if (entity.getType().equalsIgnoreCase("older_self")) {
+                            OlderSelf older = new OlderSelf((OlderSelf)entity, true);
+                            this.olderSelves.add(older);
+                            map[x][y][z] = older;
+                        } else {
+                            map[x][y][z] = entity.clone();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -128,6 +175,45 @@ public class Grid implements GridSubject, GameToJSON {
     }
 
     /**
+     * check if zombie is present in the map
+     * @return
+     */
+    public boolean hasZombie() {
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                for (Entity entity : getEntities(x, y)) {
+                    if (entity instanceof Zombie) {
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        return false;
+    }
+
+    public boolean isPlayerOnTimeTravelPortal() {
+        Position playerPos = this.player.getPosition();
+        Position portalPos = null;
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                for (Entity entity : getEntities(x, y)) {
+                    if (entity instanceof TimeTravellingPortal) {
+                        portalPos = entity.getPosition();
+                        if (playerPos.equals(portalPos)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            }
+            
+        }
+        return false;
+    }
+
+    /**
      * Add an entity to grid.
      * 
      * @param o entity to add.
@@ -151,7 +237,7 @@ public class Grid implements GridSubject, GameToJSON {
 
         map[x][y][layer] = e;
 
-        if (e instanceof Player) {
+        if (e.getType().equalsIgnoreCase("player")) {
             setPlayer((Player) e);
         // For linking portals
         } else if (e instanceof Portal) {
@@ -223,6 +309,10 @@ public class Grid implements GridSubject, GameToJSON {
         grid.put("entities", entities);
 
         return grid;
+    }
+
+    public Grid clone() {
+        return new Grid(this);
     }
 
 }

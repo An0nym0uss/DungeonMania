@@ -4,6 +4,7 @@ import dungeonmania.entities.collectable.CollectableEntity;
 import org.json.JSONObject;
 
 import dungeonmania.Grid;
+import dungeonmania.constants.Layer;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.statics.Boulder;
 import dungeonmania.entities.statics.Door;
@@ -18,14 +19,17 @@ import java.util.*;
 public class Mercenary extends Enemy {
 
     private boolean bribed;
+    private int mindcontrolDuration;
     
     public Mercenary(Position position, int speed, int health, int damage) {
-        super("mercenary", position, false, speed, health, damage);
+        super("mercenary", position, true, speed, health, damage);
         this.bribed = false;
+        this.mindcontrolDuration = 0;
     }
 
     @Override
     public void update(Grid grid) {
+        this.tickDown();
         if (this.shouldCommenceBattle(grid) && !this.getBribed()) {
             this.commenceBattle(grid);
         }
@@ -33,10 +37,20 @@ public class Mercenary extends Enemy {
          List<Position> shortestPath = this.breadthFirstSearch(grid);
 
             // Perform movement
-            if (shortestPath.size() > 1) {
+            if (shortestPath.size() == 2 && getBribed()) {
+
+            }
+            else if (shortestPath.size() > 1) {
                 // There is a valid path
                 Position nextStep = shortestPath.get(1);
-                this.setPosition(nextStep);
+                grid.dettach(this);
+                Position newPos = new Position(nextStep.getX(), nextStep.getY(), Layer.ENEMY);
+                this.setPosition(newPos);
+                grid.attach(this);
+            }
+
+            if (this.shouldCommenceBattle(grid) && !this.getBribed()) {
+                this.commenceBattle(grid);
             }
         }
 
@@ -107,6 +121,28 @@ public class Mercenary extends Enemy {
         this.bribed = bribed;
     }
 
+    public int getMindcontrolDuration() {
+        return this.mindcontrolDuration;
+    }
+
+    public void setMindcontrolDuration(int mindcontrolDuration) {
+        this.mindcontrolDuration = mindcontrolDuration;
+    }
+
+    /**
+     * check if the mercenary is mind controlled, i.e. mindControlled duration > 0
+     * for each tick, if so, set the mercenary to bribed state and reduce the 
+     * duration bty one 
+     */
+    public void tickDown() {
+        if (this.mindcontrolDuration > 0) {
+            this.bribed = true;
+            this.mindcontrolDuration -= 1;
+        } else {
+            this.bribed = false;
+        }
+    } 
+
     @Override
     public void move(Grid grid, Direction d) {
     }
@@ -126,5 +162,14 @@ public class Mercenary extends Enemy {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Mercenary clone() {
+        Mercenary copy = new Mercenary(this.getPosition(), this.getSpeed(), this.getHealth(), this.getDamage());
+        copy.bribed = this.bribed;
+        
+        return copy;
+
     }
 }

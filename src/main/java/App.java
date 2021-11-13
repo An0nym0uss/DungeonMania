@@ -123,6 +123,11 @@ public class App {
             return callUsingSessionAndArgument(request, (dmc) -> dmc.interact(request.queryParams("entityId")));
         }, gson::toJson);
 
+        Spark.post("/api/game/rewind/", "application/json", (request, response) -> {
+            String ticks = request.queryParams("ticks");
+            return callUsingSessionAndArgument(request, (dmc) -> dmc.rewind(Integer.parseInt(ticks)));
+        }, gson::toJson);
+
         Spark.post("/api/game/new/generate/", "application/json", (request, response) -> {
 
             Random rand = new Random();

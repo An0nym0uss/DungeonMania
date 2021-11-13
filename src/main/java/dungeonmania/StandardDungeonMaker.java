@@ -52,6 +52,9 @@ public class StandardDungeonMaker implements DungeonMaker {
             System.err.println(e.getMessage());
             throw new IllegalArgumentException("filename {" + dungeonName +"} isn't formatted correctly");
         
+        } catch (NullPointerException e) {
+            System.err.println(e.getMessage());
+            throw new IllegalArgumentException("filename {" + dungeonName +"} does not exist");
         }
         // Create mode
 
@@ -201,13 +204,13 @@ public class StandardDungeonMaker implements DungeonMaker {
             throws IllegalArgumentException {
         
         if (xStart < 0 || xStart >= 50) {
-            throw new IllegalAccessError("xStart is out of bounds");
+            throw new IllegalArgumentException("xStart is out of bounds");
         } else if (yStart < 0 || yStart >= 50) {
-            throw new IllegalAccessError("yStart is out of bounds");
+            throw new IllegalArgumentException("yStart is out of bounds");
         } else if (xEnd < 0 || xEnd >= 50) {
-            throw new IllegalAccessError("xEnd is out of bounds");
+            throw new IllegalArgumentException("xEnd is out of bounds");
         } else if (yEnd < 0 || yEnd >= 50) {
-            throw new IllegalAccessError("yEnd is out of bounds");
+            throw new IllegalArgumentException("yEnd is out of bounds");
         }
 
         xStart = (xStart-1)/2;

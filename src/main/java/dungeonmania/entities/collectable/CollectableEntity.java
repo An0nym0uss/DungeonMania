@@ -30,4 +30,9 @@ public abstract class CollectableEntity extends Entity{
     public void placeBomb(Player player, Grid grid) {
 
     }
+
+    @Override
+    public CollectableEntity clone() {
+        return this;
+    }
 }

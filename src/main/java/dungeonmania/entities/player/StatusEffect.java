@@ -14,6 +14,13 @@ public class StatusEffect {
         this.invisibleDuration = 0;
     }
 
+    public StatusEffect(StatusEffect that) {
+        this.invincible = that.isInvincible();
+        this.invincibleDuration = that.getInvincibleDuration();
+        this.invisible = that.isInvisible();
+        this.invisibleDuration = that.getInvisibleDuration();
+    }
+
     public boolean isInvincible() {
         return this.invincible;
     }
@@ -59,5 +66,9 @@ public class StatusEffect {
         if (this.invisibleDuration == 0 && isInvisible()) {
             setInvisible(false);
         }
+    }
+
+    public StatusEffect clone() {
+        return new StatusEffect(this);
     }
 }
