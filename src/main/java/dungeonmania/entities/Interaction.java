@@ -19,7 +19,11 @@ public class Interaction {
             for (Entity adjacentEntity : grid.getEntities(adjacentPosition.getX(), adjacentPosition.getY())) {
                 if (adjacentEntity.getType().equals(entity.getType())) {
                     if (player.hasSceptre()) {
-                        entity.setMindcontrolDuration(10);
+                        if (!entity.getBribed()) {
+                            entity.setBribed(true);
+                            entity.setMindcontrolDuration(10);
+                        }
+                        success = true;
                     } else if (entity.getType().equals("assassin") && player.hasTheOneRing() && player.hasTreasure()) {
                         // Check if we can bribe assassin
                         entity.setBribed(true);
