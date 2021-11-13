@@ -1,0 +1,205 @@
+{
+    "entities": [
+        {
+            "x": 3,
+            "y": 3,
+            "type": "player"
+        },
+        {
+            "x": 3,
+            "y": 1,
+            "type": "sword"
+        },
+        {
+            "x": 5,
+            "y": 1,
+            "type": "wood"
+        },
+        {
+            "x": 5,
+            "y": 2,
+            "type": "arrow"
+        },
+        {
+            "x": 6,
+            "y": 1,
+            "type": "arrow"
+        },
+        {
+            "x": 6,
+            "y": 2,
+            "type": "arrow"
+        },
+        {
+            "x": 8,
+            "y": 1,
+            "type": "armour"
+        },
+        {
+            "x": 10,
+            "y": 1,
+            "type": "wood"
+        },
+        {
+            "x": 10,
+            "y": 2,
+            "type": "wood"
+        },
+        {
+            "x": 11,
+            "y": 1,
+            "type": "treasure"
+        },
+        {
+            "x": 1,
+            "y": 4,
+            "type": "health_potion"
+        },
+        {
+            "x": 1,
+            "y": 5,
+            "type": "health_potion"
+        },
+        {
+            "x": 1,
+            "y": 6,
+            "type": "health_potion"
+        },
+        {
+            "x": 1,
+            "y": 7,
+            "type": "invincibility_potion"
+        },
+        {
+            "x": 17,
+            "y": 3,
+            "type": "mercenary"
+        },
+        {
+            "x": 15,
+            "y": 2,
+            "type": "wall"
+        },
+        {
+            "x": 16,
+            "y": 2,
+            "type": "wall"
+        },
+        {
+            "x": 17,
+            "y": 2,
+            "type": "wall"
+        },
+        {
+            "x": 18,
+            "y": 2,
+            "type": "wall"
+        },
+        {
+            "x": 18,
+            "y": 3,
+            "type": "wall"
+        },
+        {
+            "x": 18,
+            "y": 4,
+            "type": "wall"
+        },
+        {
+            "x": 17,
+            "y": 4,
+            "type": "wall"
+        },
+        {
+            "x": 16,
+            "y": 4,
+            "type": "wall"
+        },
+        {
+            "x": 15,
+            "y": 4,
+            "type": "wall"
+        },
+        {
+            "x": 15,
+            "y": 3,
+            "type": "door_locked_silver",
+            "key": 1
+        },
+        {
+            "x": 14,
+            "y": 3,
+            "type": "key_silver",
+            "key": 1
+        },
+        {
+            "x": 17,
+            "y": 8,
+            "type": "assassin"
+        },
+        {
+            "x": 15,
+            "y": 7,
+            "type": "wall"
+        },
+        {
+            "x": 16,
+            "y": 7,
+            "type": "wall"
+        },
+        {
+            "x": 17,
+            "y": 7,
+            "type": "wall"
+        },
+        {
+            "x": 18,
+            "y": 7,
+            "type": "wall"
+        },
+        {
+            "x": 18,
+            "y": 8,
+            "type": "wall"
+        },
+        {
+            "x": 18,
+            "y": 9,
+            "type": "wall"
+        },
+        {
+            "x": 17,
+            "y": 9,
+            "type": "wall"
+        },
+        {
+            "x": 16,
+            "y": 9,
+            "type": "wall"
+        },
+        {
+            "x": 15,
+            "y": 9,
+            "type": "wall"
+        },
+        {
+            "x": 15,
+            "y": 8,
+            "type": "door_locked_silver",
+            "key": 2
+        },
+        {
+            "x": 14,
+            "y": 8,
+            "type": "key_silver",
+            "key": 2
+        },
+        {
+            "x": 10,
+            "y": 17,
+            "type": "zombie_toast_spawner"
+        }
+    ],
+    "width": 20,
+    "height": 20
+}
