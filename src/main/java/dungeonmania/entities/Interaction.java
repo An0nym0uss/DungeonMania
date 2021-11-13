@@ -2,6 +2,7 @@ package dungeonmania.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dungeonmania.Grid;
 import dungeonmania.exceptions.InvalidActionException;
@@ -22,9 +23,20 @@ public class Interaction {
                     } else if (player.hasSceptre()) {
                         entity.setMindcontrolDuration(10);
                     } else {
-                        entity.setBribed(true);
-                        player.getInventory().removeNonSpecificItem("treasure");
-                        success = true;
+                        // Check if we can bribe assassin
+                        if (entity.getType().equals("assassin") && player.hasTheOneRing() && player.hasTreasure()) {
+                            entity.setBribed(true);
+                            player.getInventory().removeNonSpecificItem("treasure");
+                            player.getInventory().removeNonSpecificItem("one_ring");
+                            success = true;
+                        }
+                        else if (entity.getType().equals("mercenary") && player.hasTreasure()) {
+                            // Check if we can bribe normal mercenary
+                            entity.setBribed(true);
+                            player.getInventory().removeNonSpecificItem("treasure");
+                            success = true;
+                        }
+
                     }
                 }
             }
@@ -54,34 +66,44 @@ public class Interaction {
         }
     }
 
-    // return all position within 2 cardianl tiles of the given position, used
+    // return all position within 2 cardinal tiles of the given position, used
     // for finding mercenary within range
     private static List<Position> getPosition(Position position, Grid grid) {
         List<Position> adjacentPositions = new ArrayList<>();
-        if (!(position.getY() - 1 < 0)) {
-            adjacentPositions.add(new Position(position.getX(), position.getY() - 1));
-        }
-        if (!(position.getY() - 2 < 0)) {
-            adjacentPositions.add(new Position(position.getX(), position.getY() - 2));
-        }
-        if (!(position.getX() + 1 > grid.getWidth())) {
-            adjacentPositions.add(new Position(position.getX() + 1, position.getY()));
-        }
-        if (!(position.getX() + 2 > grid.getWidth())) {
-            adjacentPositions.add(new Position(position.getX() + 2, position.getY()));
-        }
-        if (!(position.getY() + 1 > grid.getHeight())) {
-            adjacentPositions.add(new Position(position.getX(), position.getY() + 1));
-        }
-        if (!(position.getY() + 2 > grid.getHeight())) {
-            adjacentPositions.add(new Position(position.getX(), position.getY() + 2));
-        }
-        if (!(position.getX() - 1 < 0)) {
-            adjacentPositions.add(new Position(position.getX() - 1, position.getY()));
-        }
-        if (!(position.getX() - 2 < 0)) {
-            adjacentPositions.add(new Position(position.getX() - 2, position.getY()));
-        }
-        return adjacentPositions;
+//        if (!(position.getY() - 1 < 0)) {
+//            adjacentPositions.add(new Position(position.getX(), position.getY() - 1));
+//        }
+//        if (!(position.getY() - 2 < 0)) {
+//            adjacentPositions.add(new Position(position.getX(), position.getY() - 2));
+//        }
+//        if (!(position.getX() + 1 > grid.getWidth())) {
+//            adjacentPositions.add(new Position(position.getX() + 1, position.getY()));
+//        }
+//        if (!(position.getX() + 2 > grid.getWidth())) {
+//            adjacentPositions.add(new Position(position.getX() + 2, position.getY()));
+//        }
+//        if (!(position.getY() + 1 > grid.getHeight())) {
+//            adjacentPositions.add(new Position(position.getX(), position.getY() + 1));
+//        }
+//        if (!(position.getY() + 2 > grid.getHeight())) {
+//            adjacentPositions.add(new Position(position.getX(), position.getY() + 2));
+//        }
+//        if (!(position.getX() - 1 < 0)) {
+//            adjacentPositions.add(new Position(position.getX() - 1, position.getY()));
+//        }
+//        if (!(position.getX() - 2 < 0)) {
+//            adjacentPositions.add(new Position(position.getX() - 2, position.getY()));
+//        }
+        adjacentPositions.add(new Position(position.getX(), position.getY() - 1));
+        adjacentPositions.add(new Position(position.getX(), position.getY() - 2));
+        adjacentPositions.add(new Position(position.getX() + 1, position.getY()));
+        adjacentPositions.add(new Position(position.getX() + 2, position.getY()));
+        adjacentPositions.add(new Position(position.getX(), position.getY() + 1));
+        adjacentPositions.add(new Position(position.getX(), position.getY() + 2));
+        adjacentPositions.add(new Position(position.getX() - 1, position.getY()));
+        adjacentPositions.add(new Position(position.getX() - 2, position.getY()));
+
+        return adjacentPositions.stream().filter(pos -> pos.getX() >= 0 && pos.getX() < grid.getWidth() && pos.getY() >= 0 && pos.getY() < grid.getHeight()).collect(Collectors.toList());
+//        return adjacentPositions;
     }
 }

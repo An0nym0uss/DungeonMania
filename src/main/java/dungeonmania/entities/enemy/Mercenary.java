@@ -1,6 +1,7 @@
 package dungeonmania.entities.enemy;
 
 import dungeonmania.entities.collectable.CollectableEntity;
+import dungeonmania.exceptions.InvalidActionException;
 import org.json.JSONObject;
 
 import dungeonmania.Grid;
@@ -29,12 +30,16 @@ public class Mercenary extends Enemy {
 
     @Override
     public void update(Grid grid) {
-        this.tickDown();
+        System.out.println("CALL UPDATE");
+        System.out.println("Mercenary bribed: " + this.bribed);
+        System.out.println(this);
+        // TODO (fix mind control / tick down)
+//        this.tickDown();
         if (this.shouldCommenceBattle(grid) && !this.getBribed()) {
             this.commenceBattle(grid);
         }
         else {
-         List<Position> shortestPath = this.breadthFirstSearch(grid);
+            List<Position> shortestPath = this.breadthFirstSearch(grid);
 
             // Perform movement
             if (shortestPath.size() == 2 && getBribed()) {
@@ -168,8 +173,25 @@ public class Mercenary extends Enemy {
     public Mercenary clone() {
         Mercenary copy = new Mercenary(this.getPosition(), this.getSpeed(), this.getHealth(), this.getDamage());
         copy.bribed = this.bribed;
-        
         return copy;
 
     }
+
+    @Override
+    public JSONObject getJSON() {
+
+        JSONObject entity = new JSONObject();
+
+        entity.put("x", getPosition().getX());
+        entity.put("y", getPosition().getY());
+        entity.put("type", getType());
+        entity.put("speed", getSpeed());
+        entity.put("health", getHealth());
+        entity.put("damage", getDamage());
+        entity.put("bribed", getBribed());
+        entity.put("mindcontrolDuration", getMindcontrolDuration());
+
+        return entity;
+    }
+
 }
