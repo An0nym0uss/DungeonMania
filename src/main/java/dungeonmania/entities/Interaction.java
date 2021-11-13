@@ -18,31 +18,31 @@ public class Interaction {
         for (Position adjacentPosition : getPosition(position, grid)) {
             for (Entity adjacentEntity : grid.getEntities(adjacentPosition.getX(), adjacentPosition.getY())) {
                 if (adjacentEntity.getType().equals(entity.getType())) {
-                    if ((!player.hasTreasure()) && (!player.hasSceptre())) {
-                        throw new InvalidActionException("You do not have sceptre or any gold");
-                    } else if (player.hasSceptre()) {
+                    if (player.hasSceptre()) {
                         entity.setMindcontrolDuration(10);
-                    } else {
+                    } else if (entity.getType().equals("assassin") && player.hasTheOneRing() && player.hasTreasure()) {
                         // Check if we can bribe assassin
-                        if (entity.getType().equals("assassin") && player.hasTheOneRing() && player.hasTreasure()) {
-                            entity.setBribed(true);
-                            player.getInventory().removeNonSpecificItem("treasure");
-                            player.getInventory().removeNonSpecificItem("one_ring");
-                            success = true;
-                        }
-                        else if (entity.getType().equals("mercenary") && player.hasTreasure()) {
-                            // Check if we can bribe normal mercenary
-                            entity.setBribed(true);
-                            player.getInventory().removeNonSpecificItem("treasure");
-                            success = true;
-                        }
-
+                        entity.setBribed(true);
+                        player.getInventory().removeNonSpecificItem("treasure");
+                        player.getInventory().removeNonSpecificItem("one_ring");
+                        player.setMerc(entity);
+                        success = true;
+                    } else if (entity.getType().equals("mercenary") && player.hasTreasure()) {
+                        // Check if we can bribe normal mercenary
+                        entity.setBribed(true);
+                        player.getInventory().removeNonSpecificItem("treasure");
+                        player.setMerc(entity);
+                        success = true;
+                    } else if (!player.hasTreasure()) {
+                        throw new InvalidActionException("You do not have any gold to bribe");
+                    } else if (!player.hasTreasure()) {
+                        throw new InvalidActionException("You do not have one ring to bribe an assassin");
                     }
                 }
             }
         }
         if (!success) {
-            throw new InvalidActionException("You not within 2 cardinal tiles to the mercenary");
+            throw new InvalidActionException("You must be within 2 cardinal tile of the enemy to bribe them");
         }
     }
 
