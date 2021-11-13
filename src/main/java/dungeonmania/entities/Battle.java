@@ -6,6 +6,7 @@ import dungeonmania.entities.collectable.rarecollectable.RareCollectableEntities
 import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
 import dungeonmania.entities.enemy.Enemy;
 import dungeonmania.entities.enemy.Hydra;
+import dungeonmania.entities.enemy.Assassin;
 import dungeonmania.entities.player.Player;
 import dungeonmania.util.Position;
 
@@ -17,51 +18,57 @@ public class Battle {
         } else if (player.getStatusEffect().isInvincible()) {
             grid.dettach(enemy);
         } else {
-            // start battle
-            // enemy attack first
-            int enemyDamageDealt = enemyDamage(player, enemy);
-            player.receiveDamage(enemyDamageDealt);
+            while (true) {
+                // start battle
+                // enemy attack first
+                if (!player.getPeaceful()) {
+                    int enemyDamageDealt = enemyDamage(player, enemy);
+                    player.receiveDamage(enemyDamageDealt);
+                }
 
-            if (!player.isDead()){
-                if (!player.hasAnduril()) {
-                    int playerDamageDealt = playerDamage(player, enemy);
-                    enemy.receiveDamage(playerDamageDealt);
-                    // player with bow attack again
-                    if (player.hasBow() && !enemy.isDead()) {
+                if (!player.isDead()){
+                    if (!player.hasAnduril()) {
+                        int playerDamageDealt = playerDamage(player, enemy);
                         enemy.receiveDamage(playerDamageDealt);
-                    }
-                    // if player has an ally mercenary, it will attack as well
-                    int mercDamageDealt = MercDamage(player, enemy);
-                    enemy.receiveDamage(mercDamageDealt);
-                } else {
-                    int playerDamageDealt = playerDamage(player, enemy);
-                    enemy.receiveAndruilDamage(playerDamageDealt);
-                    // if player has a bow and and an anduril, the second attack 
-                    // with the bow will still count as an attack with andruil
-                    if (player.hasBow() && !enemy.isDead()) {
+                        // player with bow attack again
+                        if (player.hasBow() && !enemy.isDead()) {
+                            enemy.receiveDamage(playerDamageDealt);
+                        }
+                        // if player has an ally mercenary, it will attack as well
+                        int mercDamageDealt = MercDamage(player, enemy);
+                        enemy.receiveDamage(mercDamageDealt);
+                    } else {
+                        int playerDamageDealt = playerDamage(player, enemy);
                         enemy.receiveAndruilDamage(playerDamageDealt);
+                        // if player has a bow and and an anduril, the second attack 
+                        // with the bow will still count as an attack with andruil
+                        if (player.hasBow() && !enemy.isDead()) {
+                            enemy.receiveAndruilDamage(playerDamageDealt);
+                        }
+                        // mecenary attack does not count as an attack with anduril
+                        int mercDamageDealt = MercDamage(player, enemy);
+                        enemy.receiveDamage(mercDamageDealt);
                     }
-                    // mecenary attack does not count as an attack with anduril
-                    int mercDamageDealt = MercDamage(player, enemy);
-                    enemy.receiveDamage(mercDamageDealt);
-                }
 
-                if (enemy.isDead()) {
-                    grid.dettach(enemy);
-                    if (player.isRareDrop()) {
-                        RareCollectableEntities.spawnnRareCollectableEntities(player);
+                    if (enemy.isDead()) {
+                        grid.dettach(enemy);
+                        if (player.isRareDrop()) {
+                            RareCollectableEntities.spawnnRareCollectableEntities(player);
+                        }
+                        break;
                     }
-                }
-            } else {
-                // player is dead
-                // if player has the One Ring, regenerate to full health
-                if (player.getInventory().checkItem("one_ring") > 0) {
-                    player.setCurrentHealth(player.getMaxHealth());
-                    player.getInventory().removeNonSpecificItem("one_ring");
-                    grid.dettach(enemy);
-                } else {
-                    // player dies   
-                    grid.dettach(player);
+                } else if (player.isDead()){
+                    // player is dead
+                    // if player has the One Ring, regenerate to full health
+                    if (player.getInventory().checkItem("one_ring") > 0) {
+                        player.setCurrentHealth(player.getMaxHealth());
+                        player.getInventory().removeNonSpecificItem("one_ring");
+                        grid.dettach(enemy);
+                    } else {
+                        // player dies   
+                        grid.dettach(player);
+                    }
+                    break;
                 }
             }
         }
@@ -77,7 +84,7 @@ public class Battle {
         damage += player.useMidnightArmour();
 
         // player with anduril deal triple damage against bosses
-        if (player.hasAnduril() && (enemy instanceof Hydra /* || instanceof Assassin*/)) {
+        if (player.hasAnduril() && (enemy instanceof Hydra  || enemy instanceof Assassin)) {
             damage *= 3;
         }
         // TODO: uncomment once zombie with armour is inplemented
