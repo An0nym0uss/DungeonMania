@@ -34,9 +34,9 @@ public class RandomEnemyFactory implements EntityFactory {
         } else {
             double prob2 = rand.nextDouble();
             if (prob2 < 0.30) {
-                return new Assassin(null, 1,15,5);
+                return new Assassin(null, 1,20,15);
             }
-            return new Mercenary(null, 1, 1, 1);
+            return new Mercenary(null, 1, 5, 5);
         }
     }
     
