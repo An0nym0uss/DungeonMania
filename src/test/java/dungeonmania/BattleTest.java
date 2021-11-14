@@ -9,6 +9,7 @@ import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.Arrow;
 import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.collectable.HealthPotion;
+import dungeonmania.entities.collectable.SunStone;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.collectable.Wood;
@@ -23,6 +24,8 @@ import dungeonmania.entities.enemy.Spider;
 import dungeonmania.entities.Entity;
 
 import dungeonmania.constants.Layer;
+import dungeonmania.modes.Hard;
+import dungeonmania.modes.Peaceful;
 import dungeonmania.modes.Standard;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -197,25 +200,162 @@ public class BattleTest {
         player.move(grid, Direction.DOWN);
         player.move(grid, Direction.UP);
         assertTrue(player.getMaxHealth() - player.getCurrentHealth() < damageTaken);
-    } 
+    }
 
     @Test
-    public void testMerc() {
+    public void testUseAnduril() {
+        Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
+        Enemy enemy = new Spider(new Position(2, 1), 1, 1, 1);
         Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
-        Position p = new Position(1,1);
-        Mercenary m = new Mercenary(new Position(1,1), 1, 1, 1);
+        grid.attach(player);
+        grid.attach(enemy);
 
-        m.damageDealt();
-        m.isDead();
+        RareCollectableEntities anduril = new Anduril();
+        anduril.setDropRate(100);
+        anduril.spawnnAnduril(player, player.getInventory());
+        assertTrue(player.getInventory().getItems().size() == 1);
 
-        assertFalse(m.movingConstraints(new Sword(p, 1, 1)));
-        assertTrue(m.movingConstraints(new Wall(p)));
-        assertTrue(m.movingConstraints(new Door("door_locked_silver", p, 1, false)));
-        assertTrue(m.movingConstraints(new Boulder(p)));
-        assertTrue(m.movingConstraints(m));
-        assertTrue(m.movingConstraints(new Player(new Position(1, 1, Layer.PLAYER), new Standard())));
-        //m.spawn(new Wall(p), grid);
+        player.move(grid, Direction.RIGHT);
+        assertTrue(grid.getEntities(2, 1).get(0).getType().equals("player"));
     }
+
+    @Test
+    public void testUseMidnightArmour() {
+        Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
+        CollectableEntity armour = new Armour(new Position(2, 1, Layer.COLLECTABLE));
+        CollectableEntity sunStone = new SunStone(new Position(3, 1, Layer.COLLECTABLE));
+        Enemy enemy = new Spider(new Position(4, 1), 1, 1, 1);
+        Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
+        grid.attach(player);
+        grid.attach(enemy);
+        grid.attach(armour);
+        grid.attach(sunStone);
+
+        player.move(grid, Direction.RIGHT);
+        player.move(grid, Direction.RIGHT);
+
+        assertTrue(player.getInventory().getItems().size() == 2);
+        player.craftItem(player.getBuildables().get(0), grid);
+        assertTrue(player.getInventory().getItems().size() == 1);
+
+        player.move(grid, Direction.RIGHT);
+        assertTrue(grid.getEntities(4, 1).get(0).getType().equals("player"));
+    }
+
+    @Test
+    public void testBattlePeaceful() {
+
+        Player player = new Player(new Position(1, 1, Layer.PLAYER), new Peaceful());
+        Enemy shelob = new Spider(new Position(2, 1), 1, 100, 100);
+        Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
+        grid.attach(player);
+        grid.attach(shelob);
+
+        // enemy dont attack
+        player.move(grid, Direction.RIGHT);
+        assertTrue(grid.getEntities(2, 1).size() == 1);
+        assertTrue(grid.getEntities(2, 1).get(0).getType().equals("player"));
+    }
+
+    @Test
+    public void testDurabilitySword() {
+
+        Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
+        CollectableEntity sword = new Sword(new Position(2, 1, Layer.COLLECTABLE));
+        Grid grid = new Grid(20, 20, new Entity[20][20][Layer.LAYER_SIZE], null);
+        grid.attach(player);
+        grid.attach(sword);
+        player.setRareDrop(false);
+        for (int i = 0; i < 10; i++) {
+            Enemy enemy = new Spider(new Position(i+3, 1), 1, 1, 1);
+            grid.attach(enemy);
+        }
+        player.move(grid, Direction.RIGHT);
+        assertTrue(player.getInventory().getItems().size() == 1);
+        for (int i = 0; i < 10; i++) {
+            player.move(grid, Direction.RIGHT);
+        }
+        // sword durability reached zero after defeating 10 enemies
+        assertTrue(grid.getEntities(12, 1).get(0).getType().equals("player"));
+        assertTrue(player.getInventory().getItems().size() == 0);
+    }
+
+    @Test
+    public void testDurabilityArmour() {
+
+        Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
+        CollectableEntity armour = new Armour(new Position(2, 1, Layer.COLLECTABLE));
+        Grid grid = new Grid(20, 20, new Entity[20][20][Layer.LAYER_SIZE], null);
+        grid.attach(player);
+        grid.attach(armour);
+        player.setRareDrop(false);
+        for (int i = 0; i < 10; i++) {
+            Enemy enemy = new Spider(new Position(i + 3, 1), 1, 1, 1);
+            grid.attach(enemy);
+        }
+        player.move(grid, Direction.RIGHT);
+        assertTrue(player.getInventory().getItems().size() == 1);
+        for (int i = 0; i < 10; i++) {
+            player.move(grid, Direction.RIGHT);
+        }
+        // sword durability reached zero after defeating 10 enemies
+        assertTrue(grid.getEntities(12, 1).get(0).getType().equals("player"));
+        assertTrue(player.getInventory().getItems().size() == 0);
+    }
+
+    @Test
+    public void testDurabilityBow() {
+
+        Player player = new Player(new Position(1, 1, Layer.PLAYER), new Standard());
+        CollectableEntity wood = new Wood(new Position(2, 1, Layer.COLLECTABLE));
+        CollectableEntity arrow1 = new Arrow(new Position(3, 1, Layer.COLLECTABLE));
+        CollectableEntity arrow2 = new Arrow(new Position(4, 1, Layer.COLLECTABLE));
+        CollectableEntity arrow3 = new Arrow(new Position(5, 1, Layer.COLLECTABLE));
+        Grid grid = new Grid(20, 20, new Entity[20][20][Layer.LAYER_SIZE], null);
+        grid.attach(player);
+        grid.attach(wood);
+        grid.attach(arrow1);
+        grid.attach(arrow2);
+        grid.attach(arrow3);
+
+        player.move(grid, Direction.RIGHT);
+        player.move(grid, Direction.RIGHT);
+        player.move(grid, Direction.RIGHT);
+        player.move(grid, Direction.RIGHT);
+
+        // build a bow
+        player.craftItem(player.getBuildables().get(0), grid);
+        player.setRareDrop(false);
+        for (int i = 0; i < 10; i++) {
+            Enemy enemy = new Spider(new Position(i + 6, 1), 1, 100, 1);
+            grid.attach(enemy);
+        }
+
+        assertTrue(player.getInventory().getItems().size() == 1);
+        assertTrue(player.getInventory().getItems().get(0).getType() == "bow");
+        for (int i = 0; i < 10; i++) {
+            player.move(grid, Direction.RIGHT);
+        }
+        assertTrue(player.getInventory().getItems().size() == 0);
+    }
+
+    // @Test
+    // public void testMerc() {
+    //     Grid grid = new Grid(10, 10, new Entity[10][10][Layer.LAYER_SIZE], null);
+    //     Position p = new Position(1,1);
+    //     Mercenary m = new Mercenary(new Position(1,1), 1, 1, 1);
+
+    //     m.damageDealt();
+    //     m.isDead();
+
+    //     assertFalse(m.movingConstraints(new Sword(p, 1, 1)));
+    //     assertTrue(m.movingConstraints(new Wall(p)));
+    //     assertTrue(m.movingConstraints(new Door("door_locked_silver", p, 1, false)));
+    //     assertTrue(m.movingConstraints(new Boulder(p)));
+    //     assertTrue(m.movingConstraints(m));
+    //     assertTrue(m.movingConstraints(new Player(new Position(1, 1, Layer.PLAYER), new Standard())));
+    //     //m.spawn(new Wall(p), grid);
+    // }
 
 //    @Test
 //    public void testDamageNotInvincible() {

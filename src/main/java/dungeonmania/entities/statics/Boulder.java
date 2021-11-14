@@ -96,6 +96,7 @@ public class Boulder extends StaticEntity {
 
     @Override
     public Boulder clone() {
-        return new Boulder(this.getPosition());
+        Position oldPos = new Position(this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getLayer());
+        return new Boulder(oldPos);
     }
 }

@@ -27,16 +27,16 @@ public class RandomEnemyFactory implements EntityFactory {
 
         if (prob < 0.60) {
 
-            return new Spider(null, 1, 1, 1);
+            return new Spider(null, 1, 50, 1);
         } else if (prob < 0.93) {
 
-            return new Zombie(null, 1, 1, 1);
+            return new Zombie(null, 1, 100, 1);
         } else {
             double prob2 = rand.nextDouble();
             if (prob2 < 0.30) {
-                return new Assassin(null, 1,20,15);
+                return new Assassin(null, 1,100,3);
             }
-            return new Mercenary(null, 1, 5, 5);
+            return new Mercenary(null, 1, 50, 2);
         }
     }
     
