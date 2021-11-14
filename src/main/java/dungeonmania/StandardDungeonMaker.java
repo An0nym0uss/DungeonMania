@@ -51,6 +51,9 @@ public class StandardDungeonMaker implements DungeonMaker {
             System.err.println(e.getMessage());
             throw new IllegalArgumentException("dungeon name {" + dungeonName + "} given doesn't exist");
         
+        } catch (NullPointerException e) {
+            System.err.println(e.getMessage());
+            throw new IllegalArgumentException("dungeon name {" + dungeonName +"} given doesn't exist");
         }
 
         // Create mode

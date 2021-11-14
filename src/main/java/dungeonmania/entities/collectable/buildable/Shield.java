@@ -9,7 +9,7 @@ public class Shield extends BuildableEntity implements Durable{
     private int durability;
     private int defense;
 
-    private final String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/shieldRecipe.json";
+    private final String recipeFile = "/recipes/shieldRecipe.json";
 
     public Shield(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);

@@ -8,7 +8,7 @@ import dungeonmania.util.Position;
 public class Bow extends BuildableEntity implements Durable{
     private int durability;
 
-    private String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/bowRecipe.json";
+    private String recipeFile = "/recipes/bowRecipe.json";
 
     public Bow(String type, Position position, boolean isInteractable) {
         super(type, position, isInteractable);

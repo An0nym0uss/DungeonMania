@@ -7,8 +7,8 @@ public class RecipeAll {
     private List<Recipe> recipes = new ArrayList<>();
 
     public RecipeAll() {
-        String bowRecipeFile = "/dungeonmania/entities/collectable/buildable/recipes/bowRecipe.json";
-        String shieldRecipeFile = "/dungeonmania/entities/collectable/buildable/recipes/shieldRecipe.json";
+        String bowRecipeFile = "/recipes/bowRecipe.json";
+        String shieldRecipeFile = "/recipes/shieldRecipe.json";
 
         List<String> files = new ArrayList<>();
         files.add(bowRecipeFile);
