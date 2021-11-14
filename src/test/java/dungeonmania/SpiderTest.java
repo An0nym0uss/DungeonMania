@@ -54,4 +54,27 @@ public class SpiderTest {
         // 3 chances for spider to spawn, should be at least more than 1
         assertTrue(totalSpiders >= 1);
     }
+
+    @Test
+    public void testSpiderBoundary() {
+        DungeonManiaController controller = new DungeonManiaController();
+        // Changing where the files are loaded from.
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
+
+        // start game
+        DungeonResponse response = controller.newGame("spider-2", "standard");
+
+        controller.tick(null, Direction.NONE);
+        controller.tick(null, Direction.NONE);
+        controller.tick(null, Direction.NONE);
+        response = controller.tick(null, Direction.RIGHT); //kill a spider
+
+        // count any spiders in dungeon
+        for (EntityResponse entity : response.getEntities()) {
+            if (entity.getType().equals("spider")) {
+                assertEquals(3, entity.getPosition().getX());
+                assertEquals(0, entity.getPosition().getY());
+            }
+        }
+    }
 }
