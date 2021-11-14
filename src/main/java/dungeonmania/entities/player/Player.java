@@ -589,11 +589,6 @@ public class Player extends Entity implements Damage, Health, Moving {
                 throw new InvalidActionException("You do not have sufficient items to craft bow.");
             }
             if (!hasBow()) {
-                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
-                    for (int i = 0; i < ingredient.getValue(); i++) {
-                        this.inventory.removeNonSpecificItem(ingredient.getKey());
-                    }
-                }
                 Bow bow = new Bow(new Position(0, 0));
                 useIngredient(buildable, recipe);
                 this.bow = bow;
@@ -605,36 +600,34 @@ public class Player extends Entity implements Damage, Health, Moving {
                 throw new InvalidActionException("You do not have sufficient items to craft shield.");
             }
             if (!hasShield()) {
-                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
-                    for (int i = 0; i < ingredient.getValue(); i++) {
-                        this.inventory.removeNonSpecificItem(ingredient.getKey());
-                    }
-                }
                 Shield shield = new Shield(new Position(0, 0));
                 useIngredient(buildable, recipe);
                 this.shield = shield;
                 this.inventory.addItem(shield);
             }
         } else if (buildable.equals("sceptre")) {
-            Recipe recipe = getAvailableRecipe(buildable);
-            if (recipe == null) {
-                throw new InvalidActionException("You do not have sufficient items to craft sceptre.");
+            if (!hasSceptre()) {
+                Recipe recipe = getAvailableRecipe(buildable);
+                if (recipe == null) {
+                    throw new InvalidActionException("You do not have sufficient items to craft sceptre.");
+                }
+                useIngredient(buildable, recipe);
+                Sceptre sceptre = new Sceptre(new Position(0, 0));
+                this.inventory.addItem(sceptre);
             }
-            useIngredient(buildable, recipe);
-            Sceptre sceptre = new Sceptre(new Position(0, 0));
-            this.inventory.addItem(sceptre);
         } else if (buildable.equals("midnight_armour")) {
             if (grid.hasZombie()) {
                 throw new InvalidActionException("You cannot craft midnight armour when zombie is in game.");
+            } else if (!hasMidnightArmour()) {
+                Recipe recipe = getAvailableRecipe(buildable);
+                if (recipe == null) {
+                    throw new InvalidActionException("You do not have sufficient items to craft midnight armour.");
+                }
+                useIngredient(buildable, recipe);
+                MidnightArmour midnightArmour = new MidnightArmour(new Position(0, 0));
+                this.midnightArmour = midnightArmour;
+                this.inventory.addItem(midnightArmour);
             }
-            Recipe recipe = getAvailableRecipe(buildable);
-            if (recipe == null) {
-                throw new InvalidActionException("You do not have sufficient items to craft midnight armour.");
-            }
-            useIngredient(buildable, recipe);
-            MidnightArmour midnightArmour = new MidnightArmour(new Position(0, 0));
-            this.midnightArmour = midnightArmour;
-            this.inventory.addItem(midnightArmour);
         }
         else {
             throw new IllegalArgumentException(buildable + " not buildable.");
@@ -704,9 +697,11 @@ public class Player extends Entity implements Damage, Health, Moving {
             for (Entity entity : grid.getEntities(newX, newY)) {
                 if (entity instanceof Boulder) {
                     if (!canPushBoulder((Boulder) entity, grid)) {
+                        collision(grid, getPosition().getX(), getPosition().getY());
                         return;
                     }
                 } else if (!canMoveInto(entity)) {
+                    collision(grid, getPosition().getX(), getPosition().getY());
                     return;
                 }
             }
@@ -716,12 +711,18 @@ public class Player extends Entity implements Damage, Health, Moving {
             this.setPosition(new Position(newX, newY, Layer.PLAYER));
             grid.attach(this);
 
-            // player interacts with entities in the cell
-            for (Entity entity : grid.getEntities(newX, newY)) {
-                collidesWith(entity, grid);
-            }
+            collision(grid, newX, newY);
         }
         statusEffect.tickDown();
+    }
+
+    /**
+     * player interacts with entities in the cell
+     */
+    protected void collision(Grid grid, int x, int y) {
+        for (Entity entity : grid.getEntities(x, y)) {
+            collidesWith(entity, grid);
+        }
     }
 
     public void interact(String EntityId, Grid grid) {

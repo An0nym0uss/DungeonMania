@@ -67,19 +67,26 @@ public class Battle {
                         break;
                     }
                 } else if (player.isDead()){
-                    // player is dead
-                    // if player has the One Ring, regenerate to full health
-                    if (player.getInventory().checkItem("one_ring") > 0) {
-                        player.setCurrentHealth(player.getMaxHealth());
-                        player.getInventory().removeNonSpecificItem("one_ring");
-                        grid.dettach(enemy);
-                    } else {
-                        // player dies   
-                        grid.dettach(player);
-                    }
+                    playerDies(player, enemy, grid);
+                    
                     break;
                 }
             }
+        }
+    }
+
+    /**
+     * player is dead
+     * if player has the One Ring, regenerate to full health
+     */
+    private static void playerDies(Player player, Entity enemy, Grid grid) {
+        if (player.getInventory().checkItem("one_ring") > 0) {
+            player.setCurrentHealth(player.getMaxHealth());
+            player.getInventory().removeNonSpecificItem("one_ring");
+            grid.dettach(enemy);
+        } else {
+            // player dies   
+            grid.dettach(player);
         }
     }
 
@@ -165,16 +172,7 @@ public class Battle {
                     }
                 }
             } else {
-                // player is dead
-                // if player has the One Ring, regenerate to full health
-                if (player.getInventory().checkItem("one_ring") > 0) {
-                    player.setCurrentHealth(player.getMaxHealth());
-                    player.getInventory().removeNonSpecificItem("one_ring");
-                    grid.dettach(olderSelf);
-                } else {
-                    // player dies   
-                    grid.dettach(player);
-                }
+                playerDies(player, olderSelf, grid);
             }
         }
     }

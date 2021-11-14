@@ -106,9 +106,11 @@ public class OlderSelf extends Player{
             for (Entity entity : grid.getEntities(newX, newY)) {
                 if (entity instanceof Boulder) {
                     if (!canPushBoulder((Boulder) entity, grid)) {
+                        collision(grid, getPosition().getX(), getPosition().getY());
                         return;
                     }
                 } else if (!canMoveInto(entity)) {
+                    collision(grid, getPosition().getX(), getPosition().getY());
                     return;
                 }
             }
@@ -119,9 +121,7 @@ public class OlderSelf extends Player{
             grid.attach(this);
 
             // player interacts with entities in the cell
-            for (Entity entity : grid.getEntities(newX, newY)) {
-                collidesWith(entity, grid);
-            }
+            collision(grid, newX, newY);
         }
         statusEffect.tickDown();
     }
