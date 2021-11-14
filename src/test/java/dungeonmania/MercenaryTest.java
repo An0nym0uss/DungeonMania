@@ -6,6 +6,7 @@ import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.enemy.Mercenary;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Wall;
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.modes.Mode;
 import dungeonmania.modes.Standard;
 import dungeonmania.response.models.DungeonResponse;
@@ -16,6 +17,7 @@ import dungeonmania.util.Position;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -120,6 +122,8 @@ public class MercenaryTest {
         Player player = new Player(new Position(0, 0), new Standard());
         Treasure treasure = new Treasure(new Position(1, 0));
 
+        mercenary.getJSON();
+
         /**
          * [P] [0] []
          * [] [] [M]
@@ -139,4 +143,59 @@ public class MercenaryTest {
         assertEquals(0, mercenary.getPosition().getY());
     }
     
+    @Test
+    /**
+     * Tests mercenary battles player and gets defeated.
+     */
+    public void testMercenaryBattle() {
+        DungeonManiaController controller = new DungeonManiaController();
+        // Changing where the files are loaded from.
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
+
+        // start game
+        DungeonResponse response = controller.newGame("mercenary-1", "standard");
+
+        controller.tick(null, Direction.NONE);
+        controller.tick(null, Direction.NONE);
+        response = controller.tick(null, Direction.NONE);
+
+        for (EntityResponse entity : response.getEntities()) {
+            if (entity.getType().equals("mercenary")) {
+                assertEquals(0, entity.getPosition().getX());
+                assertEquals(0, entity.getPosition().getY());
+            }
+        }
+    }
+
+    @Test
+    public void testMercenaryBribe() {
+        DungeonManiaController controller = new DungeonManiaController();
+        // Changing where the files are loaded from.
+        StandardDungeonMaker.RESOURCE_PATH = "src/test/resources/dungeons/";
+
+        // start game
+        DungeonResponse response = controller.newGame("mercenary-6", "standard");
+
+        for (EntityResponse entity : response.getEntities()) {
+            if (entity.getType().equals("mercenary")) {
+                assertThrows(InvalidActionException.class, () -> controller.interact(entity.getId()));
+            }
+        }
+
+        response = controller.tick(null, Direction.RIGHT);
+        for (EntityResponse entity : response.getEntities()) {
+            if (entity.getType().equals("mercenary")) {
+                response = controller.interact(entity.getId());
+            }
+        }
+
+        for (EntityResponse entity : response.getEntities()) {
+            if (entity.getType().equals("mercenary")) {
+                assertEquals(2, entity.getPosition().getX());
+                assertEquals(0, entity.getPosition().getY());
+            }
+        }
+    }
+
+
 }

@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 
 import org.junit.jupiter.api.Test;
 
-import collectable.*;
+//import collectable.*;
 import dungeonmania.entities.*;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.HealthPotion;
