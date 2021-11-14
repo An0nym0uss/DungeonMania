@@ -27,7 +27,7 @@ public class Hydra extends RandomMovingEnemy implements Spawner {
     }
 
     public Hydra() {
-        this(new Position(0, 0), 1, 30, 10);
+        this(new Position(0, 0), 1, 100, 2);
     }
     
     /**
