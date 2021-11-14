@@ -16,7 +16,7 @@ public class Shield extends CollectableEntity implements Durable, Buildable{
     private int defense;
     private List<Recipe> recipes;
 
-    private final String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/shieldRecipe.json";
+    private final String recipeFile = "/recipes/shieldRecipe.json";
 
     public Shield(Position position) {
         this(position, 10, 10);

@@ -24,8 +24,20 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.modes.Mode;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.entities.enemy.*;
-import dungeonmania.entities.collectable.*;
-import dungeonmania.entities.collectable.buildable.*;
+import dungeonmania.entities.collectable.Armour;
+import dungeonmania.entities.collectable.Bomb;
+import dungeonmania.entities.collectable.CollectableEntity;
+import dungeonmania.entities.collectable.HealthPotion;
+import dungeonmania.entities.collectable.InvincibilityPotion;
+import dungeonmania.entities.collectable.InvisibilityPotion;
+import dungeonmania.entities.collectable.Key;
+import dungeonmania.entities.collectable.SunStone;
+import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.collectable.Treasure;
+import dungeonmania.entities.collectable.buildable.Bow;
+import dungeonmania.entities.collectable.buildable.MidnightArmour;
+import dungeonmania.entities.collectable.buildable.Sceptre;
+import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.entities.collectable.rarecollectable.*;
 
 public class Player extends Entity implements Damage, Health, Moving {

@@ -2,6 +2,8 @@ package dungeonmania;
 
 import org.junit.jupiter.api.Test;
 
+import collectable.*;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -11,12 +13,13 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import dungeonmania.entities.player.Player;
+import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.enemy.Enemy;
 import dungeonmania.entities.enemy.Mercenary;
 import dungeonmania.entities.statics.ZombieToastSpawner;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.entities.collectable.*;
 import dungeonmania.entities.Entity;
 
 import dungeonmania.constants.Layer;

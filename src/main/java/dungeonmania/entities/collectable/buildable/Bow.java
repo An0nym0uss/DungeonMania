@@ -15,7 +15,7 @@ public class Bow extends CollectableEntity implements Durable, Buildable{
     private int durability;
     private List<Recipe> recipes;
 
-    private String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/bowRecipe.json";
+    private String recipeFile = "/recipes/bowRecipe.json";
 
     public Bow(Position position) {
         this(position, 10);

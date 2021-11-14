@@ -10,7 +10,7 @@ import dungeonmania.util.Position;
 public class MidnightArmour extends Armour implements Buildable{
     private List<Recipe> recipes;
     
-    private String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/midnightArmourRecipe.json";
+    private String recipeFile = "/recipes/midnightArmourRecipe.json";
 
     public MidnightArmour(Position position) {
         super("midnight_armour", position);

@@ -10,7 +10,7 @@ import dungeonmania.util.Position;
 
 public class Sceptre extends CollectableEntity implements Buildable {
     private List<Recipe> recipes;
-    private String recipeFile = "/dungeonmania/entities/collectable/buildable/recipes/sceptreRecipe.json";
+    private String recipeFile = "/recipes/sceptreRecipe.json";
 
     public Sceptre(Position position) {
         super("sceptre", position, false);
