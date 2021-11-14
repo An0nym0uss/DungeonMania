@@ -42,6 +42,7 @@ public class Battle {
                         // player with bow attack again
                         if (player.hasBow() && !enemy.isDead()) {
                             enemy.receiveDamage(playerDamageDealt);
+                            player.useBow();
                         }
                         // if player has an ally mercenary, it will attack as well
                         int mercDamageDealt = MercDamage(player, enemy);
@@ -53,6 +54,7 @@ public class Battle {
                         // with the bow will still count as an attack with andruil
                         if (player.hasBow() && !enemy.isDead()) {
                             enemy.receiveAndruilDamage(playerDamageDealt);
+                            player.useBow();
                         }
                         // mecenary attack does not count as an attack with anduril
                         int mercDamageDealt = MercDamage(player, enemy);
