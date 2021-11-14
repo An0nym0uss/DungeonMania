@@ -148,7 +148,7 @@ public class StandardDungeonMaker implements DungeonMaker {
 
         while(gridDataIter.hasNext()) {
             Entity e = createEntity(gridDataIter.next().getAsJsonObject());
-            grid.attach(e);
+            if (e != null) grid.attach(e);
         }
         return grid;
     }

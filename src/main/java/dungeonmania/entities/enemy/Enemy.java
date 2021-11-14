@@ -13,6 +13,8 @@ import dungeonmania.util.Position;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 
 public abstract class Enemy extends Entity implements Moving, Health, Damage {
     private int speed;
@@ -65,6 +67,10 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage {
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
     }
 
     // Checks if the position is free to move into (considering the movementConstraints)
@@ -145,5 +151,17 @@ public abstract class Enemy extends Entity implements Moving, Health, Damage {
 
     public void receiveAndruilDamage(int damage) {
         setHealth(getHealth() - damage);
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject enemy = super.getJSON();
+
+        enemy.put("speed", speed);
+        enemy.put("max_health", maxHealth);
+        enemy.put("health", health);
+        enemy.put("damage", damage);
+        
+        return enemy;
     }
 }

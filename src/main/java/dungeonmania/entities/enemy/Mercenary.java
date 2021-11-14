@@ -174,18 +174,12 @@ public class Mercenary extends Enemy {
     @Override
     public JSONObject getJSON() {
 
-        JSONObject entity = new JSONObject();
+        JSONObject mercenary = super.getJSON();
 
-        entity.put("x", getPosition().getX());
-        entity.put("y", getPosition().getY());
-        entity.put("type", getType());
-        entity.put("speed", getSpeed());
-        entity.put("health", getHealth());
-        entity.put("damage", getDamage());
-        entity.put("bribed", getBribed());
-        entity.put("mindcontrolDuration", getMindcontrolDuration());
+        mercenary.put("bribed", getBribed());
+        mercenary.put("mindcontrolDuration", getMindcontrolDuration());
 
-        return entity;
+        return mercenary;
     }
 
 }

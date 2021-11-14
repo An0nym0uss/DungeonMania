@@ -6,7 +6,7 @@ import dungeonmania.util.Position;
 public class InvisibilityPotion extends CollectableEntity {
 
     public InvisibilityPotion(Position position) {
-        super("invisible_potion", position, false);
+        super("invisibility_potion", position, false);
     }
 
     @Override

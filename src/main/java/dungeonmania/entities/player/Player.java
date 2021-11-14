@@ -103,6 +103,22 @@ public class Player extends Entity implements Damage, Health, Moving {
 
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
+
+        for (CollectableEntity item : inventory.getItems()) {
+            if (item instanceof Armour && !(item instanceof MidnightArmour)) {
+                this.armour = (Armour) item;
+            } else if (item instanceof Shield) {
+                this.shield = (Shield) item;
+            } else if (item instanceof Bow) {
+                this.bow = (Bow) item;
+            } else if (item instanceof Sword) {
+                this.sword = (Sword) item;
+            } else if (item instanceof Anduril) {
+                this.anduril = (Anduril) item;
+            } else if (item instanceof MidnightArmour) {
+                this.midnightArmour = (MidnightArmour) item;
+            }
+        }
     }
 
     public Inventory getInventory() {
@@ -780,6 +796,7 @@ public class Player extends Entity implements Damage, Health, Moving {
         JSONObject player = super.getJSON();
 
         player.put("inventory", inventory.getJSON().get("items"));
+        player.put("health", currentHealth);
 
         return player;
     }
