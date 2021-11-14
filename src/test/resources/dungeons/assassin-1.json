@@ -7,8 +7,8 @@
       "type": "player"
     },
     {
-      "x": 8,
-      "y": 8,
+      "x": 2,
+      "y": 1,
       "type": "assassin"
     },
     {
@@ -22,6 +22,6 @@
       "type": "one_ring"
     }
   ],
-  "width": 10,
-  "height": 10
+  "width": 3,
+  "height": 3
 }
