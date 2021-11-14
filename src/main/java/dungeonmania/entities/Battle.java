@@ -1,22 +1,4 @@
-package dungeonmania.entities;
-
-import dungeonmania.Grid;
-import dungeonmania.entities.collectable.rarecollectable.Anduril;
-import dungeonmania.entities.collectable.rarecollectable.RareCollectableEntities;
-import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
-import dungeonmania.entities.enemy.Enemy;
-import dungeonmania.entities.enemy.Hydra;
-import dungeonmania.entities.enemy.Assassin;
-import dungeonmania.entities.player.Player;
-import dungeonmania.util.Position;
-
-public class Battle {
-
-    public static void battle(Player player, Enemy enemy, Grid grid) {
-        if (player.getStatusEffect().isInvisible()) {
-            
-        } else if (player.getStatusEffect().isInvincible()) {
-            grid.dettach(enemy);
+ettach(enemy);
         } else {
             while (true) {
                 // start battle
@@ -33,6 +15,7 @@ public class Battle {
                         // player with bow attack again
                         if (player.hasBow() && !enemy.isDead()) {
                             enemy.receiveDamage(playerDamageDealt);
+                            player.useBow();
                         }
                         // if player has an ally mercenary, it will attack as well
                         int mercDamageDealt = MercDamage(player, enemy);
@@ -44,6 +27,7 @@ public class Battle {
                         // with the bow will still count as an attack with andruil
                         if (player.hasBow() && !enemy.isDead()) {
                             enemy.receiveAndruilDamage(playerDamageDealt);
+                            player.useBow();
                         }
                         // mecenary attack does not count as an attack with anduril
                         int mercDamageDealt = MercDamage(player, enemy);
@@ -58,23 +42,30 @@ public class Battle {
                         break;
                     }
                 } else if (player.isDead()){
-                    // player is dead
-                    // if player has the One Ring, regenerate to full health
-                    if (player.getInventory().checkItem("one_ring") > 0) {
-                        player.setCurrentHealth(player.getMaxHealth());
-                        player.getInventory().removeNonSpecificItem("one_ring");
-                        grid.dettach(enemy);
-                    } else {
-                        // player dies   
-                        grid.dettach(player);
-                    }
+                    playerDies(player, enemy, grid);
+                    
                     break;
                 }
             }
         }
     }
 
-    private static int playerDamage(Player player, Enemy enemy) {
+    /**
+     * player is dead
+     * if player has the One Ring, regenerate to full health
+     */
+    private static void playerDies(Player player, Entity enemy, Grid grid) {
+        if (player.getInventory().checkItem("one_ring") > 0) {
+            player.setCurrentHealth(player.getMaxHealth());
+            player.getInventory().removeNonSpecificItem("one_ring");
+            grid.dettach(enemy);
+        } else {
+            // player dies   
+            grid.dettach(player);
+        }
+    }
+
+    private static int playerDamage(Player player, Entity enemy) {
         // calculate character base damage
         int damage =  player.damageDealt();
 
@@ -94,7 +85,7 @@ public class Battle {
         return damage;
     }
 
-    private static int MercDamage(Player player, Enemy enemy) {
+    private static int MercDamage(Player player, Entity enemy) {
         int damage = 0;
         if (player.hasMercAlly()) {
             // mercenary as an ally also use character's damage formula
@@ -123,5 +114,41 @@ public class Battle {
             damage = 0;
         }
         return damage;
+    }
+
+    private static void playerOlderSelfBattle(Player player, OlderSelf olderSelf, Grid grid) {
+        if (player.getStatusEffect().isInvisible() || olderSelf.getStatusEffect().isInvisible()) {
+            
+        } else if (player.getStatusEffect().isInvincible()) {
+            grid.dettach(olderSelf);
+        } else if (olderSelf.getStatusEffect().isInvincible()) {
+            grid.dettach(player);
+        } else {
+            // start battle
+            // enemy attack first
+            int enemyDamageDealt = playerDamage(olderSelf, player);
+            player.receiveDamage(enemyDamageDealt);
+
+            if (!player.isDead()){
+                int playerDamageDealt = playerDamage(player, olderSelf);
+                olderSelf.receiveDamage(playerDamageDealt);
+                // player with bow attack again
+                if (player.hasBow() && !olderSelf.isDead()) {
+                    olderSelf.receiveDamage(playerDamageDealt);
+                }
+                // if player has an ally mercenary, it will attack as well
+                int mercDamageDealt = MercDamage(player, olderSelf);
+                olderSelf.receiveDamage(mercDamageDealt);
+
+                if (olderSelf.isDead()) {
+                    grid.dettach(olderSelf);
+                    if (player.isRareDrop()) {
+                        RareCollectableEntities.spawnnRareCollectableEntities(player);
+                    }
+                }
+            } else {
+                playerDies(player, olderSelf, grid);
+            }
+        }
     }
 }
