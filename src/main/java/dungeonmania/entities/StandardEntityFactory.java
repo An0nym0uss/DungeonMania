@@ -1,6 +1,7 @@
 package dungeonmania.entities;
 
 import java.util.Iterator;
+import java.util.Random;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -108,12 +109,96 @@ public class StandardEntityFactory implements EntityFactory {
         // Enemies TODO
         // Mercancy TODO
         } else if (entityType.equalsIgnoreCase("mercenary")) {
-            return new Mercenary(new Position(x, y, Layer.ENEMY), 1, 50, 2);
+
+            try {
+                int speed = entityData.get("speed").getAsInt();
+                int health = entityData.get("health").getAsInt();
+                int damage = entityData.get("damage").getAsInt();
+                int max_health = entityData.get("max_health").getAsInt();
+                boolean bribed = entityData.get("bribed").getAsBoolean();
+                int mindcontrolDuration = entityData.get("mindcontrolDuration").getAsInt();
+
+                Mercenary mercenary = new Mercenary(new Position(x, y, Layer.ENEMY), speed, health, damage);
+
+                mercenary.setMaxHealth(max_health);
+                mercenary.setBribed(bribed);
+                mercenary.setMindcontrolDuration(mindcontrolDuration);
+
+                return mercenary;
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                Random rand = new Random();
+
+                double prob = rand.nextDouble();
+                if (prob < 0.3) {
+                    return new Assassin(new Position(x, y, Layer.ENEMY), 1,100,3);
+                } else {
+                    return new Mercenary(new Position(x, y, Layer.ENEMY), 1, 50, 2);
+                }
+            }
+
+
         } else if (entityType.equalsIgnoreCase("assassin")) {
+            try {
+                int speed = entityData.get("speed").getAsInt();
+                int health = entityData.get("health").getAsInt();
+                int damage = entityData.get("damage").getAsInt();
+                int max_health = entityData.get("max_health").getAsInt();
+                boolean bribed = entityData.get("bribed").getAsBoolean();
+                int mindcontrolDuration = entityData.get("mindcontrolDuration").getAsInt();
+
+                Assassin assassin = new Assassin(new Position(x, y, Layer.ENEMY), speed, health, damage);
+
+                assassin.setMaxHealth(max_health);
+                assassin.setBribed(bribed);
+                assassin.setMindcontrolDuration(mindcontrolDuration);
+
+                return assassin;
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
             return new Assassin(new Position(x, y, Layer.ENEMY), 1, 100, 3);
         } else if (entityType.equalsIgnoreCase("spider")) {
+
+            try {
+                int speed = entityData.get("speed").getAsInt();
+                int health = entityData.get("health").getAsInt();
+                int damage = entityData.get("damage").getAsInt();
+                int max_health = entityData.get("max_health").getAsInt();
+
+                Enemy spider = new Spider(new Position(x, y, Layer.ENEMY), speed, health, damage);
+
+                spider.setMaxHealth(max_health);
+
+                return spider;
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
+
             return new Spider(new Position(x, y, Layer.SPIDER), 1, 50, 1);
         } else if (entityType.equalsIgnoreCase("zombie_toast")) {
+
+            try {
+                int speed = entityData.get("speed").getAsInt();
+                int health = entityData.get("health").getAsInt();
+                int damage = entityData.get("damage").getAsInt();
+                int max_health = entityData.get("max_health").getAsInt();
+
+                Enemy zombie = new Zombie(new Position(x, y, Layer.ENEMY), speed, health, damage);
+
+                zombie.setMaxHealth(max_health);
+
+                return zombie;
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
             return new Zombie(new Position(x, y, Layer.ENEMY), 1, 100, 1);
         // Collectables
         } else if (entityType.equalsIgnoreCase("bomb")) {
