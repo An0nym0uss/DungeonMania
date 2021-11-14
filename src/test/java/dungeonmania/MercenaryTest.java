@@ -138,4 +138,5 @@ public class MercenaryTest {
         assertEquals(2, mercenary.getPosition().getX());
         assertEquals(0, mercenary.getPosition().getY());
     }
+    
 }
