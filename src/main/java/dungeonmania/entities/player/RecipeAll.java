@@ -7,10 +7,10 @@ public class RecipeAll {
     private List<Recipe> recipes = new ArrayList<>();
 
     public RecipeAll() {
-        String bowRecipeFile = "/dungeonmania/entities/collectable/buildable/recipes/bowRecipe.json";
-        String shieldRecipeFile = "/dungeonmania/entities/collectable/buildable/recipes/shieldRecipe.json";
-        String sceptreRecipeFile = "/dungeonmania/entities/collectable/buildable/recipes/sceptreRecipe.json";
-        String midnightArmourRecipeFile = "/dungeonmania/entities/collectable/buildable/recipes/midnightArmourRecipe.json";
+        String bowRecipeFile = "/recipes/bowRecipe.json";
+        String shieldRecipeFile = "/recipes/shieldRecipe.json";
+        String sceptreRecipeFile = "/recipes/sceptreRecipe.json";
+        String midnightArmourRecipeFile = "/recipes/midnightArmourRecipe.json";
 
         List<String> files = new ArrayList<>();
         files.add(bowRecipeFile);

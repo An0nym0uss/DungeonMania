@@ -2,10 +2,18 @@ package dungeonmania;
 
 import org.junit.jupiter.api.Test;
 
+import collectable.*;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import dungeonmania.entities.collectable.*;
+import dungeonmania.entities.collectable.Armour;
+import dungeonmania.entities.collectable.Arrow;
+import dungeonmania.entities.collectable.CollectableEntity;
+import dungeonmania.entities.collectable.HealthPotion;
+import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.collectable.Treasure;
+import dungeonmania.entities.collectable.Wood;
 import dungeonmania.entities.collectable.rarecollectable.*;
 import dungeonmania.entities.player.Player;
 import dungeonmania.entities.statics.Boulder;

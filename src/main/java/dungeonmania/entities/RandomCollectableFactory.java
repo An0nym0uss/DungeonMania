@@ -4,7 +4,16 @@ import java.util.Random;
 
 import com.google.gson.JsonObject;
 
-import dungeonmania.entities.collectable.*;
+import dungeonmania.entities.collectable.Arrow;
+import dungeonmania.entities.collectable.Bomb;
+import dungeonmania.entities.collectable.HealthPotion;
+import dungeonmania.entities.collectable.InvincibilityPotion;
+import dungeonmania.entities.collectable.InvisibilityPotion;
+import dungeonmania.entities.collectable.Key;
+import dungeonmania.entities.collectable.SunStone;
+import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.collectable.Treasure;
+import dungeonmania.entities.collectable.Wood;
 import dungeonmania.util.Position;
 
 public class RandomCollectableFactory implements EntityFactory {
