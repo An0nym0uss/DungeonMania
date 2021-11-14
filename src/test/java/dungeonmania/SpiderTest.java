@@ -67,12 +67,14 @@ public class SpiderTest {
         controller.tick(null, Direction.NONE);
         controller.tick(null, Direction.NONE);
         controller.tick(null, Direction.NONE);
-        response = controller.tick(null, Direction.RIGHT); //kill a spider
+        controller.tick(null, Direction.NONE);
+        controller.tick(null, Direction.NONE);
+        response = controller.tick(null, Direction.NONE);
 
-        // count any spiders in dungeon
+        // make sure spiders are in correct positions after hitting the grid boundaries
         for (EntityResponse entity : response.getEntities()) {
             if (entity.getType().equals("spider")) {
-                assertEquals(3, entity.getPosition().getX());
+                assertTrue(entity.getPosition().getX() <= 3 || entity.getPosition().getX() >= 1);
                 assertEquals(0, entity.getPosition().getY());
             }
         }
