@@ -31,6 +31,7 @@ public class Zombie extends RandomMovingEnemy {
 
     @Override
     public Zombie clone() {
-        return new Zombie(this.getPosition(), this.getSpeed(), this.getHealth(), this.getDamage());
+        Position oldPos = new Position(this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getLayer());
+        return new Zombie(oldPos, this.getSpeed(), this.getHealth(), this.getDamage());
     }
 }

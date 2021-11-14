@@ -28,8 +28,32 @@
             "y": 3,
             "type": "portal",
             "colour": "BLUE"
+        },
+        {
+            "x": 2,
+            "y": 5,
+            "type": "portal",
+            "colour": "ORANGE"
+        },
+        {
+            "x": 5,
+            "y": 5,
+            "type": "portal",
+            "colour": "ORANGE"
+        },
+        {
+            "x": 2,
+            "y": 7,
+            "type": "portal",
+            "colour": "GRAY"
+        },
+        {
+            "x": 5,
+            "y": 7,
+            "type": "portal",
+            "colour": "GRAY"
         }
     ],
     "width": 6,
-    "height": 6
+    "height": 9
 }

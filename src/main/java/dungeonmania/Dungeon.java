@@ -103,9 +103,6 @@ public class Dungeon implements GameToJSON {
                 if (tick.getMovementDirection() != null) {
                     olderSelf.move(grid, tick.getMovementDirection());
                 }
-                if (tick.getItemUsed() != null) {
-                    olderSelf.useItem(tick.getItemUsed(), grid);
-                }
             }
         }
 

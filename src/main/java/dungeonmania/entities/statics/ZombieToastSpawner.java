@@ -8,6 +8,7 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.Spawner;
 import dungeonmania.entities.enemy.Zombie;
 import dungeonmania.modes.Mode;
+import dungeonmania.modes.Standard;
 import dungeonmania.util.Position;
 
 /**
@@ -128,5 +129,14 @@ public class ZombieToastSpawner extends StaticEntity implements Spawner  {
     @Override
     public <T> int getNumEntitiesOnGrid(Grid grid, Class<T> clas) {
         return -1;
+    }
+
+    @Override
+    public ZombieToastSpawner clone() {
+        ZombieToastSpawner copy = new ZombieToastSpawner(this.getPosition(), new Standard());
+        copy.spawnRate = this.spawnRate;
+        copy.spawnCounter = this.spawnCounter;
+
+        return copy;
     }
 }

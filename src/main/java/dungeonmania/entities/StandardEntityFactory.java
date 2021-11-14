@@ -10,7 +10,19 @@ import dungeonmania.entities.statics.*;
 import dungeonmania.modes.Mode;
 import dungeonmania.util.Position;
 import dungeonmania.constants.Layer;
-import dungeonmania.entities.collectable.*;
+import dungeonmania.entities.collectable.Armour;
+import dungeonmania.entities.collectable.Arrow;
+import dungeonmania.entities.collectable.Bomb;
+import dungeonmania.entities.collectable.CollectableEntity;
+import dungeonmania.entities.collectable.HealthPotion;
+import dungeonmania.entities.collectable.InvincibilityPotion;
+import dungeonmania.entities.collectable.InvisibilityPotion;
+import dungeonmania.entities.collectable.Key;
+import dungeonmania.entities.collectable.SunStone;
+import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.collectable.TimeTurner;
+import dungeonmania.entities.collectable.Treasure;
+import dungeonmania.entities.collectable.Wood;
 import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.MidnightArmour;
 import dungeonmania.entities.collectable.buildable.Sceptre;
@@ -123,7 +135,7 @@ public class StandardEntityFactory implements EntityFactory {
                 sword.setDurability(durability);
 
             } catch (NullPointerException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
             return sword;
@@ -139,7 +151,7 @@ public class StandardEntityFactory implements EntityFactory {
                 armour.setDurability(durability);
 
             } catch (NullPointerException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
             return armour;

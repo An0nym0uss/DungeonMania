@@ -16,4 +16,10 @@ public class Assassin extends Mercenary {
         this.setType("assassin");
     }
 
+    @Override
+    public Assassin clone() {
+        Position oldPos = new Position(this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getLayer());
+        return new Assassin(oldPos, this.getSpeed(), this.getHealth(), this.getDamage());
+    }
+
 }

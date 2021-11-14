@@ -1,5 +1,6 @@
 package dungeonmania.entities.player;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,13 @@ public class ReadRecipe {
 
     public List<Recipe> readRecipes(String filename) {
         List<Recipe> recipeCollection = new ArrayList<>();
+
+        // creates recipes folder when it doesn't exist.
+        File recipes_folder = new File(FileLoader.class.getResource("/").getPath() + "recipes");
+        if (!recipes_folder.exists()) {
+            recipes_folder.mkdirs();
+        }
+        
         try {
             String read = FileLoader.loadResourceFile(filename);
             JSONObject js = new JSONObject(read);
@@ -49,6 +57,8 @@ public class ReadRecipe {
             
             
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 

@@ -175,6 +175,18 @@ public class Grid implements GridSubject, GameToJSON {
     }
 
     /**
+     * returns the entity at given position
+     * @pre 0 <= x < WIDTH
+     * @pre 0 <= y < HEIGHT
+     * @pre 0 <= z <= LAYER_SIZE
+     * 
+     * @post null or Entity
+     */
+    public Entity getEntity(int x, int y, int z) {
+        return map[x][y][z];
+    }
+
+    /**
      * check if zombie is present in the map
      * @return
      */
