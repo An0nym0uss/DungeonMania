@@ -281,6 +281,7 @@ public class StandardEntityFactory implements EntityFactory {
             if (mode == null) {throw new InternalError("tried to create a player without selecting a mode.");}
 
             Inventory inventory = new Inventory();
+            int health = mode.getMaxPlayerHealth();
 
             // Try get inventory from json file
             try {
@@ -294,6 +295,8 @@ public class StandardEntityFactory implements EntityFactory {
 
                     inventory.addItem(e);
                 }
+
+                health = entityData.get("health").getAsInt();
             } catch (NullPointerException e) {
                 // No inventory saved.
             }
@@ -301,6 +304,10 @@ public class StandardEntityFactory implements EntityFactory {
             Player player = new Player(new Position(x,y, Layer.PLAYER), mode);
 
             player.setInventory(inventory);
+
+            // Setting it twice so that prev health is set to curr.
+            player.setCurrentHealth(health);
+            player.setCurrentHealth(health);
 
             return player;
 
