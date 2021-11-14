@@ -1,4 +1,31 @@
-ettach(enemy);
+package dungeonmania.entities;
+
+import dungeonmania.Grid;
+import dungeonmania.entities.collectable.rarecollectable.Anduril;
+import dungeonmania.entities.collectable.rarecollectable.RareCollectableEntities;
+import dungeonmania.entities.collectable.rarecollectable.TheOneRing;
+import dungeonmania.entities.enemy.Enemy;
+import dungeonmania.entities.enemy.Hydra;
+import dungeonmania.entities.player.OlderSelf;
+import dungeonmania.entities.enemy.Assassin;
+import dungeonmania.entities.player.Player;
+import dungeonmania.util.Position;
+
+public class Battle {
+
+    public static void battle(Player player, Entity enemy, Grid grid) {
+        if (enemy instanceof Enemy) {
+            playerEnemyBattle(player, (Enemy)enemy, grid);
+        } else if (enemy instanceof OlderSelf) {
+            playerOlderSelfBattle(player, (OlderSelf)enemy, grid);
+        }
+    }
+
+    private static void playerEnemyBattle(Player player, Enemy enemy, Grid grid) {
+        if (player.getStatusEffect().isInvisible()) {
+            
+        } else if (player.getStatusEffect().isInvincible()) {
+            grid.dettach(enemy);
         } else {
             while (true) {
                 // start battle
