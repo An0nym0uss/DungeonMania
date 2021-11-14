@@ -30,8 +30,7 @@ public class Mercenary extends Enemy {
 
     @Override
     public void update(Grid grid) {
-        // TODO (fix mind control / tick down)
-//        this.tickDown();
+        this.tickDown();
         if (this.shouldCommenceBattle(grid) && !this.getBribed()) {
             this.commenceBattle(grid);
         }
@@ -134,14 +133,14 @@ public class Mercenary extends Enemy {
     /**
      * check if the mercenary is mind controlled, i.e. mindControlled duration > 0
      * for each tick, if so, set the mercenary to bribed state and reduce the 
-     * duration bty one 
+     * duration by one 
      */
     public void tickDown() {
         if (this.mindcontrolDuration > 0) {
-            this.bribed = true;
             this.mindcontrolDuration -= 1;
-        } else {
-            this.bribed = false;
+            if (this.mindcontrolDuration == 0) {
+                this.bribed = false;
+            }
         }
     } 
 

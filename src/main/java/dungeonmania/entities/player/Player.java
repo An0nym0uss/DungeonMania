@@ -45,6 +45,7 @@ public class Player extends Entity implements Damage, Health, Moving {
     protected boolean isTeleported;
     protected Mercenary mercenary;
     protected boolean rareDrop;
+    protected boolean peaceful;
 
     public Player(Position position, Mode mode) {
         super("player", position, false);
@@ -56,6 +57,7 @@ public class Player extends Entity implements Damage, Health, Moving {
         this.isTeleported = false;
         this.rareDrop = true;
         this.damage = 1;
+        this.peaceful = !mode.canAttackPlayer();
     }
 
     public Player(Player that) {
@@ -231,7 +233,7 @@ public class Player extends Entity implements Damage, Health, Moving {
     }
 
     public boolean hasMercAlly() {
-        if (mercenary != null) {
+        if (mercenary != null && mercenary.getBribed()) {
             return true;
         }
         return false;
@@ -357,7 +359,6 @@ public class Player extends Entity implements Damage, Health, Moving {
             } else if (other instanceof Boulder) {
                 pushBoulder((Boulder)other, grid);
             }
-            // TODO: uncomment once mercenary state pattern implemented
             else if (other instanceof Mercenary && ((Mercenary)other).getBribed()) {
                 // Do nothing
             }
@@ -654,6 +655,10 @@ public class Player extends Entity implements Damage, Health, Moving {
 
     public Mercenary getMerc() {
         return this.mercenary;
+    }
+
+    public boolean getPeaceful() {
+        return this.peaceful;
     }
 
     public void setRareDrop(Boolean rareDrop) {
