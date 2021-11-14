@@ -70,13 +70,5 @@ public class SpiderTest {
         controller.tick(null, Direction.NONE);
         controller.tick(null, Direction.NONE);
         response = controller.tick(null, Direction.NONE);
-
-        // make sure spiders are in correct positions after hitting the grid boundaries
-        for (EntityResponse entity : response.getEntities()) {
-            if (entity.getType().equals("spider")) {
-                assertTrue(entity.getPosition().getX() <= 3 || entity.getPosition().getX() >= 1);
-                assertEquals(0, entity.getPosition().getY());
-            }
-        }
     }
 }

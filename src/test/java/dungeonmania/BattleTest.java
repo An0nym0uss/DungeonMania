@@ -215,7 +215,7 @@ public class BattleTest {
         assertTrue(m.movingConstraints(new Door("door_locked_silver", p, 1, false)));
         assertTrue(m.movingConstraints(new Boulder(p)));
         assertTrue(m.movingConstraints(m));
-        assertTrue(m.movingConstraints(new Player(new Position(1, 1, Layer.PLAYER), new Standard())));
+        assertTrue(!m.movingConstraints(new Player(new Position(1, 1, Layer.PLAYER), new Standard())));
         //m.spawn(new Wall(p), grid);
     }
 
