@@ -129,5 +129,11 @@ public class Hydra extends RandomMovingEnemy implements Spawner {
     public void commenceBattle(Grid grid) {
         Battle.battle(grid.getPlayer(), this, grid);
     }*/
+
+    @Override
+    public Hydra clone() {
+        Position oldPos = new Position(this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getLayer());
+        return new Hydra(oldPos, this.getSpeed(), this.getHealth(), this.getDamage());
+    }
 }
 

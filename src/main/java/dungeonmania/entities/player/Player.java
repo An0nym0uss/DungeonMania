@@ -79,19 +79,26 @@ public class Player extends Entity implements Damage, Health, Moving {
         this.currentHealth = that.getCurrentHealth();
         this.inventory = that.getInventory().clone();
         this.statusEffect = that.getStatusEffect().clone();
-        if (that.getSword() != null) {
-            this.sword = that.getSword().clone();
+        if (this.hasSword()) {
+            this.sword = (Sword)this.inventory.getItem(that.sword.getType());
         }
-        if (that.getArmour() != null) {
-            this.armour = that.getArmour().clone();
+        if (this.hasArmour()) {
+            this.armour = (Armour)this.inventory.getItem(that.armour.getType());
         }
-        if (that.getBow() != null) {
-            this.bow = that.getBow().clone();
+        if (this.hasBow()) {
+            this.bow = (Bow)this.inventory.getItem(that.bow.getType());
         }
-        if (that.getShield() != null) {
-            this.shield = that.getShield().clone();
+        if (this.hasShield()) {
+            this.shield = (Shield)this.inventory.getItem(that.shield.getType());
+        }
+        if (this.hasAnduril()) {
+            this.anduril = (Anduril)this.inventory.getItem(that.anduril.getType());
+        }
+        if (this.hasMidnightArmour()) {
+            this.midnightArmour = (MidnightArmour)this.inventory.getItem(that.midnightArmour.getType());
         }
         this.isTeleported = that.hasTeleported();
+        this.rareDrop = that.rareDrop;
     }
 
     public void setInventory(Inventory inventory) {
@@ -357,6 +364,10 @@ public class Player extends Entity implements Damage, Health, Moving {
         if (canMoveInto(other)) {
             if (other instanceof CollectableEntity) {
                 collectItem(other, grid);
+            } else if (other instanceof OlderSelf) {
+                if (!(hasSunStone() || hasMidnightArmour())) {
+                    Battle.battle(this, other, grid);
+                }
             } else if (other instanceof Boulder) {
                 pushBoulder((Boulder)other, grid);
             }
@@ -437,7 +448,7 @@ public class Player extends Entity implements Damage, Health, Moving {
     /**
      * player pushes boulder
      */
-    private void pushBoulder(Boulder boulder, Grid grid) {
+    protected void pushBoulder(Boulder boulder, Grid grid) {
         int newX = getPosition().getX() + movement.getOffset().getX();
         int newY = getPosition().getY() + movement.getOffset().getY();
 
@@ -491,7 +502,7 @@ public class Player extends Entity implements Damage, Health, Moving {
     /**
      * move to position of the corresponding teleport
      */
-    private void teleport(Portal portal, Grid grid) {
+    protected void teleport(Portal portal, Grid grid) {
         int x = portal.getCorrespondingPortal().getPosition().getX();
         int y = portal.getCorrespondingPortal().getPosition().getY();
 
@@ -590,11 +601,6 @@ public class Player extends Entity implements Damage, Health, Moving {
                 throw new InvalidActionException("You do not have sufficient items to craft bow.");
             }
             if (!hasBow()) {
-                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
-                    for (int i = 0; i < ingredient.getValue(); i++) {
-                        this.inventory.removeNonSpecificItem(ingredient.getKey());
-                    }
-                }
                 Bow bow = new Bow(new Position(0, 0));
                 useIngredient(buildable, recipe);
                 this.bow = bow;
@@ -606,43 +612,41 @@ public class Player extends Entity implements Damage, Health, Moving {
                 throw new InvalidActionException("You do not have sufficient items to craft shield.");
             }
             if (!hasShield()) {
-                for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
-                    for (int i = 0; i < ingredient.getValue(); i++) {
-                        this.inventory.removeNonSpecificItem(ingredient.getKey());
-                    }
-                }
                 Shield shield = new Shield(new Position(0, 0));
                 useIngredient(buildable, recipe);
                 this.shield = shield;
                 this.inventory.addItem(shield);
             }
         } else if (buildable.equals("sceptre")) {
-            Recipe recipe = getAvailableRecipe(buildable);
-            if (recipe == null) {
-                throw new InvalidActionException("You do not have sufficient items to craft sceptre.");
+            if (!hasSceptre()) {
+                Recipe recipe = getAvailableRecipe(buildable);
+                if (recipe == null) {
+                    throw new InvalidActionException("You do not have sufficient items to craft sceptre.");
+                }
+                useIngredient(buildable, recipe);
+                Sceptre sceptre = new Sceptre(new Position(0, 0));
+                this.inventory.addItem(sceptre);
             }
-            useIngredient(buildable, recipe);
-            Sceptre sceptre = new Sceptre(new Position(0, 0));
-            this.inventory.addItem(sceptre);
         } else if (buildable.equals("midnight_armour")) {
             if (grid.hasZombie()) {
                 throw new InvalidActionException("You cannot craft midnight armour when zombie is in game.");
+            } else if (!hasMidnightArmour()) {
+                Recipe recipe = getAvailableRecipe(buildable);
+                if (recipe == null) {
+                    throw new InvalidActionException("You do not have sufficient items to craft midnight armour.");
+                }
+                useIngredient(buildable, recipe);
+                MidnightArmour midnightArmour = new MidnightArmour(new Position(0, 0));
+                this.midnightArmour = midnightArmour;
+                this.inventory.addItem(midnightArmour);
             }
-            Recipe recipe = getAvailableRecipe(buildable);
-            if (recipe == null) {
-                throw new InvalidActionException("You do not have sufficient items to craft midnight armour.");
-            }
-            useIngredient(buildable, recipe);
-            MidnightArmour midnightArmour = new MidnightArmour(new Position(0, 0));
-            this.midnightArmour = midnightArmour;
-            this.inventory.addItem(midnightArmour);
         }
         else {
             throw new IllegalArgumentException(buildable + " not buildable.");
         }
     }
 
-    private void useIngredient(String buildable, Recipe recipe) {
+    protected void useIngredient(String buildable, Recipe recipe) {
         for (HashMap.Entry<String, Integer> ingredient : recipe.getIngredients().entrySet()) {
             for (int i = 0; i < ingredient.getValue(); i++) {
                 this.inventory.removeNonSpecificItem(ingredient.getKey());
@@ -705,9 +709,11 @@ public class Player extends Entity implements Damage, Health, Moving {
             for (Entity entity : grid.getEntities(newX, newY)) {
                 if (entity instanceof Boulder) {
                     if (!canPushBoulder((Boulder) entity, grid)) {
+                        collision(grid, getPosition().getX(), getPosition().getY());
                         return;
                     }
                 } else if (!canMoveInto(entity)) {
+                    collision(grid, getPosition().getX(), getPosition().getY());
                     return;
                 }
             }
@@ -717,12 +723,18 @@ public class Player extends Entity implements Damage, Health, Moving {
             this.setPosition(new Position(newX, newY, Layer.PLAYER));
             grid.attach(this);
 
-            // player interacts with entities in the cell
-            for (Entity entity : grid.getEntities(newX, newY)) {
-                collidesWith(entity, grid);
-            }
+            collision(grid, newX, newY);
         }
         statusEffect.tickDown();
+    }
+
+    /**
+     * player interacts with entities in the cell
+     */
+    protected void collision(Grid grid, int x, int y) {
+        for (Entity entity : grid.getEntities(x, y)) {
+            collidesWith(entity, grid);
+        }
     }
 
     public void interact(String EntityId, Grid grid) {
